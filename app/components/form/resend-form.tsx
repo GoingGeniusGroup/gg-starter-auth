@@ -1,16 +1,16 @@
 "use client";
 
-import { CardWrapper } from "@/components/auth/card-wrapper";
-import { resendSchema } from "@/schemas";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
-import { Form } from "@/components/ui/form";
-import { FormInput } from "@/components/auth/form-input";
-import { useTransition } from "react";
 import { resendToken } from "@/actions/resend";
-import { toast } from "sonner";
-import { Button } from "@/components/ui/button";
+import { CardWrapper } from "@/app/components/auth/card-wrapper";
+import { FormInput } from "@/app/components/auth/form-input";
+import { Button } from "@/app/components/ui/button";
+import { Form } from "@/app/components/ui/form";
+import { resendSchema } from "@/schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useTransition } from "react";
+import { useForm } from "react-hook-form";
+import { toast } from "sonner";
+import { z } from "zod";
 
 export const ResendForm = () => {
   const [isPending, startTransition] = useTransition();

@@ -1,11 +1,11 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
+import { Button } from "@/app/components/ui/button";
+import { DEFAULT_LOGIN_REDIRECT } from "@/routes";
 import { signIn } from "next-auth/react";
 import { useSearchParams } from "next/navigation";
-import { IoLogoGithub } from "react-icons/io5";
 import { FcGoogle } from "react-icons/fc";
-import { DEFAULT_LOGIN_REDIRECT } from "@/routes";
+import { IoLogoGithub } from "react-icons/io5";
 
 export const Social = () => {
   const searchParams = useSearchParams();

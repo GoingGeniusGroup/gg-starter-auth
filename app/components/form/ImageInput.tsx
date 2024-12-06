@@ -1,12 +1,12 @@
 import {
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
+    FormControl,
+    FormField,
+    FormItem,
+    FormLabel,
+    FormMessage,
+} from "@/app/components/ui/form";
 import { cn } from "@/lib/utils";
-import React, { ChangeEvent, ComponentPropsWithRef, useState } from "react";
+import { ChangeEvent, ComponentPropsWithRef, useState } from "react";
 import { Control, FieldValues, Path, useController } from "react-hook-form";
 
 type ImageInputProps<T extends FieldValues> = ComponentPropsWithRef<"input"> & {

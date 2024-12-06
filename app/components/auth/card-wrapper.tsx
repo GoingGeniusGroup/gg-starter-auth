@@ -1,16 +1,16 @@
+import { Social } from "@/app/components/auth/social";
+import { Button } from "@/app/components/ui/button";
 import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import Link from "next/link";
-import { Social } from "@/components/auth/social";
-import { Separator } from "@/components/ui/separator";
+    Card,
+    CardContent,
+    CardDescription,
+    CardFooter,
+    CardHeader,
+    CardTitle,
+} from "@/app/components/ui/card";
+import { Separator } from "@/app/components/ui/separator";
 import Image from "next/image";
+import Link from "next/link";
 
 type CardWrapperProps = React.HTMLAttributes<HTMLDivElement> & {
   headerTitle: string;

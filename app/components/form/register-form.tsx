@@ -1,17 +1,17 @@
 "use client";
 
-import { CardWrapper } from "@/components/auth/card-wrapper";
-import { Form } from "@/components/ui/form";
+import { register } from "@/actions/register";
+import { CardWrapper } from "@/app/components/auth/card-wrapper";
+import { FormInput } from "@/app/components/auth/form-input";
+import { Button } from "@/app/components/ui/button";
+import { Form } from "@/app/components/ui/form";
 import { registerSchema } from "@/schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
-import { FormInput } from "@/components/auth/form-input";
-import { Button } from "@/components/ui/button";
-import { useTransition } from "react";
-import { register } from "@/actions/register";
-import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import { useTransition } from "react";
+import { useForm } from "react-hook-form";
+import { toast } from "sonner";
+import { z } from "zod";
 
 export const RegisterForm = () => {
   const router = useRouter();

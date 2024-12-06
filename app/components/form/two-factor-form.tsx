@@ -1,16 +1,16 @@
 "use client";
 
-import { CardWrapper } from "@/components/auth/card-wrapper";
-import { loginSchema, twoFactorSchema } from "@/schemas";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
-import { Form } from "@/components/ui/form";
-import { FormInput } from "@/components/auth/form-input";
-import { Button } from "@/components/ui/button";
-import { useTransition } from "react";
-import { zodResolver } from "@hookform/resolvers/zod";
 import { resendTwoFactor, twoFactor } from "@/actions/two-factor";
+import { CardWrapper } from "@/app/components/auth/card-wrapper";
+import { FormInput } from "@/app/components/auth/form-input";
+import { Button } from "@/app/components/ui/button";
+import { Form } from "@/app/components/ui/form";
+import { loginSchema, twoFactorSchema } from "@/schemas";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useTransition } from "react";
+import { useForm } from "react-hook-form";
 import { toast } from "sonner";
+import { z } from "zod";
 
 type TwoFactorFormProps = {
   payload: z.infer<typeof loginSchema>;

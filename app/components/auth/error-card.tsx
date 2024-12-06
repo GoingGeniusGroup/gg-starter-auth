@@ -1,4 +1,4 @@
-import { CardWrapper } from "@/components/auth/card-wrapper";
+import { CardWrapper } from "@/app/components/auth/card-wrapper";
 import { AuthError } from "next-auth";
 import { redirect } from "next/navigation";
 

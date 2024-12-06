@@ -1,19 +1,19 @@
 "use client";
 
+import { profile } from "@/actions/profile";
+import { FormInput } from "@/app/components/auth/form-input";
+import { FormToggle } from "@/app/components/auth/form-toggle";
+import { Avatar, AvatarFallback, AvatarImage } from "@/app/components/ui/avatar";
+import { Button } from "@/app/components/ui/button";
+import { Form } from "@/app/components/ui/form";
 import { profileSchema } from "@/schemas";
+import { ExtendedUser } from "@/types/next-auth";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { UserRound } from "lucide-react";
 import { useTransition } from "react";
 import { useForm } from "react-hook-form";
-import { z } from "zod";
-import { Form } from "@/components/ui/form";
-import { FormInput } from "@/components/auth/form-input";
-import { Button } from "@/components/ui/button";
-import { profile } from "@/actions/profile";
 import { toast } from "sonner";
-import { ExtendedUser } from "@/types/next-auth";
-import { FormToggle } from "@/components/auth/form-toggle";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { UserRound } from "lucide-react";
+import { z } from "zod";
 
 type ProfileFormProps = {
   user: ExtendedUser;

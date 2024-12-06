@@ -1,6 +1,6 @@
-import { FormControl, FormDescription, FormField, FormItem, FormLabel } from "@/components/ui/form";
+import { FormControl, FormDescription, FormField, FormItem, FormLabel } from "@/app/components/ui/form";
+import { Switch } from "@/app/components/ui/switch";
 import { Control, FieldValues, Path } from "react-hook-form";
-import { Switch } from "@/components/ui/switch";
 
 type FormToggleProps<T extends FieldValues> = React.ComponentPropsWithRef<"button"> & {
   control: Control<T>;

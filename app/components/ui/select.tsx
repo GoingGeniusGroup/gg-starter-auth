@@ -2,9 +2,9 @@ import { ChevronDownIcon, ChevronUpIcon } from "@radix-ui/react-icons";
 import * as Select from "@radix-ui/react-select";
 import { FormControl, FormField, FormLabel, FormMessage } from "./form";
 
-import { Control, FieldValues, Path } from "react-hook-form";
-import { FormItem } from "@/components/ui/form";
+import { FormItem } from "@/app/components/ui/form";
 import { cn } from "@/lib/utils";
+import { Control, FieldValues, Path } from "react-hook-form";
 
 type FormSelectProps<T extends FieldValues> = {
   control: Control<T>;
