@@ -14,7 +14,7 @@ const BusinessCard = () => {
   };
 
   return (
-    <div className="flex justify-center items-center h-screen">
+    <div className="">
       <motion.div
         className="w-[336px] h-[192px]"
         onClick={handleCardClick}
