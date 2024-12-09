@@ -1,4 +1,6 @@
 import React from "react";
+import { FaEnvelope, FaPhoneAlt, FaMapMarkerAlt } from "react-icons/fa";
+import { CiMail, CiLocationOn } from "react-icons/ci";
 import {
   Card,
   CardContent,
@@ -6,26 +8,53 @@ import {
   CardHeader,
   CardTitle,
 } from "../ui/card";
-// import Blackbg from "../../public/card/businesscard front blackbg.svg";
+
+const data = {
+  title: "Aayush Karki",
+  description: "Web Developer",
+  details: [
+    {
+      id: 1,
+      icon: <FaPhoneAlt size={8} />,
+      text: "+977 9827368746",
+    },
+    {
+      id: 2,
+      icon: <CiMail size={8} />,
+      text: "ayushkarkee6@gmail.com",
+    },
+    {
+      id: 3,
+      icon: <CiLocationOn size={8} />,
+      text: "Kathmandu, Nepal",
+    },
+  ],
+};
 
 const BusinessCardFront = () => {
   return (
-    // <div className="grid grid-cols-2 w-[336px] h-[192px] bg-white rounded-md">
-    //   <div>h</div>
-    //   <div>hi</div>
-    // </div>
     <Card className="grid grid-cols-2 w-[336px] h-[192px] bg-white overflow-hidden relative">
-      <div className="flex flex-col space-y-10">
+      {/*left side*/}
+      <div className="flex flex-col space-y-8">
         <CardHeader className="flex flex-col space-y-0">
-          <CardTitle className="text-[14px]">Aayush Karki</CardTitle>
-          <CardDescription className="text-[8px]">WebDeveloper</CardDescription>
+          <CardTitle className="text-[14px]">{data.title}</CardTitle>
+          <CardDescription className="text-[8px]">
+            {data.description}
+          </CardDescription>
         </CardHeader>
-        <CardContent className="text-[8px]">
-          <p>+977 9827368746</p>
-          <p>+977 9827368746</p>
-          <p>+977 9827368746</p>
+        <CardContent className="space-y-2">
+          {data.details.map((detail) => (
+            <div key={detail.id} className="flex space-x-2">
+              <span className="flex items-center justify-center py-[3px] px-[3px] bg-[#2bbe9b] rounded-[2px] text-white">
+                {detail.icon}
+              </span>
+              <p className="text-[8px] font-light">{detail.text}</p>
+            </div>
+          ))}
         </CardContent>
       </div>
+
+      {/*right side*/}
       <div className="relative">
         {/*Light Green BG*/}
         <svg
