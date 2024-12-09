@@ -36,7 +36,7 @@ const data = {
 
 const BusinessCardFront = () => {
   return (
-    <Card className="grid grid-cols-2 w-[336px] h-[192px] bg-white overflow-hidden relative">
+    <Card className="grid grid-cols-2 w-[336px] h-[192px] bg-white overflow-hidden relative border-none">
       {/*left side*/}
       <div className="flex flex-col space-y-8">
         <CardHeader className="flex flex-col space-y-0">
