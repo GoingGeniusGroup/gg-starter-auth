@@ -1,5 +1,5 @@
 import React from "react";
-import { FaEnvelope, FaPhoneAlt, FaMapMarkerAlt } from "react-icons/fa";
+import { FaPhoneAlt } from "react-icons/fa";
 import { CiMail, CiLocationOn } from "react-icons/ci";
 import {
   Card,
@@ -8,6 +8,7 @@ import {
   CardHeader,
   CardTitle,
 } from "../ui/card";
+import Image from "next/image";
 
 const data = {
   Company: "Going Genius",
@@ -174,8 +175,13 @@ const BusinessCardFront = () => {
           </div>
         </div>
 
-        <div>
-            
+        <div className="absolute bottom-4 left-[50%] transform -translate-x-1/5 z-40 py-2">
+          <Image
+            src="/card/QR-Image.jpg"
+            alt="QR Image"
+            width={40}
+            height={40}
+          />
         </div>
       </div>
     </Card>
