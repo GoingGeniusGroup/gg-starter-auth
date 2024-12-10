@@ -11,12 +11,46 @@ import Image from "next/image";
 import GGIcon from "../../public/card/GGReal Icon.svg";
 
 const data = {
-  Name: "Aayush Karki",
   College: "Itahari International College",
-  Subject: "BSc (Hons) Computing",
+  details: [
+    {
+      id: 1,
+      title: "ID Number",
+      desc: "9827368746",
+    },
+    {
+      id: 2,
+      title: "Expiration",
+      desc: "DD/MM/YYYY",
+    },
+    {
+      id: 3,
+      title: "Student Name",
+      desc: "Aayush Karki",
+    },
+    {
+      id: 4,
+      title: "Emergency Contact",
+      Name: "Rabindra Lama",
+      desc: "9803020439",
+    },
+    {
+      id: 5,
+      title: "Course Name",
+      desc: "BSc (Hons) Computing",
+    },
+  ],
 };
 
 const StudentCardBack = () => {
+  const filteredRowDetails = data.details.filter((d) =>
+    ["ID Number", "Expiration"].includes(d.title)
+  );
+
+  const filteredColDetails = data.details.filter((d) =>
+    ["Student Name", "Emergency Contact", "Course Name"].includes(d.title)
+  );
+
   return (
     <Card className="w-[266px] h-[413px] bg-white border-none relative overflow-hidden">
       <div className="relative h-full">
@@ -36,7 +70,7 @@ const StudentCardBack = () => {
           <path d="M239.921 20L233.402 10H220.362L239.921 20Z" fill="#FFDD55" />
         </svg>
 
-        {/*bottom decoration*/}
+        {/* bottom decoration */}
         <svg
           className="absolute bottom-0"
           width="266"
@@ -51,33 +85,55 @@ const StudentCardBack = () => {
         </svg>
 
         <div className="absolute flex flex-col justify-between inset-0 py-4">
-          <div className="h-2/3 flex flex-col items-center space-y-2">
-            <h3 className="text-[14px] font-bold text-center">
-              Student Membership ID
-            </h3>
-            <div className="border border-solid border-black w-[180px] h-[180px] rounded-full">
-              <Image
-                className="rounded-full"
-                src="/card/dummy_Avatar.jpg"
-                alt="avatar"
-                width={180}
-                height={180}
-              />
+          {/* Content */}
+          <div className="h-2/3 flex flex-col">
+            <div className="mx-auto mb-2">
+              <Image src={GGIcon} alt="Logo" width={47} height={47} />
             </div>
-            <span className="font-semibold text-[14px]">{data.College}</span>
-            <p className="border border-b-black w-full"></p>
+            {/* Filtered Row Details */}
+            <div className="flex items-start w-full">
+              {filteredRowDetails.map((d) => (
+                <div
+                  key={d.id}
+                  className="flex flex-col px-4 w-full gap-0 mb-2"
+                >
+                  <span className="font-medium text-[10px] leading-tight">
+                    {d.title}
+                  </span>
+                  <p className="font-bold text-[15px] leading-tight">
+                    {d.desc}
+                  </p>
+                </div>
+              ))}
+            </div>
+            {/* Filtered Column Details */}
+            <div className="flex flex-col items-start w-full">
+              {filteredColDetails.map((d) => (
+                <div
+                  key={d.id}
+                  className="flex flex-col px-4 w-full gap-0 mb-2"
+                >
+                  <span className="font-medium text-[10px] leading-tight">
+                    {d.title}
+                  </span>
+                  <p className="font-bold text-[15px] leading-tight">
+                    {d.desc}
+                  </p>
+                  <p className="font-bold text-[15px] leading-tight">
+                    {d.Name}
+                  </p>
+                </div>
+              ))}
+            </div>
+            <p className="p-[1px] bg-black rounded-xl mx-2 z-50"></p>
           </div>
 
           <div className="h-1/3 flex w-full">
             <div className="flex flex-col items-start justify-center px-4 py-6">
               <Image src={GGIcon} alt="Logo" width={47} height={47} />
               <CardHeader className="flex flex-col space-y-0 p-0">
-                <CardTitle className="font-bold text-[14px]">
-                  {data.Name}
-                </CardTitle>
-                <CardDescription className="font-normal text-[11px]">
-                  {data.Subject}
-                </CardDescription>
+                <CardTitle className="font-bold text-[14px]"></CardTitle>
+                <CardDescription className="font-normal text-[11px]"></CardDescription>
               </CardHeader>
             </div>
             <div className="flex-1 m-auto">
