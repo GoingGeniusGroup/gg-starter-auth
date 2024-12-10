@@ -1,6 +1,5 @@
 {
   "compilerOptions": {
-    "baseUrl":"./*",
     "target": "es2015",
     "lib": ["dom", "dom.iterable", "esnext", "es2015"],
     "allowJs": true,
@@ -20,7 +19,7 @@
       }
     ],
     "paths": {
-      "@/*": ["./*","./app/*","./components/*"]
+      "@/*": ["./*","./app/*"]
     },
     "typeRoots": ["types"]
   },
