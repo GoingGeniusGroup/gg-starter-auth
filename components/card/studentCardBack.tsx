@@ -9,9 +9,25 @@ import {
 import Image from "next/image";
 
 import GGIcon from "../../public/card/GGReal Icon.svg";
+import { title } from "process";
 
 const data = {
-  College: "Itahari International College",
+  description:
+    "This is a Digital ID Issued by the Going Genius Education Membership.",
+  bydetails: [
+    {
+      id: 1,
+      title: "Softwarica | Going Genius Group",
+    },
+    {
+      id: 2,
+      title: "Going Genius Education Membership",
+    },
+    {
+      id: 3,
+      title: "goinggenius.com.np | Going Genius Group",
+    },
+  ],
   details: [
     {
       id: 1,
@@ -87,7 +103,7 @@ const StudentCardBack = () => {
         <div className="absolute flex flex-col justify-between inset-0 py-4">
           {/* Content */}
           <div className="h-2/3 flex flex-col">
-            <div className="mx-auto mb-2">
+            <div className="mx-auto mb-4">
               <Image src={GGIcon} alt="Logo" width={47} height={47} />
             </div>
             {/* Filtered Row Details */}
@@ -125,25 +141,19 @@ const StudentCardBack = () => {
                 </div>
               ))}
             </div>
-            <p className="p-[1px] bg-black rounded-xl mx-2 z-50"></p>
+            <p className="p-[1px] bg-black rounded-xl mx-2 z-50 my-2"></p>
           </div>
 
-          <div className="h-1/3 flex w-full">
-            <div className="flex flex-col items-start justify-center px-4 py-6">
-              <Image src={GGIcon} alt="Logo" width={47} height={47} />
-              <CardHeader className="flex flex-col space-y-0 p-0">
-                <CardTitle className="font-bold text-[14px]"></CardTitle>
-                <CardDescription className="font-normal text-[11px]"></CardDescription>
-              </CardHeader>
-            </div>
-            <div className="flex-1 m-auto">
-              <Image
-                src="/card/QR-Image.jpg"
-                alt="qrcode"
-                width={85}
-                height={85}
-              />
-            </div>
+          {/*Bottom Content*/}
+          <div className="h-1/3 flex flex-col w-full mt-2">
+            <h2 className="font-bold text-[10px] text-center mb-6">
+              {data.description}
+            </h2>
+            {data.bydetails.map((d) => (
+              <div key={d.id} className="font-medium text-[10px] text-center">
+                {d.title}
+              </div>
+            ))}
           </div>
         </div>
       </div>
