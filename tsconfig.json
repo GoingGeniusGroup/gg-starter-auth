@@ -19,7 +19,7 @@
       }
     ],
     "paths": {
-      "@/*": ["./*","./app/*","app/components/*"]
+      "@/*": ["./*","./app/*","./components/*"]
     },
     "typeRoots": ["types"]
   },
