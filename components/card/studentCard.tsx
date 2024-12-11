@@ -43,7 +43,14 @@ const StudentCard = () => {
             transition={{ duration: 0.7 }}
             animate={{ rotateY: flipped ? 0 : 180 }}
           >
-            <StudentCardBack />
+            <StudentCardBack
+              userName="Aayush Karki"
+              expiration={new Date("2025-12-31")}
+              course="BSc (Hons) Computing"
+              emergencyContactName="Anush Karki"
+              emergencyContactNum="9862148880"
+              phone="9827368746"
+            />
           </motion.div>
         </motion.div>
       </motion.div>

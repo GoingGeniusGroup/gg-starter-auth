@@ -9,58 +9,78 @@ import {
 import Image from "next/image";
 
 import GGIcon from "../../public/card/GGReal Icon.svg";
-import { title } from "process";
 
-const data = {
-  description:
-    "This is a Digital ID Issued by the Going Genius Education Membership.",
-  bydetails: [
-    {
-      id: 1,
-      title: "Softwarica | Going Genius Group",
-    },
-    {
-      id: 2,
-      title: "Going Genius Education Membership",
-    },
-    {
-      id: 3,
-      title: "goinggenius.com.np | Going Genius Group",
-    },
-  ],
-  details: [
-    {
-      id: 1,
-      title: "ID Number",
-      desc: "9827368746",
-    },
-    {
-      id: 2,
-      title: "Expiration",
-      desc: "DD/MM/YYYY",
-    },
-    {
-      id: 3,
-      title: "Student Name",
-      desc: "Aayush Karki",
-    },
-    {
-      id: 4,
-      title: "Emergency Contact",
-      Name: "Rabindra Lama",
-      desc: "9803020439",
-    },
-    {
-      id: 5,
-      title: "Course Name",
-      desc: "BSc (Hons) Computing",
-    },
-  ],
-};
+interface studentCardBackProps {
+  phone: String;
+  expiration: Date;
+  userName: String;
+  emergencyContactNum: String;
+  emergencyContactName: String;
+  course: String;
+}
 
-const StudentCardBack = () => {
+const StudentCardBack: React.FC<studentCardBackProps> = ({
+  phone,
+  expiration,
+  userName,
+  emergencyContactNum,
+  emergencyContactName,
+  course,
+}) => {
+  const formattedExpiration = expiration.toLocaleDateString("en-GB", {
+    day: "2-digit",
+    month: "short",
+    year: "numeric",
+  });
+
+  const data = {
+    description:
+      "This is a Digital ID Issued by the Going Genius Education Membership.",
+    bydetails: [
+      {
+        id: 1,
+        title: "Softwarica | Going Genius Group",
+      },
+      {
+        id: 2,
+        title: "Going Genius Education Membership",
+      },
+      {
+        id: 3,
+        title: "goinggenius.com.np | Going Genius Group",
+      },
+    ],
+    details: [
+      {
+        id: 1,
+        title: "Phone Number",
+        desc: phone,
+      },
+      {
+        id: 2,
+        title: "Expiration",
+        desc: formattedExpiration,
+      },
+      {
+        id: 3,
+        title: "Student Name",
+        desc: userName,
+      },
+      {
+        id: 4,
+        title: "Emergency Contact",
+        Name: emergencyContactName,
+        desc: emergencyContactNum,
+      },
+      {
+        id: 5,
+        title: "Course Name",
+        desc: course,
+      },
+    ],
+  };
   const filteredRowDetails = data.details.filter((d) =>
-    ["ID Number", "Expiration"].includes(d.title)
+    ["Phone Number", "Expiration"].includes(d.title)
   );
 
   const filteredColDetails = data.details.filter((d) =>
