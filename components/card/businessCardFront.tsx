@@ -50,6 +50,8 @@ const BusinessCardFront: React.FC<BusinessCardProps> = ({
       },
     ],
   };
+
+  const qrCodeData = "https://kaayush.vercel.app/";
   return (
     <Card className="grid grid-cols-2 w-[336px] h-[192px] bg-white overflow-hidden relative border-none">
       {/*left side*/}
@@ -140,11 +142,10 @@ const BusinessCardFront: React.FC<BusinessCardProps> = ({
         </div>
 
         <div className="absolute bottom-4 left-[50%] transform -translate-x-1/5 z-40 py-2">
-          <Image
-            src="/card/QR-Image.jpg"
-            alt="QR Image"
-            width={40}
-            height={40}
+          <QRCodeSVG
+            className="p-[2px] bg-white"
+            value={qrCodeData}
+            size={50}
           />
         </div>
       </div>
