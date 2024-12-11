@@ -31,7 +31,13 @@ const BusinessCard = () => {
             transition={{ duration: 0.7 }}
             animate={{ rotateY: flipped ? 180 : 0 }}
           >
-            <BusinessCardFront />
+            <BusinessCardFront
+              userName="Aayush Karki"
+              userField="Web Developer"
+              email="ayushkarkee6@gmail.com"
+              phone="+977 9827368746"
+              location="Kathmandu, Nepal"
+            />
           </motion.div>
           <motion.div
             className="absolute backface-hidden"
