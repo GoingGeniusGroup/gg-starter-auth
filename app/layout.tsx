@@ -22,7 +22,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         <Toaster position="bottom-left" richColors theme="light" />
         {children}
       {/* </Layout> */}
-      </body>
+      </body>                   
     </html>
   );
 }
