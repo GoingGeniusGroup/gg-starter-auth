@@ -12,6 +12,7 @@ export default async function Home() {
     <>
       <div>Hello {user?.name}</div>
       {/* <VideoHome /> */}
+      
     </>
   )
 }
