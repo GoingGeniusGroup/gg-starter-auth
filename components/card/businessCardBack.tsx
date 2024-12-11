@@ -8,6 +8,7 @@ import {
   CardTitle,
 } from "../ui/card";
 import Image from "next/image";
+import { QRCodeSVG } from "qrcode.react";
 
 const data = {
   Company: "Going Genius",
@@ -15,6 +16,7 @@ const data = {
 };
 
 const BusinessCardBack = () => {
+  const qrCodeData = "https://ggrelativity.xyz/";
   return (
     <Card className="grid grid-cols-2 w-[336px] h-[192px] bg-black overflow-hidden relative border-none">
       {/*Left Side*/}
@@ -34,13 +36,13 @@ const BusinessCardBack = () => {
           />
         </svg>
 
-        <Image
-          src="/card/QR-Image.jpg"
-          alt="QR"
-          className="absolute left-8 top-[70px]"
-          width={50}
-          height={50}
-        />
+        <div className="absolute top-[54px] right-[70px]">
+          <QRCodeSVG
+            className="p-[2px] bg-white"
+            value={qrCodeData}
+            size={70}
+          />
+        </div>
       </div>
 
       {/*Right Side*/}

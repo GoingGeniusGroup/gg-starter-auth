@@ -12,7 +12,7 @@ import {
 } from "../ui/card";
 import Image from "next/image";
 
-interface BusinessCardProps {
+interface BusinessCardFrontProps {
   userName: string;
   userField: string;
   phone: string;
@@ -20,7 +20,7 @@ interface BusinessCardProps {
   location: string;
 }
 
-const BusinessCardFront: React.FC<BusinessCardProps> = ({
+const BusinessCardFront: React.FC<BusinessCardFrontProps> = ({
   userName,
   userField,
   email,
