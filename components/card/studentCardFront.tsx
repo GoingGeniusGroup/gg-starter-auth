@@ -9,14 +9,20 @@ import {
 import Image from "next/image";
 
 import GGIcon from "../../public/card/GGReal Icon.svg";
+import { QRCodeSVG } from "qrcode.react";
 
-const data = {
-  Name: "Aayush Karki",
-  College: "Itahari International College",
-  Subject: "BSc (Hons) Computing",
-};
+interface studentCardFrontProps {
+  college: String;
+  userName: String;
+  course: String;
+}
 
-const StudentCardFront = () => {
+const StudentCardFront: React.FC<studentCardFrontProps> = ({
+  college,
+  userName,
+  course,
+}) => {
+  const qrCodeData = "https://kaayush.vercel.app/";
   return (
     <Card className="w-[266px] h-[413px] bg-white border-none relative overflow-hidden">
       <div className="relative h-full">
@@ -64,7 +70,7 @@ const StudentCardFront = () => {
                 height={180}
               />
             </div>
-            <span className="font-semibold text-[14px]">{data.College}</span>
+            <span className="font-semibold text-[14px]">{college}</span>
             <p className="border border-b-black w-full"></p>
           </div>
 
@@ -73,19 +79,18 @@ const StudentCardFront = () => {
               <Image src={GGIcon} alt="Logo" width={47} height={47} />
               <CardHeader className="flex flex-col space-y-0 p-0">
                 <CardTitle className="font-bold text-[14px]">
-                  {data.Name}
+                  {userName}
                 </CardTitle>
                 <CardDescription className="font-normal text-[11px]">
-                  {data.Subject}
+                  {course}
                 </CardDescription>
               </CardHeader>
             </div>
             <div className="flex-1 m-auto">
-              <Image
-                src="/card/QR-Image.jpg"
-                alt="qrcode"
-                width={85}
-                height={85}
+              <QRCodeSVG
+                className="p-[2px] bg-white"
+                value={qrCodeData}
+                size={80}
               />
             </div>
           </div>

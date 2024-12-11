@@ -31,7 +31,11 @@ const StudentCard = () => {
             transition={{ duration: 0.7 }}
             animate={{ rotateY: flipped ? 180 : 0 }}
           >
-            <StudentCardFront />
+            <StudentCardFront
+              college="Itahari International College"
+              course="BSc (Hons) Computing"
+              userName="Aayush Karki"
+            />
           </motion.div>
           <motion.div
             className="absolute backface-hidden"
