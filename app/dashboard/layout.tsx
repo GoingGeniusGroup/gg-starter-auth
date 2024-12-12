@@ -1,7 +1,7 @@
 "use client";
 
-import Sidebar from "../../components/dashboard/Sidebar";
-import Topbar from "../../components/dashboard/Topbar";
+import Sidebar from "@/_components/dashboard/Sidebar";
+import Topbar from "@/_components/dashboard/Topbar";
 import { ReactNode, useState } from "react";
 
 const DashboardLayout = ({ children }: { children: ReactNode }) => {
