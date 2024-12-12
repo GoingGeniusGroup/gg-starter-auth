@@ -89,17 +89,30 @@ enum ProductStatus {
   NOTAVAILABLE
 }
 
+enum ProductType {
+  VIRTUAL
+  PHYSICAL
+}
+
+enum ProductUnit {
+  PIECE
+  KG
+  GRAM
+}
+
 model Product {
   id              String        @id @default(cuid())
   name            String
   description     String?
   image           String?
   costPrice       Float
+  unit            ProductUnit   @default(PIECE)
   quantityInStock Int
   validity        String?
   discount        String?
   salePrice       Float?
   margin          String?
+  type            ProductType   @default(VIRTUAL)
   status          ProductStatus @default(AVAILABLE)
 
   inventory Inventory?
