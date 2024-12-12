@@ -227,6 +227,7 @@ model Topup {
   id        String      @id @default(cuid())
   amount    Float
   userId    String
+  type      TopupType   @default(CREDIT)
   status    TopupStatus @default(PENDING)
   user      User        @relation(fields: [userId], references: [id])
   createdAt DateTime    @default(now())
@@ -236,4 +237,10 @@ enum TopupStatus {
   PENDING
   SUCCESS
   FAILED
+}
+
+enum TopupType {
+  CREDIT
+  CASH
+  GGCOIN
 }
