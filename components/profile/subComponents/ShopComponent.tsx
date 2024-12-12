@@ -15,6 +15,8 @@ import "swiper/css/navigation";
 import "swiper/css/scrollbar";
 import "swiper/css/pagination";
 
+import productdata from "../data/product";
+
 const demodata = [
   {
     productId: "1234567890",
@@ -135,13 +137,7 @@ const demodata = [
   },
 ];
 
-const categories = [
-  "Laptops",
-  "Smartphones",
-  "Headphones",
-  "Consoles",
-  "Electronics",
-];
+const categories = ["Emotes", "Coins", "Sounds"];
 
 export default function ShopComponent() {
   const [selectedCategory, setSelectedCategory] = useState(null);
@@ -158,10 +154,10 @@ export default function ShopComponent() {
   };
 
   const filteredProducts = selectedCategory
-    ? demodata.filter((product) =>
-        product.categories.includes(selectedCategory)
+    ? productdata.filter((product) =>
+        product.category.includes(selectedCategory)
       )
-    : demodata;
+    : productdata;
 
   const searchedProducts = filteredProducts.filter((product) => {
     const nameMatch = product.name
@@ -241,11 +237,11 @@ export default function ShopComponent() {
           <Carousel className="w-full">
             <CarouselContent>
               {searchedProducts.map((product) => (
-                <CarouselItem key={product.productId} className="shrink-0 pb-4">
+                <CarouselItem key={product.id} className="shrink-0 pb-4">
                   <div className="relative overflow-hidden rounded-md bg-white/40 border border-gray-300 shadow-md dark:bg-white">
                     <div className="h-50 w-full overflow-hidden rounded-md bg-gray-100">
                       <Image
-                        src={product.imageUrl}
+                        src={product.images[0]}
                         alt={product.name}
                         width={300}
                         height={200}
@@ -261,7 +257,7 @@ export default function ShopComponent() {
                     </div>
                     <div className="absolute left-2 top-2 rounded-full bg-white p-1 border border-gray-200 shadow-md">
                       <span className="text-sm font-bold text-yellow-400">
-                        {product.rating}
+                        4.9
                       </span>
                     </div>
                   </div>
