@@ -19,6 +19,19 @@ const CategoryForm = () => {
             className="w-full mt-1 p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
         </div>
+        <div className="mb-3">
+            <label htmlFor="categoryImage" className="block text-sm font-semibold text-gray-700">
+              Category Image:
+            </label>
+            <input
+              type="file"
+              id="categoryImage"
+              name="categoryImage"
+              accept="image/*"
+              required
+              className="w-full mt-1 p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+          </div>
         <button
           type="submit"
           className="w-full p-2 my-3 bg-green-500 text-white rounded hover:bg-green-600 transition"
