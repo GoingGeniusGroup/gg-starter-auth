@@ -9,11 +9,11 @@ import {
   FaUsers,
   FaTimes,
 } from "react-icons/fa";
-import ShopComponent from "./subComponents/ShopComponent";
-import SideProfile from "./subComponents/ProfileComponent";
-import WalletComponent from "./subComponents/WalletComponent";
-import EmergencyComponent from "./subComponents/EmergencyComponent";
-import SidebarSearchComponent from "./subComponents/SidebarSearchComponent";
+import ShopComponent from "../profile/subComponents/ShopComponent";
+import SideProfile from "../profile/subComponents/ProfileComponent";
+import WalletComponent from "../profile/subComponents/WalletComponent";
+import EmergencyComponent from "../profile/subComponents/EmergencyComponent";
+import SidebarSearchComponent from "../profile/subComponents/SidebarSearchComponent";
 import { usePathname } from "next/navigation";
 import { motion, AnimatePresence, LayoutGroup } from "framer-motion";
 import { VscClearAll } from "react-icons/vsc";
