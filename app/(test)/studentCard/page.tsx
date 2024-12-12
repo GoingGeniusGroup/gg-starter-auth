@@ -1,4 +1,4 @@
-import StudentCard from "@/components/card/studentCard";
+import StudentCard from "@/app/components/card/studentCard";
 import React from "react";
 
 const StudentCardTest = () => {

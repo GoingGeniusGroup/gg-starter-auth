@@ -1,5 +1,5 @@
 import React from "react";
-import GGLOGO from "../../public/card/GGLOGO.svg";
+import GGLOGO from "../../../public/card/GGLOGO.svg";
 import {
   Card,
   CardContent,

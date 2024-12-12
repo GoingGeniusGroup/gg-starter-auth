@@ -1,7 +1,7 @@
 import React from "react";
 import { FaPhoneAlt } from "react-icons/fa";
 import { CiMail, CiLocationOn } from "react-icons/ci";
-import GGLOGO from "../../public/card/GGLOGO.svg";
+import GGLOGO from "../../../public/card/GGLOGO.svg";
 import { QRCodeSVG } from "qrcode.react";
 import {
   Card,

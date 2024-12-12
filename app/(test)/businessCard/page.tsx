@@ -1,4 +1,4 @@
-import BusinessCard from "@/components/card/businessCard";
+import BusinessCard from "@/app/components/card/businessCard";
 import React from "react";
 
 const BusinessCardTest = () => {

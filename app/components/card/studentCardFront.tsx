@@ -8,7 +8,7 @@ import {
 } from "../ui/card";
 import Image from "next/image";
 
-import GGIcon from "../../public/card/GGReal Icon.svg";
+import GGIcon from "../../../public/card/GGReal Icon.svg";
 import { QRCodeSVG } from "qrcode.react";
 
 interface studentCardFrontProps {
