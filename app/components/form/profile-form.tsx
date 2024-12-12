@@ -47,15 +47,15 @@ export const ProfileForm = ({ user }: ProfileFormProps) => {
 
   return (
     <>
-      <div className="col-span-2 col-start-2 flex justify-center">
-        <Avatar className="w-64 h-64">
+      <div className="col-span-full flex flex-col max-lg:items-center lg:col-span-2 lg:col-start-2 lg:flex-row md:justify-center">
+        <Avatar className="lg:w-64 lg:h-64 w-44 h-44">
           <AvatarImage src={user.image ?? ""} />
           <AvatarFallback>
-            <UserRound size={128} />
+            <UserRound className="lg:w-[128px] lg:h-[128px] w-[100px] h-[100px]" />
           </AvatarFallback>
         </Avatar>
       </div>
-      <div className="col-span-3 space-y-12">
+      <div className="col-span-full lg:col-span-3 space-y-12">
         <Form {...form}>
           <form onSubmit={handleSubmit} className="space-y-6">
             <div className="space-y-4">

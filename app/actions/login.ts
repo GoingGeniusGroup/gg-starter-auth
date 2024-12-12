@@ -56,7 +56,8 @@ export const login = async (payload: z.infer<typeof loginSchema>) => {
 
   // Check if user's 2FA are enabled
   if (existingUser.isTwoFactorEnabled && existingUser.email) {
-    const existingTwoFactorConfirmation = await getTwoFactorConfirmationByUserId(existingUser.id);
+    const existingTwoFactorConfirmation =
+      await getTwoFactorConfirmationByUserId(existingUser.id);
     const hasExpired = isExpired(existingTwoFactorConfirmation?.expires!);
 
     // If two factor confirmation exist and expired, then delete it.
