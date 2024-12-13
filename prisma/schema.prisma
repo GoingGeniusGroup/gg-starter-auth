@@ -48,6 +48,8 @@ model User {
   Cart                  Cart[]
   Order                 Order[]
   Topup                 Topup[]
+  Product               Product[]
+  cards                 cards[]
 }
 
 model VerificationToken {
@@ -106,19 +108,22 @@ model Product {
   description     String?
   image           String?
   costPrice       Float
-  unit            ProductUnit   @default(PIECE)
+  unit            ProductUnit   @default(PIECE) //added
   quantityInStock Int
   validity        String?
   discount        String?
   salePrice       Float?
   margin          String?
-  type            ProductType   @default(VIRTUAL)
+  type            ProductType   @default(VIRTUAL) //added
   status          ProductStatus @default(AVAILABLE)
 
   inventory Inventory?
 
   categoryId String
   category   Category @relation(fields: [categoryId], references: [id])
+ 
+  userId String //added
+  user   User   @relation(fields: [userId], references: [id])
 
   suppliers Supplier[] @relation("ProductSuppliers")
   orders    Order[]    @relation("ProductOrders")
@@ -236,6 +241,7 @@ model PaymentMethod {
   orders Order[]
 }
 
+//Top up modal
 model Topup {
   id        String      @id @default(cuid())
   amount    Float
@@ -256,4 +262,30 @@ enum TopupType {
   CREDIT
   CASH
   GGCOIN
+}
+
+//card modal membership
+model cards {
+  id               String    @id @default(cuid())
+  userId           String
+  user             User      @relation(fields: [userId], references: [id])
+  type             cardType  @default(BUSINESS)
+  userName         String?   @db.VarChar(50)
+  userField        String?   @db.VarChar(50)
+  email            String?   @db.VarChar(50)
+  phone            String?   @db.VarChar(50)
+  location         String?   @db.VarChar(50)
+  studentFaculty   String?   @db.VarChar(50)
+  emergencyContact String?   @db.VarChar(50)
+  emergenctName    String?   @db.VarChar(50)
+  backgroundImage  String[]
+  enrollDate       DateTime?
+  expireDate       DateTime?
+}
+
+enum cardType {
+  STUDENT
+  BUSINESS
+  DEVELOPER
+  GAMER
 }
