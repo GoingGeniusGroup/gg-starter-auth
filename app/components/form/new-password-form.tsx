@@ -1,17 +1,17 @@
 "use client";
 
-import { newPassword } from "@/actions/new-password";
-import { CardWrapper } from "@/app/components/auth/card-wrapper";
-import { FormInput } from "@/app/components/auth/form-input";
-import { Button } from "@/app/components/ui/button";
-import { Form } from "@/app/components/ui/form";
-import { newPasswordSchema } from "@/schemas";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useRouter } from "next/navigation";
+import { CardWrapper } from "@/components/auth/card-wrapper";
+import { Form } from "@/components/ui/form";
+import { FormInput } from "@/components/auth/form-input";
 import { useTransition } from "react";
 import { useForm } from "react-hook-form";
-import { toast } from "sonner";
+import { newPasswordSchema } from "@/schemas";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
+import { Button } from "@/components/ui/button/button";
+import { useRouter } from "next/navigation";
+import { newPassword } from "@/actions/new-password";
+import { toast } from "sonner";
 
 type NewPasswordFormProps = {
   token: string;

@@ -1,27 +1,27 @@
 "use client";
 
-import { resendToken } from "@/actions/resend";
-import { CardWrapper } from "@/app/components/auth/card-wrapper";
-import { FormInput } from "@/app/components/auth/form-input";
-import { Button } from "@/app/components/ui/button";
-import { Form } from "@/app/components/ui/form";
+import { CardWrapper } from "@/components/auth/card-wrapper";
 import { resendSchema } from "@/schemas";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useTransition } from "react";
 import { useForm } from "react-hook-form";
-import { toast } from "sonner";
 import { z } from "zod";
+import { Form } from "@/components/ui/form";
+import { FormInput } from "@/components/auth/form-input";
+import { useTransition } from "react";
+import { resendToken } from "@/actions/resend";
+import { toast } from "sonner";
+import { Button } from "@/components/ui/button/button";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 export const ResendForm = () => {
   const [isPending, startTransition] = useTransition();
   const form = useForm<z.infer<typeof resendSchema>>({
     resolver: zodResolver(resendSchema),
     defaultValues: {
-      email: ""
-    }
-  })
+      email: "",
+    },
+  });
 
-  const handleSubmit = form.handleSubmit(values => {
+  const handleSubmit = form.handleSubmit((values) => {
     startTransition(() => {
       resendToken(values).then((data) => {
         if (data.success) {
@@ -29,7 +29,7 @@ export const ResendForm = () => {
         }
         return toast.error(data.error.message);
       });
-    })
+    });
   });
   return (
     <CardWrapper
@@ -48,7 +48,9 @@ export const ResendForm = () => {
             placeholder="e.g. johndoe@example.com"
             isPending={isPending}
           />
-          <Button type="submit" disabled={isPending} className="w-full">Resend</Button>
+          <Button type="submit" disabled={isPending} className="w-full">
+            Resend
+          </Button>
         </form>
       </Form>
     </CardWrapper>
