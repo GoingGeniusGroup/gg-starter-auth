@@ -13,7 +13,7 @@ export const {
   auth,
   signIn,
   signOut,
-  update
+  update,
 } = NextAuth({
   adapter: PrismaAdapter(db),
   session: {
@@ -34,7 +34,7 @@ export const {
       if (user) {
         token.id = user.id;
         token.email = user.email;
-        token.name = user.name;
+        token.username = user.name;
         token.isOAuth = !!account;
       }
 
@@ -43,9 +43,9 @@ export const {
       const existingUser = await getUserById(token.sub);
       if (!existingUser) return token;
 
-      const existingAccount = await getAccountByUserId(existingUser.id);
+      const existingAccount = await getAccountByUserId(existingUser.gg_id);
 
-      token.name = existingUser.name;
+      token.username = existingUser.username;
       token.email = existingUser.email;
       token.role = existingUser.role;
       token.isTwoFactorEnabled = existingUser.isTwoFactorEnabled;
@@ -55,9 +55,10 @@ export const {
     },
     async session({ token, session }) {
       if (token) {
-        session.user.id = token.id as string;
+        session.user.gg_id = token.id as string;
         session.user.name = token.name;
         session.user.email = token.email;
+        session.user.username = token.username as string;
         session.user.role = token.role as UserRole;
         session.user.isTwoFactorEnabled = token.isTwoFactorEnabled as boolean;
         session.user.isOAuth = token.isOAuth as boolean;
@@ -69,11 +70,10 @@ export const {
       if (account?.provider !== "credentials") return true;
 
       const existingUser = await getUserById(user.id);
-      
+
       if (existingUser?.isTwoFactorEnabled) {
-        const existingTwoFactorConfirmation = await getTwoFactorConfirmationByUserId(
-          existingUser.id
-        );
+        const existingTwoFactorConfirmation =
+          await getTwoFactorConfirmationByUserId(existingUser.gg_id);
         if (!existingTwoFactorConfirmation) return false;
         const hasExpired = isExpired(existingTwoFactorConfirmation.expires);
         if (hasExpired) return false;

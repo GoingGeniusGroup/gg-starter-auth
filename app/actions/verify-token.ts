@@ -2,7 +2,10 @@
 
 import { isExpired, response } from "@/lib/utils";
 import { getUserByEmail, updateUserById } from "@/services/user";
-import { deleteVerificationTokenById, getVerificationToken } from "@/services/verification-token";
+import {
+  deleteVerificationTokenById,
+  getVerificationToken,
+} from "@/services/verification-token";
 import { redirect } from "next/navigation";
 
 export const newVerification = async (token: string) => {
@@ -37,7 +40,7 @@ export const newVerification = async (token: string) => {
   }
 
   // Update user verified based on current datetime.
-  await updateUserById(existingUser.id, {
+  await updateUserById(existingUser.gg_id, {
     emailVerified: new Date(),
     email: existingToken.email, // This is needed when user want to change their email address
   });
