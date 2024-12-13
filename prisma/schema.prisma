@@ -47,6 +47,9 @@ model User {
   twoFactorConfirmation TwoFactorConfirmation?
   Cart                  Cart[]
   Order                 Order[]
+  Topup                 Topup[]
+  Product               Product[]
+  cards                 cards[]
 }
 
 model VerificationToken {
@@ -82,28 +85,45 @@ model TwoFactorConfirmation {
   expires DateTime
   user    User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
+
 enum ProductStatus {
   AVAILABLE
   NOTAVAILABLE
 }
 
+enum ProductType {
+  VIRTUAL
+  PHYSICAL
+}
+
+enum ProductUnit {
+  PIECE
+  KG
+  GRAM
+}
+
 model Product {
-  id              String  @id @default(cuid())
+  id              String        @id @default(cuid())
   name            String
   description     String?
   image           String?
   costPrice       Float
+  unit            ProductUnit   @default(PIECE) //added
   quantityInStock Int
   validity        String?
   discount        String?
   salePrice       Float?
   margin          String?
+  type            ProductType   @default(VIRTUAL) //added
   status          ProductStatus @default(AVAILABLE)
 
   inventory Inventory?
 
   categoryId String
   category   Category @relation(fields: [categoryId], references: [id])
+ 
+  userId String //added
+  user   User   @relation(fields: [userId], references: [id])
 
   suppliers Supplier[] @relation("ProductSuppliers")
   orders    Order[]    @relation("ProductOrders")
@@ -185,10 +205,10 @@ model Supplier {
 }
 
 enum OrderStatus {
-   PENDING
-   SHIPPED
-   DELIVERED
-   CANCELLED
+  PENDING
+  SHIPPED
+  DELIVERED
+  CANCELLED
 }
 
 model Order {
@@ -219,4 +239,53 @@ model PaymentMethod {
   paymentType String // e.g., 'Cash', 'Credit Card'
 
   orders Order[]
+}
+
+//Top up modal
+model Topup {
+  id        String      @id @default(cuid())
+  amount    Float
+  userId    String
+  type      TopupType   @default(CREDIT)
+  status    TopupStatus @default(PENDING)
+  user      User        @relation(fields: [userId], references: [id])
+  createdAt DateTime    @default(now())
+}
+
+enum TopupStatus {
+  PENDING
+  SUCCESS
+  FAILED
+}
+
+enum TopupType {
+  CREDIT
+  CASH
+  GGCOIN
+}
+
+//card modal membership
+model cards {
+  id               String    @id @default(cuid())
+  userId           String
+  user             User      @relation(fields: [userId], references: [id])
+  type             cardType  @default(BUSINESS)
+  userName         String?   @db.VarChar(50)
+  userField        String?   @db.VarChar(50)
+  email            String?   @db.VarChar(50)
+  phone            String?   @db.VarChar(50)
+  location         String?   @db.VarChar(50)
+  studentFaculty   String?   @db.VarChar(50)
+  emergencyContact String?   @db.VarChar(50)
+  emergenctName    String?   @db.VarChar(50)
+  backgroundImage  String[]
+  enrollDate       DateTime?
+  expireDate       DateTime?
+}
+
+enum cardType {
+  STUDENT
+  BUSINESS
+  DEVELOPER
+  GAMER
 }
