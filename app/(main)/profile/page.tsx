@@ -9,10 +9,12 @@ export const metadata: Metadata = {
 export default async function ProfilePage() {
   const user = await currentUser();
   if (!user) return;
-  
+
   return (
     <div className="grid grid-cols-7 gap-y-14">
-      <h2 className="text-xl col-span-full col-start-4 font-semibold">Profile Settings</h2>
+      <h2 className="text-xl col-span-full max-lg:flex max-lg:justify-center lg:col-start-4 font-semibold">
+        Profile Settings
+      </h2>
       <ProfileForm user={user} />
     </div>
   );
