@@ -1,6 +1,6 @@
 "use client";
 
-import { Avatar } from "@/components/comp/Avatar";
+import { Avatar } from "@/components/Avatar";
 import { Suspense } from "react";
 import AvatarSkeleton from "../GeniusUserProfile/skeleton/AvatarSkeleton";
 import { usePublicAvatar } from "./provider/AvatarManagerPublicContext";

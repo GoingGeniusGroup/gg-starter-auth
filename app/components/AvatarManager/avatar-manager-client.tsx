@@ -1,17 +1,17 @@
 "use client";
 
 import { addAvatar, deleteAvatar, updateAvatar } from "@/actions/avatar";
-import { Avatar } from "@/components/comp/Avatar";
+import { Avatar } from "@/components/Avatar";
 import {
   AvatarCreator,
   AvatarCreatorConfig,
   BodyType,
   Language,
-} from "@/components/comp/AvatarComponents/avatar_creator";
+} from "@/components/AvatarComponents/avatar_creator";
 import {
   AvatarExportedEvent,
   UserSetEvent,
-} from "@/components/comp/AvatarComponents/avatar_creator/events";
+} from "@/components/AvatarComponents/avatar_creator/events";
 import { Button as MovingBorderButton } from "@/components/ui/border/moving-border";
 import { Button } from "@/components/ui/button/button";
 import SpotlightButton from "@/components/ui/button/spotlightButton";

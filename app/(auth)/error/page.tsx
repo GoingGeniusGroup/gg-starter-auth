@@ -1,4 +1,4 @@
-import { ErrorCard } from "@/components/comp/auth/error-card";
+import { ErrorCard } from "@/components/auth/error-card";
 import { Metadata } from "next";
 import { AuthError } from "next-auth";
 

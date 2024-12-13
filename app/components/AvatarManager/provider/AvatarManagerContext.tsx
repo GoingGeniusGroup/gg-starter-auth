@@ -10,7 +10,7 @@ import {
 } from "react";
 
 import { addAvatar, deleteAvatar, updateAvatar } from "@/actions/avatar";
-import { AvatarExportedEvent } from "@/components/comp/AvatarComponents/avatar_creator/events";
+import { AvatarExportedEvent } from "@/components/AvatarComponents/avatar_creator/events";
 import { getAvatarsByUserId } from "@/services/avatar";
 import { AvatarResponse } from "@/types/utils";
 import { toast } from "sonner";
