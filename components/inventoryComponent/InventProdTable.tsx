@@ -9,7 +9,7 @@ import {
   TableRow,
 } from "@/components/ui/table1";
 
-
+import Link from "next/link";
 
 import { Input } from "@/components/ui/input"
 import { LuListFilter } from "react-icons/lu";
@@ -23,6 +23,7 @@ interface Product {
     quantity:number;
     unit: string; 
     unitPrice: number; 
+    category:string,
     description?: string;
   }
 
@@ -42,6 +43,7 @@ const InventProdTable = () => {
       quantity:20,
       unit: "Piece",
       unitPrice: 500,
+      category:"Physical",
       description: "Smartphone with 64GB storage",
     },
     {
@@ -52,6 +54,7 @@ const InventProdTable = () => {
       unit: "Piece",
       unitPrice: 500,
       quantity:20,
+      category:"Physical",
       description: "Smartphone with 64GB storage",
     },
     {
@@ -61,6 +64,7 @@ const InventProdTable = () => {
         unit: "Piece",
         unitPrice: 5000,
         quantity:6,
+        category:"Physical",
         description: "Smartphone",
       },
       {
@@ -70,16 +74,17 @@ const InventProdTable = () => {
         unit: "Piece",
         unitPrice: 550,
         quantity:20,
+        category:"Physical",
         description: "Smartphone with 64GB storage and AMOLED display",
       },
       {
         pd_id: 5,
         productId: "XYZ-001",
         name: "XYZ Laptop Silver",
-       
         unit: "Piece",
         unitPrice: 1000,
         quantity:20,
+        category:"Physical",
         description: "Laptop with Intel i5 processor and 256GB SSD",
       },
       {
@@ -89,6 +94,7 @@ const InventProdTable = () => {
         quantity:20,
         unit: "Sack",
         unitPrice: 900,
+        category:"Physical",
         description: "Ordinary portland cement",
       },
       {
@@ -98,6 +104,7 @@ const InventProdTable = () => {
         unit: "Kg",
         unitPrice: 90,
         quantity:20,
+        category:"Physical",
         description: "Polish white wheat powder",
       },
   ];
@@ -115,10 +122,13 @@ const InventProdTable = () => {
         </button>
       </div>   
       
+      <Link href="/add-product">
       <button className="flex items-center gap-2 justify-end bg-blue-500 text-white px-4 py-2 rounded-md shadow hover:bg-blue-600 active:bg-blue-700">
         <FaPlus className="w-4 h-4" /> 
         Add
       </button>
+      </Link>
+     
        </div>
 
     
@@ -129,6 +139,7 @@ const InventProdTable = () => {
             <TableHead>S.N</TableHead>
             <TableHead>Product ID</TableHead>
             <TableHead>Name</TableHead>
+            <TableHead>Category</TableHead>
             <TableHead>Quantity</TableHead>
             <TableHead>Unit</TableHead>
             <TableHead>Unit Price(Rs)</TableHead>
@@ -142,6 +153,7 @@ const InventProdTable = () => {
               <TableCell>{index+1}</TableCell>
               <TableCell>{product.productId}</TableCell>
               <TableCell className="text-blue-500">{product.name}</TableCell>
+              <TableCell>{product.category}</TableCell>
               <TableCell>{product.quantity}</TableCell>
               <TableCell>{product.unit}</TableCell>
               <TableCell className="text-green-500">{product.unitPrice.toFixed(2)}</TableCell>
