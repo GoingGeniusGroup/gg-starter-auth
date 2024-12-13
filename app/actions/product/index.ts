@@ -5,23 +5,20 @@ import { productSchema } from "@/schemas";
 import fs from "fs/promises";
 import { revalidatePath } from "next/cache";
 
+const writeImageToDisk = async (image: File) => {
+  await fs.mkdir("public/products", { recursive: true });
+  const imagepath = `/products/${crypto.randomUUID()}~${image.name}`;
+  await fs.writeFile(
+    `public${imagepath}`,
+    Buffer.from(await image.arrayBuffer())
+  );
 
-const writeImageToDisk = async (image:File) => {
-    await fs.mkdir("public/products", { recursive: true })
-    const imagepath = `/products/${crypto.randomUUID()}~${image.name}`;
-    await fs.writeFile(
-      `public${imagepath}`,
-      Buffer.from(await image.arrayBuffer())
-    );
-    return imagepath;
-  };
+  return imagepath;
+};
 
-  
-export const addProduct = async (
-  payload:FormData)=> {
- 
+export const addProduct = async (payload: FormData) => {
   const payloadObject: any = {};
-    
+
   for (const [key, value] of payload.entries()) {
     try {
       // Try to parse JSON values (for arrays and objects)
@@ -32,54 +29,51 @@ export const addProduct = async (
     }
   }
 
+  const validatedFields = productSchema.safeParse(payloadObject);
 
-  const validatedFields =  productSchema.safeParse( payloadObject)
-
-  
   if (!validatedFields.success) {
     return response({
       success: false,
       error: {
         code: 422,
         message: "invalid fields",
-        
       },
     });
   }
 
- try {
-   const data = validatedFields.data;
-   const imagepath = await writeImageToDisk(data.image);
-   const supplierIds = data.suppliers.map((sup) => sup.id);
- 
-   console.log(imagepath,'imagepath from server');
-     
-   const product = await db.product.create({
-     data: {
-       name: data.name,
-       image: imagepath,
-       costPrice: data.costPrice,
-       quantityInStock: data.quantityInStock,
-       categoryId: (
-         await db.category.findFirst({
-           where: { categoryName: "Electronics" },
-         })
-       )?.id!,
-       description: data.description,
-       validity: data.validity,
-       discount: data.discount || null,
-       salePrice: data.salePrice,
-       margin: data.margin || null,
-       suppliers: {
-         connect: supplierIds.map((id) => ({ id })),
-       }
-     },
-   });
- 
-   console.log(product,'product from server');
+  try {
+    const data = validatedFields.data;
+    const imagepath = await writeImageToDisk(data.image);
+    const supplierIds = data.suppliers.map((sup) => sup.id);
 
-   if (product) {
-      revalidatePath('/admin/products')
+    console.log(imagepath, "imagepath from server");
+
+    const product = await db.product.create({
+      data: {
+        name: data.name,
+        image: imagepath,
+        costPrice: data.costPrice,
+        quantityInStock: data.quantityInStock,
+        categoryId: (
+          await db.category.findFirst({
+            where: { categoryName: "Electronics" },
+          })
+        )?.id!,
+        description: data.description,
+        validity: data.validity,
+        discount: data.discount || null,
+        salePrice: data.salePrice,
+        margin: data.margin || null,
+        suppliers: {
+          connect: supplierIds.map((id) => ({ id })),
+        },
+      },
+    });
+
+    console.log(product, "product from server");
+
+    if (product) {
+      revalidatePath("/admin/products");
       return response({
         success: true,
         code: 201,
@@ -97,7 +91,7 @@ export const addProduct = async (
     }
   } catch (error) {
     console.error(error);
-    
+
     return response({
       success: false,
       error: {
@@ -107,5 +101,3 @@ export const addProduct = async (
     });
   }
 };
-
-

@@ -1,6 +1,5 @@
 import { create } from "zustand";
 
-
 interface Option {
   id: string;
   label: string;
@@ -25,30 +24,34 @@ export const useFetchValues = create<ListOptions>((set) => ({
   suppliers: [],
   products: [],
   isLoading: false,
-  
+
   fetchProducts: async () => {
     set({ isLoading: true });
     try {
       const productData = await getProducts();
 
       // Handle the case where productData might be null and ensure it's an array
-      set({ 
-        products: productData ? productData.map((product: any) => ({
-          id: product.id,
-          name: product.name,
-          description: product.description,
-          image: product.image || null,  // Assuming your product object may have image as null
-          costPrice: product.costPrice,
-          quantityInStock: product.quantityInStock,
-          validity: product.validity || null,  // Add other fields with fallback
-          discount: product.discount || null,
-          salePrice: product.salePrice,
-          margin: product.margin || null,
-          status: product.status,  // Assuming 'status' is of type ProductStatus
-          categoryId: product.categoryId || product.category.id, // Adjust category assignment
-        })) : [],  // Fallback to empty array if productData is null
-
-        isLoading: false 
+      set({
+        products: productData
+          ? productData.map((product: any) => ({
+              id: product.id,
+              name: product.name,
+              description: product.description || null,
+              image: product.image || null,
+              costPrice: product.costPrice || 0,
+              unit: product.unit || "PIECE",
+              quantityInStock: product.quantityInStock || 0,
+              validity: product.validity || null,
+              discount: product.discount || null,
+              salePrice: product.salePrice || 0,
+              margin: product.margin || null,
+              status: product.status || "AVAILABLE",
+              categoryId: product.categoryId || null,
+              type: product.type || "DEFAULT",
+              userId: product.userId || null,
+            }))
+          : [], // Fallback to empty array if productData is null
+        isLoading: false,
       });
     } catch (error) {
       console.error("Failed to fetch products:", error);
@@ -60,4 +63,3 @@ export const useFetchValues = create<ListOptions>((set) => ({
     // ... similar implementation for categories and suppliers
   },
 }));
-
