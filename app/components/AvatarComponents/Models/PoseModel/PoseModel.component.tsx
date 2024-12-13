@@ -1,6 +1,6 @@
 import React, { FC, Ref } from "react";
 import { useGraph } from "@react-three/fiber";
-import { Model } from "@/components/comp/AvatarComponents/Models/Model";
+import { Model } from "@/components/AvatarComponents/Models/Model";
 import { Group } from "three";
 import {
   mutatePose,
@@ -9,7 +9,7 @@ import {
   useGltfLoader,
 } from "@/services/avatar/index";
 import { BaseModelProps } from "@/types/avatar";
-import { Emotion } from "@/components/comp/Avatar/Avatar.component";
+import { Emotion } from "@/components/Avatar/Avatar.component";
 
 export interface PoseModelProps extends BaseModelProps {
   modelSrc: string | Blob;

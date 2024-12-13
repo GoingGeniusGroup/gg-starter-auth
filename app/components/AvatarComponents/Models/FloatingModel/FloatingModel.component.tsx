@@ -1,7 +1,7 @@
 import React, { useRef, FC } from "react";
 import { useFrame } from "@react-three/fiber";
 import type { Group } from "three";
-import { Model } from "@/components/comp/AvatarComponents/Models/Model";
+import { Model } from "@/components/AvatarComponents/Models/Model";
 import { useGltfLoader } from "@/services/avatar/index";
 import { BaseModelProps } from "@/types/avatar";
 

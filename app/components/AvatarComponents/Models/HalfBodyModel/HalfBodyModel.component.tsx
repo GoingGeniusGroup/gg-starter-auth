@@ -1,6 +1,6 @@
 import React, { FC, useRef } from "react";
 import { useFrame, useGraph } from "@react-three/fiber";
-import { Model } from "@/components/comp/AvatarComponents/Models/Model";
+import { Model } from "@/components/AvatarComponents/Models/Model";
 import { BaseModelProps } from "@/types/avatar";
 import {
   useEmotion,

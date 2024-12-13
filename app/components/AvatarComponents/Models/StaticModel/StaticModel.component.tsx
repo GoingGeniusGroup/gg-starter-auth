@@ -1,5 +1,5 @@
 import React, { FC, Ref } from "react";
-import { Model } from "@/components/comp/AvatarComponents/Models/Model";
+import { Model } from "@/components/AvatarComponents/Models/Model";
 import {
   useEmotion,
   useFallback,
@@ -8,7 +8,7 @@ import {
 import { Group } from "three";
 import { useGraph } from "@react-three/fiber";
 import { BaseModelProps } from "@/types/avatar";
-import { Emotion } from "@/components/comp/Avatar/Avatar.component";
+import { Emotion } from "@/components/Avatar/Avatar.component";
 
 export interface StaticModelProps extends BaseModelProps {
   modelSrc: string | Blob;

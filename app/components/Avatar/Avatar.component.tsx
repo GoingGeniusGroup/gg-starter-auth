@@ -11,27 +11,27 @@ import {
   useMemo,
   useRef,
 } from "react";
-import { BackgroundColor } from "@/components/comp/AvatarComponents/Background";
+import { BackgroundColor } from "@/components/AvatarComponents/Background";
 import {
   Background,
   Box,
-} from "@/components/comp/AvatarComponents/Background/Box/Box.component";
-import { BaseCanvas } from "@/components/comp/AvatarComponents/BaseCanvas";
-import Bloom from "@/components/comp/AvatarComponents/Bloom/Bloom.component";
+} from "@/components/AvatarComponents/Background/Box/Box.component";
+import { BaseCanvas } from "@/components/AvatarComponents/BaseCanvas";
+import Bloom from "@/components/AvatarComponents/Bloom/Bloom.component";
 import Capture, {
   CaptureType,
-} from "@/components/comp/AvatarComponents/Capture/Capture.component";
-import Lights from "@/components/comp/AvatarComponents/Lights/Lights.component";
-import Loader from "@/components/comp/AvatarComponents/Loader";
+} from "@/components/AvatarComponents/Capture/Capture.component";
+import Lights from "@/components/AvatarComponents/Lights/Lights.component";
+import Loader from "@/components/AvatarComponents/Loader";
 import {
   AnimationModel,
   HalfBodyModel,
   PoseModel,
   StaticModel,
-} from "@/components/comp/AvatarComponents/Models";
-import { CameraControls } from "@/components/comp/AvatarComponents/Scene/CameraControls.component";
-import { Environment } from "@/components/comp/AvatarComponents/Scene/Environment.component";
-import Shadow from "@/components/comp/AvatarComponents/Shadow/Shadow.component";
+} from "@/components/AvatarComponents/Models";
+import { CameraControls } from "@/components/AvatarComponents/Scene/CameraControls.component";
+import { Environment } from "@/components/AvatarComponents/Scene/Environment.component";
+import Shadow from "@/components/AvatarComponents/Shadow/Shadow.component";
 import { isValidFormat, triggerCallback } from "@/services/avatar/index";
 import {
   BaseModelProps,

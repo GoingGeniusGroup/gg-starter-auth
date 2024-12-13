@@ -2,7 +2,7 @@ import React, { useRef, FC, useMemo, useState } from "react";
 import { useFrame, useGraph } from "@react-three/fiber";
 import { AnimationMixer, Group } from "three";
 
-import { Model } from "@/components/comp/AvatarComponents/Models/Model";
+import { Model } from "@/components/AvatarComponents/Models/Model";
 import {
   useHeadMovement,
   useGltfLoader,
@@ -12,7 +12,7 @@ import {
 } from "@/services/avatar/index";
 import { BaseModelProps } from "@/types/avatar";
 import { loadAnimationClip } from "@/services/avatar/Animation.service";
-import { Emotion } from "@/components/comp/Avatar/Avatar.component";
+import { Emotion } from "@/components/Avatar/Avatar.component";
 
 export interface AnimationModelProps extends BaseModelProps {
   modelSrc: string | Blob;
