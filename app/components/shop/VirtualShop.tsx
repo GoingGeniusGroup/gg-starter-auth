@@ -9,7 +9,7 @@ import ProductList from "./subComponents/ProductList";
 import ProductDetail from "./subComponents/ProductDetail";
 import CartSheet from "./subComponents/CartSheet";
 import { Product, CartItem } from "./subComponents/types";
-import { Switch } from "../../ui/switch/switch";
+import { Switch } from "@/components/ui/switch/switch";
 import { GiEarthAmerica } from "react-icons/gi";
 import { TbHexagon3D } from "react-icons/tb";
 import {
@@ -20,8 +20,8 @@ import {
 import { Label } from "@/components/ui/label";
 import VirtualProductList from "./subComponents/VirtualProductList";
 
-import physicalProducts from "@/core/data/physicalProduct";
-import virtualProducts from "@/core/data/virtualProduct";
+import physicalProducts from "@/components/core/data/physicalProduct";
+import virtualProducts from "@/components/core/data/virtualProduct";
 
 const VirtualShop = () => {
   const [cart, setCart] = useState<Record<string, number>>({});
