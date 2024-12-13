@@ -37,7 +37,10 @@ model User {
   accounts              Account[]
   Cart                  Cart[]
   Order                 Order[]
+  Product               Product[]
+  Topup                 Topup[]
   twoFactorConfirmation TwoFactorConfirmation?
+  cards                 cards[]
 }
 
 model VerificationToken {
@@ -87,9 +90,13 @@ model Product {
   margin          String?
   status          ProductStatus @default(AVAILABLE)
   categoryId      String
+  type            ProductType   @default(VIRTUAL)
+  unit            ProductUnit   @default(PIECE)
+  userId          String
   carts           Cart[]
   inventory       Inventory?
   category        Category      @relation(fields: [categoryId], references: [id])
+  User            User          @relation(fields: [userId], references: [id])
   Variants        Variant[]
   orders          Order[]       @relation("ProductOrders")
   suppliers       Supplier[]    @relation("ProductSuppliers")
@@ -173,6 +180,34 @@ model PaymentMethod {
   orders      Order[]
 }
 
+model Topup {
+  id        String      @id
+  amount    Float
+  userId    String
+  type      TopupType   @default(CREDIT)
+  status    TopupStatus @default(PENDING)
+  createdAt DateTime    @default(now())
+  User      User        @relation(fields: [userId], references: [id])
+}
+
+model cards {
+  id               String    @id
+  userId           String
+  type             cardType  @default(BUSINESS)
+  userName         String?   @db.VarChar(50)
+  userField        String?   @db.VarChar(50)
+  email            String?   @db.VarChar(50)
+  phone            String?   @db.VarChar(50)
+  location         String?   @db.VarChar(50)
+  studentFaculty   String?   @db.VarChar(50)
+  emergencyContact String?   @db.VarChar(50)
+  emergenctName    String?   @db.VarChar(50)
+  backgroundImage  String[]
+  enrollDate       DateTime?
+  expireDate       DateTime?
+  User             User      @relation(fields: [userId], references: [id])
+}
+
 enum UserRole {
   Admin
   User
@@ -193,4 +228,34 @@ enum OrderStatus {
   SHIPPED
   DELIVERED
   CANCELLED
+}
+
+enum ProductType {
+  VIRTUAL
+  PHYSICAL
+}
+
+enum ProductUnit {
+  PIECE
+  KG
+  GRAM
+}
+
+enum TopupStatus {
+  PENDING
+  SUCCESS
+  FAILED
+}
+
+enum TopupType {
+  CREDIT
+  CASH
+  GGCOIN
+}
+
+enum cardType {
+  STUDENT
+  BUSINESS
+  DEVELOPER
+  GAMER
 }
