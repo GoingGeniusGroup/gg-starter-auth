@@ -12,15 +12,26 @@ const CategoryForm = ({onCancel}:CategoryFormProps) => {
         </legend>
         <div className='grid grid-cols-1 gap-3'></div>
         <div className="mb-3">
-          <label htmlFor="categoryType" className="block text-sm font-semibold text-gray-700">Categories Type:</label>
+          <label htmlFor="categoryName" className="block text-sm font-semibold text-gray-700">Categories Type:</label>
           <input
             type="text"
-            id="categoryType"
-            name="categoryType"
+            id="categoryName"
+            name="categoryName"
             required
             className="w-full mt-1 p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
         </div>
+        <div className="mb-3">
+            <label htmlFor="description" className="block text-sm font-semibold text-gray-700">
+            Category Description:
+            </label>
+            <textarea
+              id="description"
+              name="description"
+              rows={3}
+              className="w-full mt-1 p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+          </div>
         <div className="mb-3">
             <label htmlFor="categoryImage" className="block text-sm font-semibold text-gray-700">
               Category Image:

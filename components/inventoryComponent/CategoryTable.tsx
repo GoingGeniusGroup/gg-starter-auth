@@ -15,7 +15,8 @@ import { FaEdit, FaTrash, FaPlus } from "react-icons/fa";
 
 interface Category {
   CategoryId: number;
-  type: string;
+  categoryName: string;
+  categoryDescription:string;
   productQuantity: number;
 
 }
@@ -23,16 +24,19 @@ interface CategoryTableProps {
   onAddClick: () => void;
 }
 const CategoryTable = ({ onAddClick }:CategoryTableProps) => {
+    
   const categories: Category[] = [
     {
       CategoryId: 1,
-      type: "Virtual",
+      categoryName: "Virtual",
+      categoryDescription:"non-tengible,digitally created ",
       productQuantity:20, 
     },
 
     {
         CategoryId: 2,
-        type: "Physical",
+        categoryName: "Physical",
+        categoryDescription:"tengible products ",
         productQuantity:20, 
       },
   
@@ -67,6 +71,7 @@ const CategoryTable = ({ onAddClick }:CategoryTableProps) => {
             <TableHead>S.N</TableHead>
             <TableHead>Category Id</TableHead>
             <TableHead>Category Type</TableHead>
+            <TableHead>Category Description</TableHead>
             <TableHead>Number of Product</TableHead>
             <TableHead>Actions</TableHead>
           </TableRow>
@@ -76,9 +81,9 @@ const CategoryTable = ({ onAddClick }:CategoryTableProps) => {
             <TableRow key={index}>
               <TableCell>{index + 1}</TableCell>
               <TableCell>{category.CategoryId}</TableCell>
-              <TableCell className="text-blue-500">{category.type}</TableCell>
+              <TableCell className="text-blue-500">{category.categoryName}</TableCell>
+              <TableCell>{category.categoryDescription}</TableCell>
               <TableCell>{category.productQuantity}</TableCell>
-              
               <TableCell>
                 <div className="flex space-x-2">
                   <button
