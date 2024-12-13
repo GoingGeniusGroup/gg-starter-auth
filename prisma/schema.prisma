@@ -25,6 +25,11 @@ model Account {
   @@unique([provider, providerAccountId])
 }
 
+enum UserRole {
+  Admin
+  User
+}
+
 model User {
   id                    String                 @id @default(cuid())
   name                  String?
@@ -40,6 +45,7 @@ model User {
   Topup                 Topup[]
   Product               Product[]
   cards                 cards[]
+  TwoFactorConfirmation TwoFactorConfirmation?
 }
 
 model VerificationToken {
@@ -111,7 +117,7 @@ model Product {
 
   categoryId String
   category   Category @relation(fields: [categoryId], references: [id])
- 
+
   userId String //added
   user   User   @relation(fields: [userId], references: [id])
 
@@ -198,27 +204,6 @@ model Order {
   products        Product[]     @relation("ProductOrders")
 }
 
-model PaymentMethod {
-  id          String  @id @default(cuid())
-  paymentType String
-  orders      Order[]
-}
-
-enum UserRole {
-  Admin
-  User
-}
-
-enum ProductStatus {
-  AVAILABLE
-  NOTAVAILABLE
-}
-
-enum CartStatus {
-  PENDING
-  CHECKOUT
-}
-
 enum OrderStatus {
   PENDING
   SHIPPED
@@ -226,34 +211,10 @@ enum OrderStatus {
   CANCELLED
 }
 
-model Order {
-  id            String      @id @default(cuid())
-  orderDate     DateTime    @default(now())
-  quantity      Int
-  deliveryDate  DateTime?
-  streetAddress String
-  state         String
-  city          String
-  status        OrderStatus @default(PENDING)
-
-  products Product[] @relation("ProductOrders") //
-
-  // variants Variant[] @relation("OrderVariants")
-
-  userId String
-  user   User   @relation(fields: [userId], references: [id])
-
-  paymentMethod   PaymentMethod @relation(fields: [paymentMethodId], references: [id])
-  paymentMethodId String
-
-  carts Cart[] @relation("OrderCarts")
-}
-
 model PaymentMethod {
-  id          String @id @default(cuid())
-  paymentType String // e.g., 'Cash', 'Credit Card'
-
-  orders Order[]
+  id          String  @id @default(cuid())
+  paymentType String
+  orders      Order[]
 }
 
 //Top up modal
