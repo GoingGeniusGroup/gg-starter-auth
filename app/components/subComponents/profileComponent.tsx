@@ -13,7 +13,9 @@ export default function ProfileComponent() {
   const [showForm, setShowForm] = useState(false);
   const [form, setForm] = useState({});
 
-  const handleInputChange = (e) => {
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
     const { name, value } = e.target;
     setForm((prevForm) => ({
       ...prevForm,
@@ -27,7 +29,7 @@ export default function ProfileComponent() {
 
   // Check if user has region data and set region status accordingly
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
   };
 
