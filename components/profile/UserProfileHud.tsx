@@ -1,8 +1,15 @@
 "use client";
-import { FaBell, FaBriefcase, FaStore, FaUserCircle, FaUsers, FaTimes } from 'react-icons/fa'
+import {
+  FaBell,
+  FaBriefcase,
+  FaStore,
+  FaUserCircle,
+  FaUsers,
+  FaTimes,
+} from "react-icons/fa";
 import { useState } from "react";
 import Image from "next/image";
-import {   IoDiamondSharp } from "react-icons/io5";
+import { IoDiamondSharp } from "react-icons/io5";
 // import {   IoCart } from "react-icons/io5";
 // import { FaCreditCard } from "react-icons/fa6";
 // import { HiMiniWallet } from "react-icons/hi2";
@@ -10,7 +17,7 @@ import Link from "next/link";
 import { MdOutlineDarkMode } from "react-icons/md";
 import { GiCash } from "react-icons/gi";
 
-const tabs = ['Profile', 'Wallet', 'Shop', 'Emergency', 'Notifications'];
+const tabs = ["Profile", "Wallet", "Shop", "Emergency", "Notifications"];
 
 export default function UserProfileHud() {
   const [selectedTab, setSelectedTab] = useState("Cart");
@@ -34,18 +41,18 @@ export default function UserProfileHud() {
       //   return <HiMiniWallet className="text-blue-500" size={17} />;
       // default:
       //   return null;
-      case 'Profile':
-      return <FaUserCircle className='text-black' size={17} />
-    case 'Wallet':
-      return <FaBriefcase className='text-black' size={17} />
-    case 'Shop':
-      return <FaStore className='text-black' size={17} />
-    case 'Emergency':
-      return <FaUsers className='text-black' size={17} />
-    case 'Notifications':
-      return <FaBell className='text-black' size={17} />
-    default:
-      return null
+      case "Profile":
+        return <FaUserCircle className="text-black" size={17} />;
+      case "Wallet":
+        return <FaBriefcase className="text-black" size={17} />;
+      case "Shop":
+        return <FaStore className="text-black" size={17} />;
+      case "Emergency":
+        return <FaUsers className="text-black" size={17} />;
+      case "Notifications":
+        return <FaBell className="text-black" size={17} />;
+      default:
+        return null;
     }
   };
 
