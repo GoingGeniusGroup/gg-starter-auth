@@ -2,7 +2,9 @@ import { db } from "@/lib/db";
 import { setTokenExpiration } from "@/lib/utils";
 
 export const generateTwoFactorConfirmation = async (userId: string) => {
-  const existingTwoFactorConfirmation = await getTwoFactorConfirmationByUserId(userId);
+  const existingTwoFactorConfirmation = await getTwoFactorConfirmationByUserId(
+    userId
+  );
   if (existingTwoFactorConfirmation) {
     await deleteTwoFactorConfirmationById(existingTwoFactorConfirmation.id);
   }
@@ -49,4 +51,4 @@ export const deleteTwoFactorConfirmationByUserId = async (userId: string) => {
   } catch {
     return null;
   }
-}
+};

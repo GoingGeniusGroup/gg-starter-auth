@@ -1,27 +1,26 @@
 "use client";
 
 import { login } from "@/actions/login";
-import { CardWrapper } from "@/app/components/auth/card-wrapper";
-import { FormInput } from "@/app/components/auth/form-input";
-import { Button } from "@/app/components/ui/button";
-import { Form } from "@/app/components/ui/form";
+import { CardWrapper } from "@/components/auth/card-wrapper";
+import { FormInput } from "@/components/auth/form-input";
+import { Button } from "@/components/ui/button/button";
+import { Form } from "@/components/ui/form";
 import { loginSchema } from "@/schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
 
-export const LoginForm = () => {
+export const LoginForm = ({ isMobile }: { isMobile: boolean }) => {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
   const form = useForm<z.infer<typeof loginSchema>>({
     resolver: zodResolver(loginSchema),
     mode: "onChange",
     defaultValues: {
-      email: "",
+      login: "",
       password: "",
     },
   });
@@ -34,7 +33,22 @@ export const LoginForm = () => {
           if (!data.success) {
             return toast.error(data.error.message);
           }
-          return router.push("/two-factor");
+          if (data.code === 200 && data.message.includes("two-factor")) {
+            toast.success(data.message);
+            return router.push("/two-factor");
+          }
+          // If login is successful without 2FA:
+          // 1. Show success message
+          toast.success("Login successful! Redirecting...");
+
+          // 2. Small delay to ensure toast is shown
+          setTimeout(() => {
+            // 3. Reload the entire page
+            window.location.reload();
+
+            // 4. Optional: Replace current history entry with home page
+            window.location.href = "/";
+          }, 1000);
         })
         .catch(() => toast.error("Something went wrong."));
     });
@@ -46,6 +60,7 @@ export const LoginForm = () => {
       headerDescription="Welcome back! Please fill out the form below before logging in to the website."
       backButtonLabel="Don't have an account? Register"
       backButtonHref="/register"
+      isMobile={isMobile}
       showSocial
     >
       <Form {...form}>
@@ -53,10 +68,10 @@ export const LoginForm = () => {
           <div className="space-y-4">
             <FormInput
               control={form.control}
-              name="email"
-              label="Email Address"
-              type="email"
-              placeholder="e.g. johndoe@example.com"
+              name="login"
+              label="Email, Phone, or Username"
+              type="text"
+              placeholder="e.g. johndoe@example.com or @johndoe"
               isPending={isPending}
             />
             <div>
@@ -68,14 +83,14 @@ export const LoginForm = () => {
                 placeholder="******"
                 isPending={isPending}
               />
-              <Button
+              {/* <Button
                 size="sm"
-                variant="link"
-                className="-mt-6 p-0 text-xs text-blue-500 w-full justify-end"
+                variant="anylink"
+                className={`-mt-6 p-0 text-xs w-full justify-end`}
                 asChild
               >
                 <Link href="/reset">Forgot password?</Link>
-              </Button>
+              </Button> */}
             </div>
           </div>
           <Button type="submit" disabled={isPending} className="w-full">

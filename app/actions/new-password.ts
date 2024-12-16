@@ -10,7 +10,10 @@ import { redirect } from "next/navigation";
 import { z } from "zod";
 import { hashPassword, isExpired, response } from "@/lib/utils";
 
-export const newPassword = async (payload: z.infer<typeof newPasswordSchema>, token: string) => {
+export const newPassword = async (
+  payload: z.infer<typeof newPasswordSchema>,
+  token: string
+) => {
   // Check if user input is not valid, then return an error.
   const validatedFields = newPasswordSchema.safeParse(payload);
   if (!validatedFields.success) {
@@ -57,7 +60,7 @@ export const newPassword = async (payload: z.infer<typeof newPasswordSchema>, to
   const hashedPassword = await hashPassword(password);
 
   // Replace the old password with the new one.
-  await updateUserById(existingUser.id, {
+  await updateUserById(existingUser.gg_id, {
     password: hashedPassword,
   });
   // Delete reset password token.

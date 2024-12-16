@@ -28,7 +28,8 @@ export const sendTwoFactorEmail = async (email: string, token: string) => {
   await resend.emails.send({
     from: process.env.EMAIL_FROM as string,
     to: email,
-    subject: "[Next Dashboard] Action required: Confirm Two-Factor Authentication",
+    subject:
+      "[Next Dashboard] Action required: Confirm Two-Factor Authentication",
     html: `<p>${token} is your authentication Code.</p>`,
   });
 };

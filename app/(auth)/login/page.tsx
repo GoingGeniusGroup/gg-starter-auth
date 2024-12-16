@@ -8,5 +8,5 @@ export const metadata: Metadata = {
 
 export default async function LoginPage({ searchParams }: { searchParams: { error: string } }) {
   if (searchParams.error) redirect(`/error?message=${searchParams.error}`);
-  return <LoginForm />;
+  return <LoginForm isMobile={false} />;
 }
