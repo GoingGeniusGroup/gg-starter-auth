@@ -1,8 +1,8 @@
-import { type ClassValue, clsx } from "clsx";
-import { twMerge } from "tailwind-merge";
-import { sign, verify, type SignOptions, type Secret } from "jsonwebtoken";
+import { Response, ResponseSuccess, ResponseWithMessage } from "@/types";
 import bcrypt from "bcryptjs";
-import { Response, ResponseWithMessage } from "@/types";
+import { clsx, type ClassValue } from "clsx";
+import { sign, verify, type Secret, type SignOptions } from "jsonwebtoken";
+import { twMerge } from "tailwind-merge";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -37,7 +37,10 @@ export function setTokenExpiration(exp: number = 60 * 60) {
  * @return The token generated
  */
 
-export function signJwt(payload: Record<string, unknown>, options?: SignOptions) {
+export function signJwt(
+  payload: Record<string, unknown>,
+  options?: SignOptions
+) {
   return sign(payload, process.env.JWT_SECRET as Secret, {
     ...options,
     algorithm: "HS256",
@@ -70,9 +73,14 @@ export const fileToBase64 = (file: File): Promise<string> => {
   });
 };
 
+
+
+
+
 // Overload for response status in server action
-export function response(response: ResponseWithMessage): Response;
-export function response<T extends Record<string, unknown>>(response: Response<T>): Response<T>;
-export function response<T extends object>(response: T): T {
+export function response<T>(response: ResponseWithMessage): Response<T>;
+export function response<T>(response: ResponseSuccess<T>): Response<T>;
+export function response<T>(response: Response<T>): Response<T> {
   return response;
 }
+

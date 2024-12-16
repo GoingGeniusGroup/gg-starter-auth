@@ -24,7 +24,8 @@ export const profile = async (payload: z.infer<typeof profileSchema>) => {
     });
   }
 
-  let { name, email, password, newPassword, isTwoFactorEnabled } = validatedFields.data;
+  let { username, email, password, newPassword, isTwoFactorEnabled } =
+    validatedFields.data;
 
   // Check if current user does not exist, then return an error.
   const user = await currentUser();
@@ -39,7 +40,7 @@ export const profile = async (payload: z.infer<typeof profileSchema>) => {
   }
 
   // Check if user does not exist in the database, then return an error.
-  const existingUser = await getUserById(user.id);
+  const existingUser = await getUserById(user.gg_id);
   if (!existingUser) {
     return response({
       success: false,
@@ -62,19 +63,23 @@ export const profile = async (payload: z.infer<typeof profileSchema>) => {
   if (email && email !== user.email) {
     // Check if email already in use from another user and make sure that email doesn't same as current user.
     const existingEmail = await getUserByEmail(email);
-    if (existingEmail && user.id !== existingEmail.id) {
+    if (existingEmail && user.gg_id !== existingEmail.gg_id) {
       return response({
         success: false,
         error: {
           code: 422,
-          message: "The email address you have entered is already in use. Please use another one.",
+          message:
+            "The email address you have entered is already in use. Please use another one.",
         },
       });
     }
 
     // Generate verification token, then send it to the email.
     const verificationToken = await generateVerificationToken(email);
-    await sendVerificationEmail(verificationToken.email, verificationToken.token);
+    await sendVerificationEmail(
+      verificationToken.email,
+      verificationToken.token
+    );
 
     // Return response success.
     return response({
@@ -92,7 +97,10 @@ export const profile = async (payload: z.infer<typeof profileSchema>) => {
   // Check if password entered
   if (password && newPassword && existingUser.password) {
     // Check if passwords doesn't matches, then return an error.
-    const isPasswordMatch = await bcrypt.compare(password, existingUser.password);
+    const isPasswordMatch = await bcrypt.compare(
+      password,
+      existingUser.password
+    );
     if (!isPasswordMatch) {
       return response({
         success: false,
@@ -109,12 +117,11 @@ export const profile = async (payload: z.infer<typeof profileSchema>) => {
 
   // Check if user disabled 2fa, then delete two factor confirmation
   if (!isTwoFactorEnabled) {
-    await deleteTwoFactorConfirmationByUserId(existingUser.id);
+    await deleteTwoFactorConfirmationByUserId(existingUser.gg_id);
   }
 
   // Update current user
-  const updatedUser = await updateUserById(existingUser.id, {
-    name,
+  const updatedUser = await updateUserById(existingUser.gg_id, {
     email,
     password,
     isTwoFactorEnabled,
