@@ -95,8 +95,8 @@ model User {
   Color                 Color[]
   ImagePost             ImagePost[]
   Order                 Order[]
-  Topup                 Topup[]
-  Product               Product[]
+  // Topup                 Topup[]
+  // Product               Product[]
   twoFactorConfirmation TwoFactorConfirmation?
   UserPaymentMethod     UserPaymentMethod[]
   avatar                avatar[]
@@ -238,7 +238,7 @@ model Product {
   description     String?
   image           String?
   costPrice       Float
-  unit            ProductUnit   @default(PIECE) //added
+  unit            ProductUnit      @default(PIECE) //added
   quantityInStock Int
   validity        String?
   salePrice       Float?
@@ -452,62 +452,62 @@ enum OrderStatus {
   CANCELLED
 }
 
-model PaymentMethod {
-  id          String  @id @default(cuid())
-  paymentType String
-  orders      Order[]
-}
-
-//Top up modal
-model Topup {
-  id        String      @id @default(cuid())
-  amount    Float
-  userId    String
-  type      TopupType   @default(CREDIT)
-  status    TopupStatus @default(PENDING)
-  user      User        @relation(fields: [userId], references: [id])
-  createdAt DateTime    @default(now())
-}
-
-enum TopupStatus {
-  PENDING
-  SUCCESS
-  FAILED
-}
-
-enum TopupType {
-  CREDIT
-  CASH
-  GGCOIN
-}
-
-//card modal membership
-model cards {
-  id               String    @id @default(cuid())
-  userId           String
-  user             User      @relation(fields: [userId], references: [id])
-  type             cardType  @default(BUSINESS)
-  userName         String?   @db.VarChar(50)
-  userField        String?   @db.VarChar(50)
-  email            String?   @db.VarChar(50)
-  phone            String?   @db.VarChar(50)
-  location         String?   @db.VarChar(50)
-  studentFaculty   String?   @db.VarChar(50)
-  emergencyContact String?   @db.VarChar(50)
-  emergenctName    String?   @db.VarChar(50)
-  backgroundImage  String[]
-  enrollDate       DateTime?
-  expireDate       DateTime?
-}
-
-enum cardType {
-  STUDENT
-  BUSINESS
-  DEVELOPER
-  GAMER
-}
-
 enum ThemeType {
   THEME
   TEXT
 }
+
+// model PaymentMethod {
+//   id          String  @id @default(cuid())
+//   paymentType String
+//   orders      Order[]
+// }
+
+// //Top up modal
+// model Topup {
+//   id        String      @id @default(cuid())
+//   amount    Float
+//   userId    String
+//   type      TopupType   @default(CREDIT)
+//   status    TopupStatus @default(PENDING)
+//   user      User        @relation(fields: [userId], references: [id])
+//   createdAt DateTime    @default(now())
+// }
+
+// enum TopupStatus {
+//   PENDING
+//   SUCCESS
+//   FAILED
+// }
+
+// enum TopupType {
+//   CREDIT
+//   CASH
+//   GGCOIN
+// }
+
+// //card modal membership
+// model cards {
+//   id               String    @id @default(cuid())
+//   userId           String
+//   user             User      @relation(fields: [userId], references: [id])
+//   type             cardType  @default(BUSINESS)
+//   userName         String?   @db.VarChar(50)
+//   userField        String?   @db.VarChar(50)
+//   email            String?   @db.VarChar(50)
+//   phone            String?   @db.VarChar(50)
+//   location         String?   @db.VarChar(50)
+//   studentFaculty   String?   @db.VarChar(50)
+//   emergencyContact String?   @db.VarChar(50)
+//   emergenctName    String?   @db.VarChar(50)
+//   backgroundImage  String[]
+//   enrollDate       DateTime?
+//   expireDate       DateTime?
+// }
+
+// enum cardType {
+//   STUDENT
+//   BUSINESS
+//   DEVELOPER
+//   GAMER
+// }
