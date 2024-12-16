@@ -132,7 +132,7 @@ model Cart {
 }
 
 model Variant {
-  id             String           @id @default(uuid())
+  id             String           @id @default(cuid())
   name           String
   status         Boolean          @default(true)
   ProductVariant ProductVariant[]
