@@ -62,18 +62,19 @@ const SupplierForm = ({ onCancel }: SupplierFormProps) => {
               />
             </div>
             <div className="grid grid-cols-2 gap-4">
-  <button
-    type="submit"
-    className="w-full px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition"
-  >
-    Submit
-  </button>
+ 
   <button
     type="button"
     onClick={onCancel}
     className="w-full px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 transition"
   >
     Cancel
+  </button>
+  <button
+    type="submit"
+    className="w-full px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition"
+  >
+    Submit
   </button>
 </div>
 
