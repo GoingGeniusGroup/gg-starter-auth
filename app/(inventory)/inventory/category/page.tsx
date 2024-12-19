@@ -1,8 +1,8 @@
 "use client";
 import React, { useState,useEffect } from "react";
-import CategoryForm from "@/components/inventoryComponent/CategoryForm";
+ import CategoryForm from "@/components/inventoryComponent/CategoryForm";
 import CategoryTable from "@/components/inventoryComponent/CategoryTable";
-
+// import CategoryForm from "@/app/_components/inventoryComponent/CategoryForm";
 const Category = () => {
   const [showForm, setShowForm] = useState<boolean>(false);
   useEffect(() => {
