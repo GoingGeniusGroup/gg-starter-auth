@@ -10,7 +10,7 @@ datasource db {
 // Account Modal
 model Account {
   id                String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  type              String
+  accountType       String
   provider          String
   providerAccountId String
   refresh_token     String?
@@ -105,8 +105,8 @@ model Product {
   name          String
   description   String?
   imageUrl      String[]
-  salePrice     Decimal?
-  costPrice     Decimal?
+  salePrice     Float?
+  costPrice     Float?
   stockQuantity Int
   brand         String?
   rating        Int
@@ -114,7 +114,7 @@ model Product {
   reviews       String[]
   isFeatured    Boolean? @default(false)
   taxId         String?
-  discount      Decimal?
+  discount      Float?
   status        Boolean  @default(true)
 
   carts          Cart[]
@@ -189,6 +189,7 @@ model Order {
   state         String
   city          String
   orderStatus   OrderStatus   @default(PENDING)
+  discount      Float?
   orderAmount   Float?
   paymentId     String?
   paymentStatus Boolean       @default(false)
@@ -197,7 +198,7 @@ model Order {
   PaymentType   PaymentType?  @relation(fields: [paymentId], references: [id])
   user          User          @relation(fields: [userId], references: [id], onDelete: Cascade)
   SalesInvoice  SalesInvoice?
-  orders        Product[]     @relation("ProductOrders")
+  product       Product[]     @relation("ProductOrders")
 }
 
 //Payement Type Modal
@@ -225,7 +226,7 @@ model ProductVariant {
   status          Boolean        @default(true)
   priceDifference Float?
   costPrice       Float?
-  discount        Decimal?
+  discount        Float?
   Product         Product        @relation(fields: [productId], references: [id], onDelete: Cascade)
   Variant         Variant        @relation(fields: [var_id], references: [id])
   VariantOption   VariantOption? @relation(fields: [var_opt], references: [id])
@@ -247,7 +248,7 @@ model SalesInvoice {
 model Tax {
   id           String         @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   name         String
-  rate         Decimal
+  rate         Float
   description  String?
   Product      Product[]
   SalesInvoice SalesInvoice[] @relation("SalesInvoiceToTax")
