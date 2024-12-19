@@ -38,7 +38,7 @@ CREATE TABLE "Account" (
     "scope" TEXT,
     "id_token" TEXT,
     "session_state" TEXT,
-    "userId" UUID NOT NULL,
+    "userId" TEXT NOT NULL,
 
     CONSTRAINT "Account_pkey" PRIMARY KEY ("id")
 );
@@ -46,17 +46,18 @@ CREATE TABLE "Account" (
 -- CreateTable
 CREATE TABLE "User" (
     "id" TEXT NOT NULL,
+    "fullName" TEXT,
     "userName" TEXT[],
     "email" TEXT[],
-    "phone" TEXT[],
+    "mobilePhone" TEXT[],
     "emailVerified" TIMESTAMP(3),
-    "image" TEXT[],
+    "imageUser" TEXT[],
     "password" TEXT,
     "role" "UserRole" NOT NULL DEFAULT 'User',
     "isTwoFactorEnabled" BOOLEAN NOT NULL DEFAULT false,
-    "location" VARCHAR(50),
+    "address" VARCHAR(50)[],
     "faculty" VARCHAR(50),
-    "emergencyContact" VARCHAR(50),
+    "emergencyContactNumber" VARCHAR(50),
     "emergencyContactName" VARCHAR(50),
     "enrollDate" TIMESTAMP(3),
     "expireDate" TIMESTAMP(3),
@@ -98,7 +99,7 @@ CREATE TABLE "TwoFactorToken" (
 CREATE TABLE "TwoFactorConfirmation" (
     "id" TEXT NOT NULL,
     "expires" TIMESTAMP(3) NOT NULL,
-    "userId" UUID NOT NULL,
+    "userId" TEXT NOT NULL,
 
     CONSTRAINT "TwoFactorConfirmation_pkey" PRIMARY KEY ("id")
 );
@@ -132,7 +133,7 @@ CREATE TABLE "Cart" (
     "productId" TEXT NOT NULL,
     "orderId" TEXT,
     "amount" DOUBLE PRECISION,
-    "userId" UUID NOT NULL,
+    "userId" TEXT NOT NULL,
 
     CONSTRAINT "Cart_pkey" PRIMARY KEY ("id")
 );
@@ -184,7 +185,7 @@ CREATE TABLE "Order" (
     "amount" DOUBLE PRECISION,
     "paymentId" TEXT,
     "paymentStatus" BOOLEAN NOT NULL DEFAULT false,
-    "userId" UUID NOT NULL,
+    "userId" TEXT NOT NULL,
 
     CONSTRAINT "Order_pkey" PRIMARY KEY ("id")
 );
@@ -238,7 +239,7 @@ CREATE TABLE "Tax" (
 -- CreateTable
 CREATE TABLE "UserPaymentMethod" (
     "id" TEXT NOT NULL,
-    "userId" UUID NOT NULL,
+    "userId" TEXT NOT NULL,
     "typeId" TEXT NOT NULL,
     "provider" TEXT,
     "account_number" TEXT,
@@ -269,8 +270,8 @@ CREATE TABLE "Category" (
 
 -- CreateTable
 CREATE TABLE "visitprofile" (
-    "visit_id" UUID NOT NULL,
-    "gg_id" UUID NOT NULL,
+    "visit_id" TEXT NOT NULL,
+    "gg_id" TEXT NOT NULL,
     "visit_by" TEXT,
     "type" "ReactionType",
     "count" INTEGER NOT NULL,
@@ -285,8 +286,8 @@ CREATE TABLE "Topup" (
     "id" TEXT NOT NULL,
     "amount" DOUBLE PRECISION NOT NULL,
     "userId" TEXT NOT NULL,
-    "type" "TopupType" NOT NULL DEFAULT 'CREDIT',
-    "status" "TopupStatus" NOT NULL DEFAULT 'PENDING',
+    "topupType" "TopupType" NOT NULL DEFAULT 'CREDIT',
+    "topupStatus" "TopupStatus" NOT NULL DEFAULT 'PENDING',
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     CONSTRAINT "Topup_pkey" PRIMARY KEY ("id")
@@ -296,10 +297,8 @@ CREATE TABLE "Topup" (
 CREATE TABLE "cards" (
     "id" TEXT NOT NULL,
     "userId" TEXT NOT NULL,
-    "type" "cardType" NOT NULL DEFAULT 'BUSINESS',
+    "cardType" "cardType" NOT NULL DEFAULT 'BUSINESS',
     "backgroundImage" TEXT[],
-    "enrollDate" TIMESTAMP(3),
-    "expireDate" TIMESTAMP(3),
 
     CONSTRAINT "cards_pkey" PRIMARY KEY ("id")
 );

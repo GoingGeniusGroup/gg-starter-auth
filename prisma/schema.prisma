@@ -7,8 +7,9 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+// Account Modal
 model Account {
-  id                String  @id @default(cuid())
+  id                String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   type              String
   provider          String
   providerAccountId String
@@ -19,7 +20,7 @@ model Account {
   scope             String?
   id_token          String?
   session_state     String?
-  userId            String  @unique @db.Uuid
+  userId            String  @unique
   user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([provider, providerAccountId])
@@ -30,22 +31,24 @@ enum UserRole {
   User
 }
 
+//user Modal
 model User {
-  id                   String    @id @default(cuid())
-  userName             String[]
-  email                String[]  @unique
-  phone                String[]
-  emailVerified        DateTime?
-  image                String[]
-  password             String?
-  role                 UserRole  @default(User)
-  isTwoFactorEnabled   Boolean   @default(false)
-  location             String?   @db.VarChar(50)
-  faculty              String?   @db.VarChar(50)
-  emergencyContact     String?   @db.VarChar(50)
-  emergencyContactName String?   @db.VarChar(50)
-  enrollDate           DateTime?
-  expireDate           DateTime?
+  id                     String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  fullName               String?
+  userName               String[]
+  email                  String[]  @unique
+  mobilePhone            String[]
+  emailVerified          DateTime?
+  imageUser              String[]
+  password               String?
+  role                   UserRole  @default(User)
+  isTwoFactorEnabled     Boolean   @default(false)
+  address                String[]  @db.VarChar(50)
+  faculty                String?   @db.VarChar(50)
+  emergencyContactNumber String?   @db.VarChar(50)
+  emergencyContactName   String?   @db.VarChar(50)
+  enrollDate             DateTime?
+  expireDate             DateTime?
 
   // Relations
   accounts              Account[]
@@ -58,8 +61,9 @@ model User {
   UserPaymentMethod     UserPaymentMethod[]
 }
 
+// Verification Token Modal
 model VerificationToken {
-  id      String   @id @default(cuid())
+  id      String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   email   String
   token   String   @unique
   expires DateTime
@@ -67,8 +71,9 @@ model VerificationToken {
   @@unique([email, token])
 }
 
+// Reset Password modal
 model ResetPasswordToken {
-  id      String   @id @default(cuid())
+  id      String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   email   String
   token   String   @unique
   expires DateTime
@@ -76,8 +81,9 @@ model ResetPasswordToken {
   @@unique([email, token])
 }
 
+// TwoFactorToken
 model TwoFactorToken {
-  id      String   @id @default(cuid())
+  id      String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   email   String
   token   String   @unique
   expires DateTime
@@ -85,74 +91,87 @@ model TwoFactorToken {
   @@unique([email, token])
 }
 
+// TwoFactorConfirmation
 model TwoFactorConfirmation {
-  id      String   @id @default(cuid())
+  id      String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   expires DateTime
-  userId  String   @unique @db.Uuid
+  userId  String   @unique
   user    User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
+//Product Modal
 model Product {
-  id              String           @id @default(cuid())
-  name            String
-  description     String?
-  image           String?
-  costPrice       Float
-  quantityInStock Int
-  validity        String?
-  salePrice       Float?
-  margin          String?
-  categoryId      String
-  isFeatured      Boolean?         @default(false)
-  slug            String?
-  taxId           String?
-  discount        Float?
-  status          Boolean          @default(true)
-  carts           Cart[]
-  inventory       Inventory?
-  category        Category         @relation(fields: [categoryId], references: [id])
-  Tax             Tax?             @relation(fields: [taxId], references: [id])
-  ProductVariant  ProductVariant[]
-  Business        Order[]          @relation("ProductOrders")
-  Supplier        Supplier[]       @relation("ProductToSupplier")
+  id            String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name          String
+  description   String?
+  imageUrl      String[]
+  salePrice     Decimal?
+  costPrice     Decimal?
+  stockQuantity Int
+  brand         String?
+  rating        Int
+  categoryId    String
+  reviews       String[]
+  isFeatured    Boolean? @default(false)
+  taxId         String?
+  discount      Decimal?
+  status        Boolean  @default(true)
+
+  carts          Cart[]
+  inventory      Inventory?
+  category       Category         @relation(fields: [categoryId], references: [id])
+  Tax            Tax?             @relation(fields: [taxId], references: [id])
+  productVariant ProductVariant[]
+  order          Order[]          @relation("ProductOrders")
+  Supplier       Supplier[]       @relation("ProductToSupplier")
 }
 
+// Cart Modal
 model Cart {
-  id             String           @id @default(cuid())
+  id             String           @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   quantity       Int
   status         CartStatus       @default(PENDING)
   productId      String
   orderId        String?
   amount         Float?
-  userId         String           @db.Uuid
+  userId         String
   order          Order?           @relation("OrderCarts", fields: [orderId], references: [id], onDelete: Cascade)
   product        Product          @relation(fields: [productId], references: [id])
   user           User             @relation(fields: [userId], references: [id], onDelete: Cascade)
   ProductVariant ProductVariant[] @relation("CartToProductVariant")
 }
 
+// Variant Modal
 model Variant {
-  id             String           @id @default(cuid())
+  id             String           @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   name           String
   status         Boolean          @default(true)
   ProductVariant ProductVariant[]
   VariantOption  VariantOption[]
 }
 
+//Inventory Modal
 model Inventory {
-  id          String   @id @default(cuid())
-  status      String
-  quantity    Int
-  restockDate DateTime
-  location    String?
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  productId   String   @unique
-  product     Product  @relation(fields: [productId], references: [id])
+  id                String               @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  stockStatus       inventoryStockStatus @default(AVAILABLE)
+  quantityAvailable Int
+  thresholdValue    Int //Low quantity alert
+  stockUpdatedDate  DateTime
+  address           String?
+  createdAt         DateTime             @default(now())
+  updatedAt         DateTime             @updatedAt
+  productId         String               @unique
+  product           Product              @relation(fields: [productId], references: [id])
+}
+
+enum inventoryStockStatus {
+  AVAILABLE
+  LOWSTOCK
+  NOTAVAILABLE
 }
 
 model Supplier {
-  id           String    @id @default(cuid())
+  id           String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   supplierName String
   email        String?
   phone        String?
@@ -160,19 +179,20 @@ model Supplier {
   Product      Product[] @relation("ProductToSupplier")
 }
 
+//Order Modal
 model Order {
-  id            String        @id @default(cuid())
+  id            String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   orderDate     DateTime      @default(now())
-  quantity      Int
+  orderQuantity Int
   deliveryDate  DateTime?
   streetAddress String
   state         String
   city          String
-  status        OrderStatus   @default(PENDING)
-  amount        Float?
+  orderStatus   OrderStatus   @default(PENDING)
+  orderAmount   Float?
   paymentId     String?
   paymentStatus Boolean       @default(false)
-  userId        String        @db.Uuid
+  userId        String
   carts         Cart[]        @relation("OrderCarts")
   PaymentType   PaymentType?  @relation(fields: [paymentId], references: [id])
   user          User          @relation(fields: [userId], references: [id], onDelete: Cascade)
@@ -180,15 +200,22 @@ model Order {
   orders        Product[]     @relation("ProductOrders")
 }
 
+//Payement Type Modal
 model PaymentType {
-  id                String              @id @default(cuid())
-  paymentType       String
+  id                String              @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  paymentType       paymentType         @default(CARD)
   Order             Order[]
   UserPaymentMethod UserPaymentMethod[]
 }
 
+enum paymentType {
+  CASH
+  CARD
+}
+
+//productVatiant Modal
 model ProductVariant {
-  id              String         @id @default(cuid())
+  id              String         @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   var_id          String
   var_opt         String?
   productId       String
@@ -198,15 +225,16 @@ model ProductVariant {
   status          Boolean        @default(true)
   priceDifference Float?
   costPrice       Float?
-  discount        Float?
+  discount        Decimal?
   Product         Product        @relation(fields: [productId], references: [id], onDelete: Cascade)
   Variant         Variant        @relation(fields: [var_id], references: [id])
   VariantOption   VariantOption? @relation(fields: [var_opt], references: [id])
   Cart            Cart[]         @relation("CartToProductVariant")
 }
 
+// SalesInvoice Modal
 model SalesInvoice {
-  id          String   @id @default(cuid())
+  id          String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   invoiceDate DateTime @default(now())
   InvoiceId   String   @unique
   totalAmount Float?
@@ -215,18 +243,19 @@ model SalesInvoice {
   Tax         Tax[]    @relation("SalesInvoiceToTax")
 }
 
+//Tax Modal
 model Tax {
-  id           String         @id @default(cuid())
+  id           String         @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   name         String
-  rate         Float
+  rate         Decimal
   description  String?
   Product      Product[]
   SalesInvoice SalesInvoice[] @relation("SalesInvoiceToTax")
 }
 
 model UserPaymentMethod {
-  id             String      @id @default(cuid())
-  userId         String      @db.Uuid
+  id             String      @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId         String
   typeId         String
   provider       String?
   account_number String?
@@ -236,8 +265,9 @@ model UserPaymentMethod {
   User           User        @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
+// VatiantOption Modal
 model VariantOption {
-  id             String           @id @default(cuid())
+  id             String           @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   value          String
   var_id         String
   variantName    String?
@@ -245,33 +275,36 @@ model VariantOption {
   Variant        Variant          @relation(fields: [var_id], references: [id])
 }
 
+//category Modal
 model Category {
-  id           String    @id @default(cuid())
-  categoryName String
-  description  String?
-  products     Product[]
+  id                  String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  categoryName        String
+  categoryDescription String?
+  categoryImage       String[]
+  products            Product[]
 }
 
+//VisitProfile Modal
 model visitprofile {
-  visit_id  String        @id @db.Uuid
-  gg_id     String        @db.Uuid
-  visit_by  String?
-  type      ReactionType?
-  count     Int
-  createdAt DateTime      @default(now())
-  updatedAt DateTime
-  User      User          @relation(fields: [gg_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  id         String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId     String
+  visitedBy  String?
+  type       ReactionType?
+  visitCount Int
+  createdAt  DateTime      @default(now())
+  updatedAt  DateTime
+  User       User          @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: NoAction)
 }
 
 //Top up modal
 model Topup {
-  id        String      @id @default(cuid())
-  amount    Float
-  userId    String
-  type      TopupType   @default(CREDIT)
-  status    TopupStatus @default(PENDING)
-  user      User        @relation(fields: [userId], references: [id])
-  createdAt DateTime    @default(now())
+  id          String      @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  amount      Float
+  userId      String
+  topupType   TopupType   @default(CREDIT)
+  topupStatus TopupStatus @default(PENDING)
+  user        User        @relation(fields: [userId], references: [id])
+  createdAt   DateTime    @default(now())
 }
 
 enum TopupStatus {
@@ -288,14 +321,11 @@ enum TopupType {
 
 //card modal membership
 model cards {
-  id              String   @id @default(cuid())
+  id              String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   userId          String
   user            User     @relation(fields: [userId], references: [id])
-  type            cardType @default(BUSINESS)
+  cardType        cardType @default(BUSINESS)
   backgroundImage String[]
-
-  enrollDate DateTime?
-  expireDate DateTime?
 }
 
 enum cardType {
