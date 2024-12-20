@@ -122,7 +122,7 @@ export const profile = async (payload: z.infer<typeof profileSchema>) => {
 
   // Update current user
   const updatedUser = await updateUserById(existingUser.id, {
-    email,
+    email: email ? [email as string] : undefined,
     password,
     isTwoFactorEnabled,
   });
