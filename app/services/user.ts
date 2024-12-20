@@ -55,6 +55,7 @@ export const getUserByPhone = async (phone: string) => {
   }
 };
 
+//method to get all users by phone number
 export const getAllUsersByPhone = async (phone: string) => {
   try {
     const user = db.user.findMany({
@@ -74,14 +75,39 @@ export const getAllUsersByPhone = async (phone: string) => {
   }
 };
 
+// method to get user by their username
 export const getUserByUsername = async (username: string) => {
   try {
-    const user = await db.user.findUnique({
-      where: { username },
-      include: {
-        avatar: true,
+    const user = await db.user.findFirst({
+      where: {
+        userName: {
+          has: username,
+        },
       },
     });
+    if (!user) {
+      console.log(`User not found with username ${username}`);
+    }
+    return user;
+  } catch (error) {
+    console.error("Error in getUserByUsername:", error);
+    return null;
+  }
+};
+
+// method to get all users by usernames
+export const getAllUsersByUsername = async (usernames: string) => {
+  try {
+    const user = await db.user.findMany({
+      where: {
+        userName: {
+          has: usernames,
+        },
+      },
+    });
+    if (!user) {
+      console.log(`Users not found with usernames ${usernames}`);
+    }
     return user;
   } catch (error) {
     console.error("Error in getUserByUsername:", error);
