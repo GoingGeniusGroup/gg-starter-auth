@@ -16,7 +16,7 @@ export const getUserByEmail = async (email: string) => {
 export const getUserByPhone = async (phone: string) => {
   try {
     const user = await db.user.findUnique({
-      where: { phone_number: phone },
+      where: { mobilePhone: phone },
     });
     if (!user) {
       console.log(`User not found with phone number: ${phone}`);
@@ -43,9 +43,9 @@ export const getUserByUsername = async (username: string) => {
   }
 };
 
-export const getUserById = async (gg_id: string) => {
+export const getUserById = async (id: string) => {
   try {
-    const user = await db.user.findUnique({ where: { gg_id } });
+    const user = await db.user.findUnique({ where: { id } });
     return user;
   } catch (error) {
     console.error("Error in getUserById:", error);
@@ -65,12 +65,12 @@ export const createUser = async (userData: Prisma.UserCreateInput) => {
 };
 
 export const updateUserById = async (
-  gg_id: string,
+  id: string,
   userData: Prisma.UserUpdateInput
 ) => {
   try {
     return await db.user.update({
-      where: { gg_id },
+      where: { id },
       data: userData,
     });
   } catch (error) {
