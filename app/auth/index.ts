@@ -43,10 +43,15 @@ export const {
       const existingUser = await getUserById(token.sub);
       if (!existingUser) return token;
 
-      const existingAccount = await getAccountByUserId(existingUser.gg_id);
+      const existingAccount = await getAccountByUserId(existingUser.id);
 
-      token.username = existingUser.username;
-      token.email = existingUser.email;
+      // Extracting email and username first index from array
+      token.username = existingUser.userName
+        ? existingUser.userName[0]
+        : existingUser.userName;
+      token.email = existingUser.email
+        ? existingUser.email[0]
+        : existingUser.email;
       token.role = existingUser.role;
       token.isTwoFactorEnabled = existingUser.isTwoFactorEnabled;
       token.isOAuth = !!existingAccount;
@@ -73,7 +78,7 @@ export const {
 
       if (existingUser?.isTwoFactorEnabled) {
         const existingTwoFactorConfirmation =
-          await getTwoFactorConfirmationByUserId(existingUser.gg_id);
+          await getTwoFactorConfirmationByUserId(existingUser.id);
         if (!existingTwoFactorConfirmation) return false;
         const hasExpired = isExpired(existingTwoFactorConfirmation.expires);
         if (hasExpired) return false;
