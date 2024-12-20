@@ -1,14 +1,35 @@
 import { db } from "@/lib/db";
 import { Prisma } from "@prisma/client";
 
+// changed email to find first user
 export const getUserByEmail = async (email: string) => {
   try {
-    const user = await db.user.findUnique({
-      where: { email },
+    const user = await db.user.findFirst({
+      where: {
+        email: {
+          has: email,
+        },
+      },
     });
     return user;
   } catch (error) {
     console.error("Error in getUserByEmail:", error);
+    return null;
+  }
+};
+
+// method to get all users by email
+export const getAllUsersByEmail = async (email: string) => {
+  try {
+    const user = await db.user.findMany({
+      where: {
+        email: {
+          has: email,
+        },
+      },
+    });
+  } catch (error) {
+    console.error("Error to get all usersbyemail", error);
     return null;
   }
 };

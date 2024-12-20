@@ -117,11 +117,11 @@ export const profile = async (payload: z.infer<typeof profileSchema>) => {
 
   // Check if user disabled 2fa, then delete two factor confirmation
   if (!isTwoFactorEnabled) {
-    await deleteTwoFactorConfirmationByUserId(existingUser.gg_id);
+    await deleteTwoFactorConfirmationByUserId(existingUser.id);
   }
 
   // Update current user
-  const updatedUser = await updateUserById(existingUser.gg_id, {
+  const updatedUser = await updateUserById(existingUser.id, {
     email,
     password,
     isTwoFactorEnabled,
