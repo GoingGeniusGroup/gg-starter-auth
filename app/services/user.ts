@@ -28,16 +28,22 @@ export const getAllUsersByEmail = async (email: string) => {
         },
       },
     });
+    return user;
   } catch (error) {
     console.error("Error to get all usersbyemail", error);
     return null;
   }
 };
 
+// method to finduserbyPhone
 export const getUserByPhone = async (phone: string) => {
   try {
-    const user = await db.user.findUnique({
-      where: { mobilePhone: phone },
+    const user = await db.user.findFirst({
+      where: {
+        mobilePhone: {
+          has: phone,
+        },
+      },
     });
     if (!user) {
       console.log(`User not found with phone number: ${phone}`);
@@ -45,6 +51,25 @@ export const getUserByPhone = async (phone: string) => {
     return user;
   } catch (error) {
     console.error("Error in getUserByPhone:", error);
+    return null;
+  }
+};
+
+export const getAllUsersByPhone = async (phone: string) => {
+  try {
+    const user = db.user.findMany({
+      where: {
+        mobilePhone: {
+          has: phone,
+        },
+      },
+    });
+    if (!user) {
+      console.log(`User not found with Phone Number ${phone}`);
+    }
+    return user;
+  } catch (error) {
+    console.error("Error in getAllUsersByPhone:", error);
     return null;
   }
 };
