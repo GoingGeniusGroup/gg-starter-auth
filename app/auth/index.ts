@@ -60,7 +60,7 @@ export const {
     },
     async session({ token, session }) {
       if (token) {
-        session.user.gg_id = token.id as string;
+        session.user.id = token.id as string;
         session.user.name = token.name;
         session.user.email = token.email;
         session.user.username = token.username as string;
