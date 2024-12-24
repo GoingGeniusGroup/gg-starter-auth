@@ -27,6 +27,7 @@ import SimulatorToggleButton from "../SimulatorToggleButton";
 import NotificationComponent from "@/components/Notification/NotificationComponent";
 import { getColorsbyUserId } from "@/services/color";
 import { ThemeType } from "@prisma/client";
+import ShopComponent from "../../ShopComponent/ShopComponent";
 
 interface MobileSimulatorContextType {
   showMobile: boolean;
@@ -196,7 +197,8 @@ export const MobileSimulatorProvider = ({
         id: 2,
         title: "Shop",
         icon: <FaShoppingCart />,
-        content: <ShopSection isMobile={true} />,
+        // content: <ShopSection isMobile={true} />,
+        content: <ShopComponent />,
       },
       {
         id: 3,

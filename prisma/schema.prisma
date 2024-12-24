@@ -56,13 +56,13 @@ model experience {
 
 model skills {
   skill_id         String      @id @default(uuid()) @db.Uuid
+  gg_id            String      @db.Uuid
+  certifications   String[]
+  experience_id    String?     @db.Uuid
   skill_name       String      @unique
   skill_percentage Int
-  gg_id            String      @db.Uuid
-  experience_id    String?     @db.Uuid
-  certifications   String[]
-  users            User        @relation(fields: [gg_id], references: [gg_id], onDelete: Cascade, onUpdate: NoAction)
   experiences      experience? @relation(fields: [experience_id], references: [experience_id], onDelete: Cascade, onUpdate: NoAction)
+  users            User        @relation(fields: [gg_id], references: [gg_id], onDelete: Cascade, onUpdate: NoAction)
 }
 
 model User {
@@ -373,10 +373,11 @@ model VariantOption {
 }
 
 model Category {
-  id           String    @id
-  categoryName String
-  description  String?
-  products     Product[]
+  id             String           @id
+  categoryName   String
+  description    String?
+  products       Product[]
+  VirtualProduct VirtualProduct[]
 }
 
 model Color {
@@ -397,6 +398,20 @@ model visitprofile {
   createdAt DateTime      @default(now())
   updatedAt DateTime
   User      User          @relation(fields: [gg_id], references: [gg_id], onDelete: Cascade, onUpdate: NoAction)
+}
+
+model VirtualProduct {
+  id            String   @id @default(uuid()) @db.Uuid
+  name          String
+  description   String?
+  categoryId    String
+  category      Category @relation(fields: [categoryId], references: [id])
+  price         Decimal
+  stockQuantity Int
+  ImageUrl      String[]
+  ratings       Float
+  sourceFile    String[]
+  animation     String?
 }
 
 enum ReactionType {
