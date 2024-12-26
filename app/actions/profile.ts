@@ -40,7 +40,7 @@ export const profile = async (payload: z.infer<typeof profileSchema>) => {
   }
 
   // Check if user does not exist in the database, then return an error.
-  const existingUser = await getUserById(user.gg_id);
+  const existingUser = await getUserById(user.id);
   if (!existingUser) {
     return response({
       success: false,
@@ -63,7 +63,7 @@ export const profile = async (payload: z.infer<typeof profileSchema>) => {
   if (email && email !== user.email) {
     // Check if email already in use from another user and make sure that email doesn't same as current user.
     const existingEmail = await getUserByEmail(email);
-    if (existingEmail && user.gg_id !== existingEmail.id) {
+    if (existingEmail && user.id !== existingEmail.id) {
       return response({
         success: false,
         error: {
@@ -122,13 +122,19 @@ export const profile = async (payload: z.infer<typeof profileSchema>) => {
 
   // Update current user
   const updatedUser = await updateUserById(existingUser.id, {
-    email: email ? [email as string] : undefined,
+    email: email ? [email] : undefined,
     password,
     isTwoFactorEnabled,
   });
 
   // Update session
-  await update({ user: { ...updatedUser } });
+  await update({ user: { 
+    name: updatedUser?.fullName,
+    username: updatedUser?.userName[0],
+    email: updatedUser?.email[0],
+    isTwoFactorEnabled: updatedUser?.isTwoFactorEnabled,
+    role: updatedUser?.role
+   } });
 
   // Return response success.
   return response({
