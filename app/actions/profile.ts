@@ -128,13 +128,15 @@ export const profile = async (payload: z.infer<typeof profileSchema>) => {
   });
 
   // Update session
-  await update({ user: { 
-    name: updatedUser?.fullName,
-    username: updatedUser?.userName[0],
-    email: updatedUser?.email[0],
-    isTwoFactorEnabled: updatedUser?.isTwoFactorEnabled,
-    role: updatedUser?.role
-   } });
+  await update({
+    user: {
+      name: updatedUser?.fullName,
+      username: updatedUser?.userName[0],
+      email: updatedUser?.email[0],
+      isTwoFactorEnabled: updatedUser?.isTwoFactorEnabled,
+      role: updatedUser?.role,
+    },
+  });
 
   // Return response success.
   return response({
