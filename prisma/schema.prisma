@@ -20,7 +20,7 @@ model Account {
   scope             String?
   id_token          String?
   session_state     String?
-  userId            String  @unique
+  userId            String  @unique @db.Uuid
   user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([provider, providerAccountId])
@@ -95,7 +95,7 @@ model TwoFactorToken {
 model TwoFactorConfirmation {
   id      String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   expires DateTime
-  userId  String   @unique
+  userId  String   @unique @db.Uuid
   user    User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
@@ -110,10 +110,10 @@ model Product {
   stockQuantity Int
   brand         String?
   rating        Int
-  categoryId    String
+  categoryId    String   @unique @db.Uuid
   reviews       String[]
   isFeatured    Boolean? @default(false)
-  taxId         String?
+  taxId         String?  @unique @db.Uuid
   discount      Float?
   status        Boolean  @default(true)
 
@@ -131,10 +131,10 @@ model Cart {
   id             String           @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   quantity       Int
   status         CartStatus       @default(PENDING)
-  productId      String
-  orderId        String?
+  productId      String           @unique @db.Uuid
+  orderId        String?          @unique @db.Uuid
   amount         Float?
-  userId         String
+  userId         String           @unique @db.Uuid
   order          Order?           @relation("OrderCarts", fields: [orderId], references: [id], onDelete: Cascade)
   product        Product          @relation(fields: [productId], references: [id])
   user           User             @relation(fields: [userId], references: [id], onDelete: Cascade)
@@ -160,7 +160,7 @@ model Inventory {
   address           String?
   createdAt         DateTime             @default(now())
   updatedAt         DateTime             @updatedAt
-  productId         String               @unique
+  productId         String               @unique @db.Uuid
   product           Product              @relation(fields: [productId], references: [id])
 }
 
@@ -191,9 +191,9 @@ model Order {
   orderStatus   OrderStatus   @default(PENDING)
   discount      Float?
   orderAmount   Float?
-  paymentId     String?
+  paymentId     String?       @unique @db.Uuid
   paymentStatus Boolean       @default(false)
-  userId        String
+  userId        String        @unique @db.Uuid
   carts         Cart[]        @relation("OrderCarts")
   PaymentType   PaymentType?  @relation(fields: [paymentId], references: [id])
   user          User          @relation(fields: [userId], references: [id], onDelete: Cascade)
@@ -217,9 +217,9 @@ enum paymentType {
 //productVatiant Modal
 model ProductVariant {
   id              String         @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  var_id          String
-  var_opt         String?
-  productId       String
+  var_id          String         @unique @db.Uuid
+  var_opt         String?        @unique @db.Uuid
+  productId       String         @unique @db.Uuid
   var_img         String?
   salePrice       Float
   stock           Int?
@@ -239,7 +239,7 @@ model SalesInvoice {
   invoiceDate DateTime @default(now())
   InvoiceId   String   @unique
   totalAmount Float?
-  orderId     String   @unique
+  orderId     String   @unique @db.Uuid
   Order       Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
   Tax         Tax[]    @relation("SalesInvoiceToTax")
 }
@@ -256,8 +256,8 @@ model Tax {
 
 model UserPaymentMethod {
   id             String      @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  userId         String
-  typeId         String
+  userId         String      @unique @db.Uuid
+  typeId         String      @unique @db.Uuid
   provider       String?
   account_number String?
   expiry_date    DateTime?
@@ -270,7 +270,7 @@ model UserPaymentMethod {
 model VariantOption {
   id             String           @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   value          String
-  var_id         String
+  var_id         String           @unique @db.Uuid
   variantName    String?
   ProductVariant ProductVariant[]
   Variant        Variant          @relation(fields: [var_id], references: [id])
@@ -288,7 +288,7 @@ model Category {
 //VisitProfile Modal
 model visitprofile {
   id         String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  userId     String
+  userId     String        @unique @db.Uuid
   visitedBy  String?
   type       ReactionType?
   visitCount Int
@@ -301,7 +301,7 @@ model visitprofile {
 model Topup {
   id          String      @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   amount      Float
-  userId      String
+  userId      String      @unique @db.Uuid
   topupType   TopupType   @default(CREDIT)
   topupStatus TopupStatus @default(PENDING)
   user        User        @relation(fields: [userId], references: [id])
@@ -323,7 +323,7 @@ enum TopupType {
 //card modal membership
 model cards {
   id              String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  userId          String
+  userId          String   @unique @db.Uuid
   user            User     @relation(fields: [userId], references: [id])
   cardType        cardType @default(BUSINESS)
   backgroundImage String[]

@@ -2,6 +2,12 @@
 CREATE TYPE "UserRole" AS ENUM ('Admin', 'User');
 
 -- CreateEnum
+CREATE TYPE "inventoryStockStatus" AS ENUM ('AVAILABLE', 'LOWSTOCK', 'NOTAVAILABLE');
+
+-- CreateEnum
+CREATE TYPE "paymentType" AS ENUM ('CASH', 'CARD');
+
+-- CreateEnum
 CREATE TYPE "TopupStatus" AS ENUM ('PENDING', 'SUCCESS', 'FAILED');
 
 -- CreateEnum
@@ -27,8 +33,8 @@ CREATE TYPE "OrderStatus" AS ENUM ('PENDING', 'SHIPPED', 'DELIVERED', 'CANCELLED
 
 -- CreateTable
 CREATE TABLE "Account" (
-    "id" TEXT NOT NULL,
-    "type" TEXT NOT NULL,
+    "id" UUID NOT NULL DEFAULT gen_random_uuid(),
+    "accountType" TEXT NOT NULL,
     "provider" TEXT NOT NULL,
     "providerAccountId" TEXT NOT NULL,
     "refresh_token" TEXT,
@@ -38,14 +44,14 @@ CREATE TABLE "Account" (
     "scope" TEXT,
     "id_token" TEXT,
     "session_state" TEXT,
-    "userId" TEXT NOT NULL,
+    "userId" UUID NOT NULL,
 
     CONSTRAINT "Account_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
 CREATE TABLE "User" (
-    "id" TEXT NOT NULL,
+    "id" UUID NOT NULL DEFAULT gen_random_uuid(),
     "fullName" TEXT,
     "userName" TEXT[],
     "email" TEXT[],
@@ -67,7 +73,7 @@ CREATE TABLE "User" (
 
 -- CreateTable
 CREATE TABLE "VerificationToken" (
-    "id" TEXT NOT NULL,
+    "id" UUID NOT NULL DEFAULT gen_random_uuid(),
     "email" TEXT NOT NULL,
     "token" TEXT NOT NULL,
     "expires" TIMESTAMP(3) NOT NULL,
@@ -77,7 +83,7 @@ CREATE TABLE "VerificationToken" (
 
 -- CreateTable
 CREATE TABLE "ResetPasswordToken" (
-    "id" TEXT NOT NULL,
+    "id" UUID NOT NULL DEFAULT gen_random_uuid(),
     "email" TEXT NOT NULL,
     "token" TEXT NOT NULL,
     "expires" TIMESTAMP(3) NOT NULL,
@@ -87,7 +93,7 @@ CREATE TABLE "ResetPasswordToken" (
 
 -- CreateTable
 CREATE TABLE "TwoFactorToken" (
-    "id" TEXT NOT NULL,
+    "id" UUID NOT NULL DEFAULT gen_random_uuid(),
     "email" TEXT NOT NULL,
     "token" TEXT NOT NULL,
     "expires" TIMESTAMP(3) NOT NULL,
@@ -97,28 +103,28 @@ CREATE TABLE "TwoFactorToken" (
 
 -- CreateTable
 CREATE TABLE "TwoFactorConfirmation" (
-    "id" TEXT NOT NULL,
+    "id" UUID NOT NULL DEFAULT gen_random_uuid(),
     "expires" TIMESTAMP(3) NOT NULL,
-    "userId" TEXT NOT NULL,
+    "userId" UUID NOT NULL,
 
     CONSTRAINT "TwoFactorConfirmation_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
 CREATE TABLE "Product" (
-    "id" TEXT NOT NULL,
+    "id" UUID NOT NULL DEFAULT gen_random_uuid(),
     "name" TEXT NOT NULL,
     "description" TEXT,
-    "image" TEXT,
-    "costPrice" DOUBLE PRECISION NOT NULL,
-    "quantityInStock" INTEGER NOT NULL,
-    "validity" TEXT,
+    "imageUrl" TEXT[],
     "salePrice" DOUBLE PRECISION,
-    "margin" TEXT,
-    "categoryId" TEXT NOT NULL,
+    "costPrice" DOUBLE PRECISION,
+    "stockQuantity" INTEGER NOT NULL,
+    "brand" TEXT,
+    "rating" INTEGER NOT NULL,
+    "categoryId" UUID NOT NULL,
+    "reviews" TEXT[],
     "isFeatured" BOOLEAN DEFAULT false,
-    "slug" TEXT,
-    "taxId" TEXT,
+    "taxId" UUID,
     "discount" DOUBLE PRECISION,
     "status" BOOLEAN NOT NULL DEFAULT true,
 
@@ -127,20 +133,20 @@ CREATE TABLE "Product" (
 
 -- CreateTable
 CREATE TABLE "Cart" (
-    "id" TEXT NOT NULL,
+    "id" UUID NOT NULL DEFAULT gen_random_uuid(),
     "quantity" INTEGER NOT NULL,
     "status" "CartStatus" NOT NULL DEFAULT 'PENDING',
-    "productId" TEXT NOT NULL,
-    "orderId" TEXT,
+    "productId" UUID NOT NULL,
+    "orderId" UUID,
     "amount" DOUBLE PRECISION,
-    "userId" TEXT NOT NULL,
+    "userId" UUID NOT NULL,
 
     CONSTRAINT "Cart_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
 CREATE TABLE "Variant" (
-    "id" TEXT NOT NULL,
+    "id" UUID NOT NULL DEFAULT gen_random_uuid(),
     "name" TEXT NOT NULL,
     "status" BOOLEAN NOT NULL DEFAULT true,
 
@@ -149,21 +155,22 @@ CREATE TABLE "Variant" (
 
 -- CreateTable
 CREATE TABLE "Inventory" (
-    "id" TEXT NOT NULL,
-    "status" TEXT NOT NULL,
-    "quantity" INTEGER NOT NULL,
-    "restockDate" TIMESTAMP(3) NOT NULL,
-    "location" TEXT,
+    "id" UUID NOT NULL DEFAULT gen_random_uuid(),
+    "stockStatus" "inventoryStockStatus" NOT NULL DEFAULT 'AVAILABLE',
+    "quantityAvailable" INTEGER NOT NULL,
+    "thresholdValue" INTEGER NOT NULL,
+    "stockUpdatedDate" TIMESTAMP(3) NOT NULL,
+    "address" TEXT,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
-    "productId" TEXT NOT NULL,
+    "productId" UUID NOT NULL,
 
     CONSTRAINT "Inventory_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
 CREATE TABLE "Supplier" (
-    "id" TEXT NOT NULL,
+    "id" UUID NOT NULL DEFAULT gen_random_uuid(),
     "supplierName" TEXT NOT NULL,
     "email" TEXT,
     "phone" TEXT,
@@ -174,36 +181,37 @@ CREATE TABLE "Supplier" (
 
 -- CreateTable
 CREATE TABLE "Order" (
-    "id" TEXT NOT NULL,
+    "id" UUID NOT NULL DEFAULT gen_random_uuid(),
     "orderDate" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "quantity" INTEGER NOT NULL,
+    "orderQuantity" INTEGER NOT NULL,
     "deliveryDate" TIMESTAMP(3),
     "streetAddress" TEXT NOT NULL,
     "state" TEXT NOT NULL,
     "city" TEXT NOT NULL,
-    "status" "OrderStatus" NOT NULL DEFAULT 'PENDING',
-    "amount" DOUBLE PRECISION,
-    "paymentId" TEXT,
+    "orderStatus" "OrderStatus" NOT NULL DEFAULT 'PENDING',
+    "discount" DOUBLE PRECISION,
+    "orderAmount" DOUBLE PRECISION,
+    "paymentId" UUID,
     "paymentStatus" BOOLEAN NOT NULL DEFAULT false,
-    "userId" TEXT NOT NULL,
+    "userId" UUID NOT NULL,
 
     CONSTRAINT "Order_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
 CREATE TABLE "PaymentType" (
-    "id" TEXT NOT NULL,
-    "paymentType" TEXT NOT NULL,
+    "id" UUID NOT NULL DEFAULT gen_random_uuid(),
+    "paymentType" "paymentType" NOT NULL DEFAULT 'CARD',
 
     CONSTRAINT "PaymentType_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
 CREATE TABLE "ProductVariant" (
-    "id" TEXT NOT NULL,
-    "var_id" TEXT NOT NULL,
-    "var_opt" TEXT,
-    "productId" TEXT NOT NULL,
+    "id" UUID NOT NULL DEFAULT gen_random_uuid(),
+    "var_id" UUID NOT NULL,
+    "var_opt" UUID,
+    "productId" UUID NOT NULL,
     "var_img" TEXT,
     "salePrice" DOUBLE PRECISION NOT NULL,
     "stock" INTEGER,
@@ -217,18 +225,18 @@ CREATE TABLE "ProductVariant" (
 
 -- CreateTable
 CREATE TABLE "SalesInvoice" (
-    "id" TEXT NOT NULL,
+    "id" UUID NOT NULL DEFAULT gen_random_uuid(),
     "invoiceDate" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "InvoiceId" TEXT NOT NULL,
     "totalAmount" DOUBLE PRECISION,
-    "orderId" TEXT NOT NULL,
+    "orderId" UUID NOT NULL,
 
     CONSTRAINT "SalesInvoice_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
 CREATE TABLE "Tax" (
-    "id" TEXT NOT NULL,
+    "id" UUID NOT NULL DEFAULT gen_random_uuid(),
     "name" TEXT NOT NULL,
     "rate" DOUBLE PRECISION NOT NULL,
     "description" TEXT,
@@ -238,9 +246,9 @@ CREATE TABLE "Tax" (
 
 -- CreateTable
 CREATE TABLE "UserPaymentMethod" (
-    "id" TEXT NOT NULL,
-    "userId" TEXT NOT NULL,
-    "typeId" TEXT NOT NULL,
+    "id" UUID NOT NULL DEFAULT gen_random_uuid(),
+    "userId" UUID NOT NULL,
+    "typeId" UUID NOT NULL,
     "provider" TEXT,
     "account_number" TEXT,
     "expiry_date" TIMESTAMP(3),
@@ -251,9 +259,9 @@ CREATE TABLE "UserPaymentMethod" (
 
 -- CreateTable
 CREATE TABLE "VariantOption" (
-    "id" TEXT NOT NULL,
+    "id" UUID NOT NULL DEFAULT gen_random_uuid(),
     "value" TEXT NOT NULL,
-    "var_id" TEXT NOT NULL,
+    "var_id" UUID NOT NULL,
     "variantName" TEXT,
 
     CONSTRAINT "VariantOption_pkey" PRIMARY KEY ("id")
@@ -261,31 +269,32 @@ CREATE TABLE "VariantOption" (
 
 -- CreateTable
 CREATE TABLE "Category" (
-    "id" TEXT NOT NULL,
+    "id" UUID NOT NULL DEFAULT gen_random_uuid(),
     "categoryName" TEXT NOT NULL,
-    "description" TEXT,
+    "categoryDescription" TEXT,
+    "categoryImage" TEXT[],
 
     CONSTRAINT "Category_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
 CREATE TABLE "visitprofile" (
-    "visit_id" TEXT NOT NULL,
-    "gg_id" TEXT NOT NULL,
-    "visit_by" TEXT,
+    "id" UUID NOT NULL DEFAULT gen_random_uuid(),
+    "userId" UUID NOT NULL,
+    "visitedBy" TEXT,
     "type" "ReactionType",
-    "count" INTEGER NOT NULL,
+    "visitCount" INTEGER NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
-    CONSTRAINT "visitprofile_pkey" PRIMARY KEY ("visit_id")
+    CONSTRAINT "visitprofile_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
 CREATE TABLE "Topup" (
-    "id" TEXT NOT NULL,
+    "id" UUID NOT NULL DEFAULT gen_random_uuid(),
     "amount" DOUBLE PRECISION NOT NULL,
-    "userId" TEXT NOT NULL,
+    "userId" UUID NOT NULL,
     "topupType" "TopupType" NOT NULL DEFAULT 'CREDIT',
     "topupStatus" "TopupStatus" NOT NULL DEFAULT 'PENDING',
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -295,8 +304,8 @@ CREATE TABLE "Topup" (
 
 -- CreateTable
 CREATE TABLE "cards" (
-    "id" TEXT NOT NULL,
-    "userId" TEXT NOT NULL,
+    "id" UUID NOT NULL DEFAULT gen_random_uuid(),
+    "userId" UUID NOT NULL,
     "cardType" "cardType" NOT NULL DEFAULT 'BUSINESS',
     "backgroundImage" TEXT[],
 
@@ -305,26 +314,26 @@ CREATE TABLE "cards" (
 
 -- CreateTable
 CREATE TABLE "_ProductToSupplier" (
-    "A" TEXT NOT NULL,
-    "B" TEXT NOT NULL
+    "A" UUID NOT NULL,
+    "B" UUID NOT NULL
 );
 
 -- CreateTable
 CREATE TABLE "_CartToProductVariant" (
-    "A" TEXT NOT NULL,
-    "B" TEXT NOT NULL
+    "A" UUID NOT NULL,
+    "B" UUID NOT NULL
 );
 
 -- CreateTable
 CREATE TABLE "_ProductOrders" (
-    "A" TEXT NOT NULL,
-    "B" TEXT NOT NULL
+    "A" UUID NOT NULL,
+    "B" UUID NOT NULL
 );
 
 -- CreateTable
 CREATE TABLE "_SalesInvoiceToTax" (
-    "A" TEXT NOT NULL,
-    "B" TEXT NOT NULL
+    "A" UUID NOT NULL,
+    "B" UUID NOT NULL
 );
 
 -- CreateIndex
@@ -358,13 +367,61 @@ CREATE UNIQUE INDEX "TwoFactorToken_email_token_key" ON "TwoFactorToken"("email"
 CREATE UNIQUE INDEX "TwoFactorConfirmation_userId_key" ON "TwoFactorConfirmation"("userId");
 
 -- CreateIndex
+CREATE UNIQUE INDEX "Product_categoryId_key" ON "Product"("categoryId");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Product_taxId_key" ON "Product"("taxId");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Cart_productId_key" ON "Cart"("productId");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Cart_orderId_key" ON "Cart"("orderId");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Cart_userId_key" ON "Cart"("userId");
+
+-- CreateIndex
 CREATE UNIQUE INDEX "Inventory_productId_key" ON "Inventory"("productId");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Order_paymentId_key" ON "Order"("paymentId");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Order_userId_key" ON "Order"("userId");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "ProductVariant_var_id_key" ON "ProductVariant"("var_id");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "ProductVariant_var_opt_key" ON "ProductVariant"("var_opt");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "ProductVariant_productId_key" ON "ProductVariant"("productId");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "SalesInvoice_InvoiceId_key" ON "SalesInvoice"("InvoiceId");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "SalesInvoice_orderId_key" ON "SalesInvoice"("orderId");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "UserPaymentMethod_userId_key" ON "UserPaymentMethod"("userId");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "UserPaymentMethod_typeId_key" ON "UserPaymentMethod"("typeId");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "VariantOption_var_id_key" ON "VariantOption"("var_id");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "visitprofile_userId_key" ON "visitprofile"("userId");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Topup_userId_key" ON "Topup"("userId");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "cards_userId_key" ON "cards"("userId");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "_ProductToSupplier_AB_unique" ON "_ProductToSupplier"("A", "B");
@@ -442,7 +499,7 @@ ALTER TABLE "UserPaymentMethod" ADD CONSTRAINT "UserPaymentMethod_userId_fkey" F
 ALTER TABLE "VariantOption" ADD CONSTRAINT "VariantOption_var_id_fkey" FOREIGN KEY ("var_id") REFERENCES "Variant"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "visitprofile" ADD CONSTRAINT "visitprofile_gg_id_fkey" FOREIGN KEY ("gg_id") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE NO ACTION;
+ALTER TABLE "visitprofile" ADD CONSTRAINT "visitprofile_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE NO ACTION;
 
 -- AddForeignKey
 ALTER TABLE "Topup" ADD CONSTRAINT "Topup_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
