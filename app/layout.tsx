@@ -78,7 +78,7 @@ export default async function RootLayout({
     );
   }
 
-  const avatarsResponse = await getUserAvatars(user.gg_id);
+  const avatarsResponse = await getUserAvatars(user.id);
   const avatars: AvatarType[] =
     avatarsResponse.success && Array.isArray(avatarsResponse.data)
       ? avatarsResponse.data
@@ -93,7 +93,7 @@ export default async function RootLayout({
             <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
               <AuroraBackground>
                 <UserProvider>
-                  <AvatarProvider initialAvatars={avatars} user={user.gg_id}>
+                  <AvatarProvider initialAvatars={avatars} user={user.id}>
                     {/* Theme switcher */}
                     <div className="absolute top-[8px] right-[73px] z-50">
                       <ThemeSwitcher />
