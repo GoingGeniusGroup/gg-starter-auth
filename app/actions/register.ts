@@ -54,10 +54,10 @@ export const register = async (payload: z.infer<typeof registerSchema>) => {
 
   // Create the user
   await createUser({
-    username,
-    email: email || null, // Handle optional email
+    userName: username ? [username as string] : undefined,
+    email: email ? [email as string] : undefined,
     password: hashedPassword,
-    phone_number,
+    mobilePhone: phone_number ? [phone_number as string] : undefined,
   });
 
   // Generate a verification token and send verification (SMS or email)

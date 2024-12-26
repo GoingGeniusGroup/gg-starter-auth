@@ -5,8 +5,8 @@ import { getCurrentUser } from "@/actions/userAndGuild";
 
 // Define the context type
 interface UserContextType {
-  username: string | null;
-  image: string | null;
+  username: string[] | null;
+  image: string[] | null;
   loading: boolean;
 }
 
@@ -17,16 +17,16 @@ const UserContext = createContext<UserContextType | null>(null);
 import { ReactNode } from "react";
 
 export function UserProvider({ children }: { children: ReactNode }) {
-  const [username, setUsername] = useState<string | null>(null);
-  const [image, setImage] = useState<string | null>(null);
+  const [username, setUsername] = useState<string[] | null>(null);
+  const [image, setImage] = useState<string[] | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     async function fetchUserData() {
       try {
         const user = await getCurrentUser();
-        setUsername(user?.username || null);
-        setImage(user?.image || null);
+        setUsername(user?.userName || null);
+        setImage(user?.imageUser || null);
       } catch (error) {
         console.error("Error fetching user data:", error);
         setUsername(null);

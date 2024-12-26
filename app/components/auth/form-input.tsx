@@ -3,12 +3,13 @@ import { Input } from "@/app/components/ui/input";
 import { cn } from "@/lib/utils";
 import { Control, FieldValues, Path } from "react-hook-form";
 
-type FormInputProps<T extends FieldValues> = React.ComponentPropsWithRef<"input"> & {
-  control: Control<T>;
-  name: Path<T>;
-  label: string;
-  isPending?: boolean;
-};
+type FormInputProps<T extends FieldValues> =
+  React.ComponentPropsWithRef<"input"> & {
+    control: Control<T>;
+    name: Path<T>;
+    label: string;
+    isPending?: boolean;
+  };
 
 export const FormInput = <T extends FieldValues>(props: FormInputProps<T>) => {
   const { control, name, label, isPending, disabled, ...rest } = props;

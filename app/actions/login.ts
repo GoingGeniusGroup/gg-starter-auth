@@ -66,7 +66,7 @@ export const login = async (payload: z.infer<typeof loginSchema>) => {
   // Check if user's 2FA are enabled
   if (existingUser.isTwoFactorEnabled && existingUser.email) {
     const existingTwoFactorConfirmation =
-      await getTwoFactorConfirmationByUserId(existingUser.gg_id);
+      await getTwoFactorConfirmationByUserId(existingUser.id);
     const hasExpired = isExpired(existingTwoFactorConfirmation?.expires!);
 
     // If two factor confirmation exist and expired, then delete it.
@@ -80,7 +80,11 @@ export const login = async (payload: z.infer<typeof loginSchema>) => {
       const token = signJwt(validatedFields.data);
       cookieStore.set("credentials-session", token);
 
-      const twoFactorToken = await generateTwoFactorToken(existingUser.email);
+      //Extracting email from array
+      const email = Array.isArray(existingUser.email)
+        ? existingUser.email[0]
+        : existingUser.email;
+      const twoFactorToken = await generateTwoFactorToken(email);
       await sendTwoFactorEmail(twoFactorToken.email, twoFactorToken.token);
 
       return response({
