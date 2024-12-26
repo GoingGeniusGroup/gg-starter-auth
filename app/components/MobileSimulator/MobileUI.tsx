@@ -8,9 +8,9 @@ import { MobileInterfaceProps } from "./interface/MobileInterface.interface";
 
 //icon
 import { RxCross2 } from "react-icons/rx";
-import { ColorPicker } from "../CustomComponents/ColorPicker";
+// import { ColorPicker } from "../CustomComponents/ColorPicker";
 import { useMobileSimulator } from "@/components/MobileSimulator/provider/MobileSimulatorContext";
-import { ThemeType } from "@prisma/client";
+// import { ThemeType } from "@prisma/client";
 
 const scheduleData = [
   { day: "S", schedule: [1, 0, 1, 1, 0, 1, 0] },
@@ -145,7 +145,7 @@ const MobileUI: React.FC<MobileInterfaceProps> = ({
             <div className="flex justify-evenly w-full">
               <div className="flex flex-col w-full items-center gap-1">
                 <h1 className="text-[10px] font-bold">THEME</h1>
-                <ColorPicker
+                {/* <ColorPicker
                   value={
                     currentBackground.name === "Custom Color"
                       ? currentBackground.class.match(
@@ -155,15 +155,15 @@ const MobileUI: React.FC<MobileInterfaceProps> = ({
                   }
                   onChange={handleColorChange}
                   typeColor={ThemeType.THEME}
-                />
+                /> */}
               </div>
               <div className="flex flex-col w-full items-center gap-1">
                 <h1 className="text-[10px] font-bold">TEXT</h1>
-                <ColorPicker
+                {/* <ColorPicker
                   value={textColor}
                   onChange={handleTextColorChange}
                   typeColor={ThemeType.TEXT}
-                />
+                /> */}
               </div>
             </div>
           </div>

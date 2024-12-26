@@ -60,7 +60,7 @@ export const newPassword = async (
   const hashedPassword = await hashPassword(password);
 
   // Replace the old password with the new one.
-  await updateUserById(existingUser.gg_id, {
+  await updateUserById(existingUser.id, {
     password: hashedPassword,
   });
   // Delete reset password token.

@@ -39,10 +39,14 @@ export const newVerification = async (token: string) => {
     });
   }
 
+  //extracting email from array
+  const email = Array.isArray(existingToken.email)
+    ? existingToken.email[0]
+    : existingToken.email;
   // Update user verified based on current datetime.
-  await updateUserById(existingUser.gg_id, {
+  await updateUserById(existingUser.id, {
     emailVerified: new Date(),
-    email: existingToken.email, // This is needed when user want to change their email address
+    email: email, // This is needed when user want to change their email address
   });
   // Then delete verify token.
   await deleteVerificationTokenById(existingToken.id);

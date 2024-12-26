@@ -71,7 +71,7 @@ export const twoFactor = async (
 
   // Delete two factor token, and generate two factor confirmation
   await deleteTwoFactorTokenById(twoFactorToken.id);
-  await generateTwoFactorConfirmation(existingUser.gg_id);
+  await generateTwoFactorConfirmation(existingUser.id);
 
   // Delete credentials-session's payload from login page.
   const cookieStore = cookies();
