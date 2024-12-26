@@ -12,11 +12,11 @@ import { ThemeSwitcher } from "./components/ThemeToggler/ThemeSwitcher";
 import FloatingDockInvertedComponent from "./components/dock/FloatingDockInverted";
 import { ToastProvider } from "./providers/toast-provider";
 import { UserProvider } from "./hooks/UserProvider";
-import {
-  AvatarProvider,
-  AvatarType,
-} from "@/components/AvatarManager/provider/AvatarManagerContext";
-import { getUserAvatars } from "./actions/avatar";
+// import {
+//   AvatarProvider,
+//   AvatarType,
+// } from "@/components/AvatarManager/provider/AvatarManagerContext";
+// import { getUserAvatars } from "./actions/avatar";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -78,11 +78,11 @@ export default async function RootLayout({
     );
   }
 
-  const avatarsResponse = await getUserAvatars(user.id);
-  const avatars: AvatarType[] =
-    avatarsResponse.success && Array.isArray(avatarsResponse.data)
-      ? avatarsResponse.data
-      : [];
+  // const avatarsResponse = await getUserAvatars(user.id);
+  // const avatars: AvatarType[] =
+  //   avatarsResponse.success && Array.isArray(avatarsResponse.data)
+  //     ? avatarsResponse.data
+  //     : [];
 
   return (
     <html lang="en" className="h-full">
@@ -93,24 +93,22 @@ export default async function RootLayout({
             <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
               <AuroraBackground>
                 <UserProvider>
-                  <AvatarProvider initialAvatars={avatars} user={user.id}>
-                    {/* Theme switcher */}
-                    <div className="absolute top-[8px] right-[73px] z-50">
-                      <ThemeSwitcher />
-                    </div>
+                  {/* Theme switcher */}
+                  <div className="absolute top-[8px] right-[73px] z-50">
+                    <ThemeSwitcher />
+                  </div>
 
-                    {/* Dock section */}
-                    <div className="w-full z-40">
-                      <div className="p-4 text-black dark:text-white">
-                        <FloatingDockInvertedComponent />
-                      </div>
+                  {/* Dock section */}
+                  <div className="w-full z-40">
+                    <div className="p-4 text-black dark:text-white">
+                      <FloatingDockInvertedComponent />
                     </div>
+                  </div>
 
-                    {/* Content section */}
-                    <div className="flex-1 px-8 py-4 w-full overflow-auto">
-                      {children}
-                    </div>
-                  </AvatarProvider>
+                  {/* Content section */}
+                  <div className="flex-1 px-8 py-4 w-full overflow-auto">
+                    {children}
+                  </div>
                 </UserProvider>
                 <ToastProvider />
               </AuroraBackground>
