@@ -15,9 +15,11 @@ import { Label } from "@/components/ui/label";
 import Script from "next/script";
 
 export default function KhaltiPayment() {
-  const [amount, setAmount] = useState("");
-  const [productName, setProductName] = useState("");
-  const [transactionId, setTransactionId] = useState("");
+  const [formData, setFormData] = useState({
+    amount: "",
+    productName: "",
+    transactionId: "",
+  });
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
