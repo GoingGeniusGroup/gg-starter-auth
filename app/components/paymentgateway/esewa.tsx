@@ -12,8 +12,8 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { DummyDataResponse } from "@/lib/types";
-import { useToast } from "@/hooks/use-toast";
+// import { DummyDataResponse } from "@/lib/types";
+import { toast } from "sonner";
 
 interface EsewaConfig {
   tax_amount: number;
@@ -39,7 +39,6 @@ export default function EsewaPayment() {
   const [transactionId, setTransactionId] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
-  const { toast } = useToast();
 
   useEffect(() => {
     const fetchDummyData = async () => {
@@ -53,25 +52,20 @@ export default function EsewaPayment() {
         setProductName(data.productName);
         setTransactionId(data.transactionId);
 
-        toast({
-          title: "Data loaded successfully",
-          description: "Payment details have been pre-filled.",
-        });
+        toast.success(
+          "Data loaded successfully. Payment details have been pre-filled."
+        );
       } catch (error) {
         const errorMessage =
           error instanceof Error ? error.message : "An unknown error occurred";
         console.error("Error fetching dummy data:", errorMessage);
 
-        toast({
-          variant: "destructive",
-          title: "Error loading data",
-          description: "Failed to load initial data. Please refresh the page.",
-        });
+        toast.error("Failed to load initial data. Please refresh the page.");
       }
     };
 
     fetchDummyData();
-  }, [toast]);
+  }, []);
   const handlePayment = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsLoading(true);
@@ -96,10 +90,9 @@ export default function EsewaPayment() {
       }
 
       const paymentData: PaymentResponse = await response.json();
-      toast({
-        title: "Payment Initiated",
-        description: "Redirecting to eSewa payment gateway...",
-      });
+      toast.success(
+        "Payment Initiated. Redirecting to eSewa payment gateway..."
+      );
 
       const form = document.createElement("form");
       form.method = "POST";
@@ -136,11 +129,7 @@ export default function EsewaPayment() {
         error instanceof Error ? error.message : "An unknown error occurred";
       console.error("Payment error:", errorMessage);
       setError("Payment initiation failed. Please try again.");
-      toast({
-        variant: "destructive",
-        title: "Payment Error",
-        description: "Payment initiation failed. Please try again.",
-      });
+      toast.error("Payment initiation failed. Please try again.");
     } finally {
       setIsLoading(false);
     }
