@@ -139,6 +139,7 @@ export default function EsewaPayment() {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    console.log(formData);
   };
 
   //function to handle input change
@@ -151,7 +152,7 @@ export default function EsewaPayment() {
   };
 
   return (
-    <div className="flex justify-center items-center relative z-50">
+    <div className="flex justify-center items-center relative">
       <Card className="w-full max-w-md mx-4">
         <CardHeader>
           <CardTitle>eSewa Payment</CardTitle>
