@@ -25,8 +25,8 @@ import { BackgroundProps } from "../interface/Background.interface";
 import MobileSimulatorContainer from "../MobileSimulatorContainer";
 import SimulatorToggleButton from "../SimulatorToggleButton";
 import NotificationComponent from "@/components/Notification/NotificationComponent";
-import { getColorsbyUserId } from "@/services/color";
-import { ThemeType } from "@prisma/client";
+// import { getColorsbyUserId } from "@/services/color";
+// import { ThemeType } from "@prisma/client";
 
 interface MobileSimulatorContextType {
   showMobile: boolean;
@@ -44,7 +44,7 @@ interface MobileSimulatorContextType {
     handleTextColorChange: (color: string) => void;
     currentBackground: BackgroundProps;
     setCurrentBackground: React.Dispatch<React.SetStateAction<BackgroundProps>>;
-    tempColor: { value: string; typeColor: ThemeType }[];
+    // tempColor: { value: string; typeColor: ThemeType }[];
   };
 }
 
@@ -92,43 +92,43 @@ export const MobileSimulatorProvider = ({
   const [showLogin, setShowLogin] = useState<boolean>(true);
   const [activeScreens, setActiveScreens] = useState<number[]>([]);
   const [textColor, setTextColor] = useState("#000000");
-  const [tempColor, setTempColor] = useState<
-    { value: string; typeColor: ThemeType }[]
-  >([]);
+  // const [tempColor, setTempColor] = useState<
+  //   { value: string; typeColor: ThemeType }[]
+  // >([]);
   const handleTextColorChange = (color: string) => {
     const formattedColor = color.startsWith("#") ? color : `#${color}`;
     setTextColor(formattedColor); // Set the new text color globally
   };
 
-  useEffect(() => {
-    const fetchcolors = async () => {
-      const response = await getColorsbyUserId();
-      if (response) {
-        response.map((colorObj) => {
-          setTempColor((prev) => {
-            return [
-              ...prev,
-              {
-                value: colorObj.value,
-                typeColor: colorObj.type,
-              },
-            ];
-          });
+  // useEffect(() => {
+  //   const fetchcolors = async () => {
+  //     const response = await getColorsbyUserId();
+  //     if (response) {
+  //       response.map((colorObj) => {
+  //         setTempColor((prev) => {
+  //           return [
+  //             ...prev,
+  //             {
+  //               value: colorObj.value,
+  //               typeColor: colorObj.type,
+  //             },
+  //           ];
+  //         });
 
-          if (colorObj.type === "TEXT") {
-            setTextColor(colorObj.value);
-          } else {
-            setCurrentBackground({
-              name: "Custom Color",
-              class: `bg-[${colorObj.value}]`,
-            });
-          }
-        });
-      }
-    };
+  //         if (colorObj.type === "TEXT") {
+  //           setTextColor(colorObj.value);
+  //         } else {
+  //           setCurrentBackground({
+  //             name: "Custom Color",
+  //             class: `bg-[${colorObj.value}]`,
+  //           });
+  //         }
+  //       });
+  //     }
+  //   };
 
-    fetchcolors();
-  }, []);
+  //   fetchcolors();
+  // }, []);
 
   // Directly compute isLoggedIn from session status
   const isLoggedIn = status === "authenticated";
@@ -232,7 +232,7 @@ export const MobileSimulatorProvider = ({
     setTextColor,
     currentBackground,
     setCurrentBackground,
-    tempColor,
+    // tempColor,
   };
 
   return (
