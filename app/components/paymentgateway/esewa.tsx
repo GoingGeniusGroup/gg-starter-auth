@@ -34,9 +34,11 @@ interface PaymentResponse {
 }
 
 export default function EsewaPayment() {
-  const [amount, setAmount] = useState<string>("");
-  const [productName, setProductName] = useState<string>("");
-  const [transactionId, setTransactionId] = useState<string>("");
+  const [formData, setFormData] = useState({
+    amount: "",
+    productName: "",
+    transactionId: "",
+  });
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -139,8 +141,17 @@ export default function EsewaPayment() {
     e.preventDefault();
   };
 
+  //function to handle input change
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { id, value } = e.target;
+    setFormData((prevData) => ({
+      ...prevData,
+      [id]: value,
+    }));
+  };
+
   return (
-    <div className="flex justify-center items-center min-h-screen bg-gray-100">
+    <div className="flex justify-center items-center relative z-50">
       <Card className="w-full max-w-md mx-4">
         <CardHeader>
           <CardTitle>eSewa Payment</CardTitle>
@@ -158,8 +169,8 @@ export default function EsewaPayment() {
               <Input
                 id="amount"
                 type="number"
-                value={amount}
-                onChange={(e) => setAmount(e.target.value)}
+                value={formData.amount}
+                onChange={handleInputChange}
                 required
                 min="1"
                 step="0.01"
@@ -170,8 +181,8 @@ export default function EsewaPayment() {
               <Label htmlFor="productName">Product Name</Label>
               <Input
                 id="productName"
-                value={productName}
-                onChange={(e) => setProductName(e.target.value)}
+                value={formData.productName}
+                onChange={handleInputChange}
                 required
                 placeholder="Enter product name"
                 maxLength={100}
@@ -181,8 +192,8 @@ export default function EsewaPayment() {
               <Label htmlFor="transactionId">Transaction ID</Label>
               <Input
                 id="transactionId"
-                value={transactionId}
-                onChange={(e) => setTransactionId(e.target.value)}
+                value={formData.transactionId}
+                onChange={handleInputChange}
                 required
                 placeholder="Enter transaction ID"
                 maxLength={50}
@@ -193,7 +204,12 @@ export default function EsewaPayment() {
             <Button
               type="submit"
               className="w-full"
-              disabled={isLoading || !amount || !productName || !transactionId}
+              disabled={
+                isLoading ||
+                !formData.amount ||
+                !formData.productName ||
+                !formData.transactionId
+              }
             >
               {isLoading ? "Processing..." : "Pay with eSewa"}
             </Button>
