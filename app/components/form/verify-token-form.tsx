@@ -1,4 +1,4 @@
-import { CardWrapper } from "@/app/components/auth/card-wrapper";
+import { CardWrapper } from "@/components/auth/card-wrapper";
 import type { Response } from "@/types";
 import { redirect } from "next/navigation";
 

@@ -131,7 +131,7 @@ const StudentCardBack: React.FC<studentCardBackProps> = ({
               {filteredRowDetails.map((d) => (
                 <div
                   key={d.id}
-                  className="flex flex-col px-4 w-full gap-0 mb-2"
+                  className="flex flex-col px-4 w-full gap-0 mb-2 text-gray-800"
                 >
                   <span className="font-medium text-[10px] leading-tight">
                     {d.title}
@@ -147,7 +147,7 @@ const StudentCardBack: React.FC<studentCardBackProps> = ({
               {filteredColDetails.map((d) => (
                 <div
                   key={d.id}
-                  className="flex flex-col px-4 w-full gap-0 mb-2"
+                  className="flex flex-col px-4 w-full gap-0 mb-2 text-gray-800"
                 >
                   <span className="font-medium text-[10px] leading-tight">
                     {d.title}
@@ -166,11 +166,14 @@ const StudentCardBack: React.FC<studentCardBackProps> = ({
 
           {/*Bottom Content*/}
           <div className="h-1/3 flex flex-col w-full mt-2">
-            <h2 className="font-bold text-[10px] text-center mb-6">
+            <h2 className="font-bold text-[10px] text-center mb-6 text-gray-800">
               {data.description}
             </h2>
             {data.bydetails.map((d) => (
-              <div key={d.id} className="font-medium text-[10px] text-center">
+              <div
+                key={d.id}
+                className="font-medium text-[10px] text-center text-gray-800"
+              >
                 {d.title}
               </div>
             ))}

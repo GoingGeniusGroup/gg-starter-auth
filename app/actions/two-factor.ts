@@ -1,18 +1,18 @@
 "use server";
 
+import { signInCredentials } from "@/actions/login";
+import { isExpired, response } from "@/lib/utils";
 import { loginSchema, twoFactorSchema } from "@/schemas";
-import { z } from "zod";
-import { getUserByEmail } from "@/services/user";
+import { sendTwoFactorEmail } from "@/services/mail";
+import { generateTwoFactorConfirmation } from "@/services/two-factor-confirmation";
 import {
   deleteTwoFactorTokenById,
   generateTwoFactorToken,
   getTwoFactorTokenByEmail,
 } from "@/services/two-factor-token";
-import { isExpired, response } from "@/lib/utils";
-import { generateTwoFactorConfirmation } from "@/services/two-factor-confirmation";
-import { signInCredentials } from "@/actions/login";
+import { getUserByEmail } from "@/services/user";
 import { cookies } from "next/headers";
-import { sendTwoFactorEmail } from "@/services/mail";
+import { z } from "zod";
 
 export const twoFactor = async (
   payload: z.infer<typeof twoFactorSchema>,
@@ -33,7 +33,7 @@ export const twoFactor = async (
   const { code } = validatedFields.data;
 
   // Check if email address doesn't exist, then return an error.
-  const existingUser = await getUserByEmail(credentials.email);
+  const existingUser = await getUserByEmail(credentials.login);
   if (!existingUser || !existingUser.email || !existingUser.password) {
     return response({
       success: false,
@@ -45,7 +45,7 @@ export const twoFactor = async (
   }
 
   // Check if token invalid or doesn't exist, then return an error.
-  const twoFactorToken = await getTwoFactorTokenByEmail(credentials.email);
+  const twoFactorToken = await getTwoFactorTokenByEmail(credentials.login);
   if (!twoFactorToken || twoFactorToken.token !== code) {
     return response({
       success: false,
@@ -63,7 +63,8 @@ export const twoFactor = async (
       success: false,
       error: {
         code: 401,
-        message: "Code has been expired. Please resend the 2FA code to your email.",
+        message:
+          "Code has been expired. Please resend the 2FA code to your email.",
       },
     });
   }
@@ -77,7 +78,7 @@ export const twoFactor = async (
   cookieStore.delete("credentials-session");
 
   // Then try to sign in with next-auth credentials.
-  return await signInCredentials(credentials.email, credentials.password);
+  return await signInCredentials(credentials.login, credentials.password);
 };
 
 // Resend Two Factor Authentication

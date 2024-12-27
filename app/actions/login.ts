@@ -9,14 +9,17 @@ import {
   getTwoFactorConfirmationByUserId,
 } from "@/services/two-factor-confirmation";
 import { generateTwoFactorToken } from "@/services/two-factor-token";
-import { getUserByEmail } from "@/services/user";
+import {
+  getUserByEmail,
+  getUserByPhone,
+  getUserByUsername,
+} from "@/services/user";
 import bcrypt from "bcryptjs";
 import { AuthError } from "next-auth";
 import { cookies } from "next/headers";
 import { z } from "zod";
 
 export const login = async (payload: z.infer<typeof loginSchema>) => {
-  // Check if user input is not valid, then return an error.
   const validatedFields = loginSchema.safeParse(payload);
   if (!validatedFields.success) {
     return response({
@@ -28,11 +31,18 @@ export const login = async (payload: z.infer<typeof loginSchema>) => {
     });
   }
 
-  const { email, password } = validatedFields.data;
+  const { login, password } = validatedFields.data;
 
-  // Check if user, email and password doesn't exist, then return an error.
-  const existingUser = await getUserByEmail(email);
-  if (!existingUser || !existingUser.email || !existingUser.password) {
+  const existingUser =
+    (await getUserByEmail(login)) ||
+    (await getUserByPhone(login)) ||
+    (await getUserByUsername(login));
+
+  if (
+    !existingUser ||
+    !("password" in existingUser) ||
+    !existingUser.password
+  ) {
     return response({
       success: false,
       error: {
@@ -42,7 +52,6 @@ export const login = async (payload: z.infer<typeof loginSchema>) => {
     });
   }
 
-  // Check if passwords doesn't matches, then return an error.
   const isPasswordMatch = await bcrypt.compare(password, existingUser.password);
   if (!isPasswordMatch) {
     return response({
@@ -71,7 +80,11 @@ export const login = async (payload: z.infer<typeof loginSchema>) => {
       const token = signJwt(validatedFields.data);
       cookieStore.set("credentials-session", token);
 
-      const twoFactorToken = await generateTwoFactorToken(existingUser.email);
+      //Extracting email from array
+      const email = Array.isArray(existingUser.email)
+        ? existingUser.email[0]
+        : existingUser.email;
+      const twoFactorToken = await generateTwoFactorToken(email);
       await sendTwoFactorEmail(twoFactorToken.email, twoFactorToken.token);
 
       return response({
@@ -83,14 +96,14 @@ export const login = async (payload: z.infer<typeof loginSchema>) => {
   }
 
   // Then try to sign in with next-auth credentials.
-  return await signInCredentials(email, password);
+  return await signInCredentials(login, password);
 };
 
 // Sign in credentials from next-auth
-export const signInCredentials = async (email: string, password: string) => {
+export const signInCredentials = async (login: string, password: string) => {
   try {
     const result = await signIn("credentials", {
-      email,
+      login, // Change this from 'email' to 'login'
       password,
       redirect: false,
     });

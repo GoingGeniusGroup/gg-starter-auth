@@ -57,12 +57,16 @@ const BusinessCardFront: React.FC<BusinessCardFrontProps> = ({
       {/*left side*/}
       <div className="flex flex-col space-y-8">
         <CardHeader className="flex flex-col space-y-0">
-          <CardTitle className="text-[14px]">{data.Name}</CardTitle>
-          <CardDescription className="text-[8px]">{data.Field}</CardDescription>
+          <CardTitle className="text-[14px] text-gray-800">
+            {data.Name}
+          </CardTitle>
+          <CardDescription className="text-[8px] text-gray-800">
+            {data.Field}
+          </CardDescription>
         </CardHeader>
         <CardContent className="space-y-2">
           {data.details.map((detail) => (
-            <div key={detail.id} className="flex space-x-2">
+            <div key={detail.id} className="flex space-x-2 text-gray-800">
               <span className="flex items-center justify-center py-[3px] px-[3px] bg-[#2bbe9b] rounded-[2px] text-white">
                 {detail.icon}
               </span>

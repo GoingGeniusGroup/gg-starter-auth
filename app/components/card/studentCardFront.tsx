@@ -70,7 +70,9 @@ const StudentCardFront: React.FC<studentCardFrontProps> = ({
                 height={180}
               />
             </div>
-            <span className="font-semibold text-[14px]">{college}</span>
+            <span className="font-semibold text-[14px] text-black">
+              {college}
+            </span>
             <p className="border border-b-black w-full"></p>
           </div>
 
@@ -78,7 +80,7 @@ const StudentCardFront: React.FC<studentCardFrontProps> = ({
             <div className="flex flex-col items-start justify-center px-4 py-6">
               <Image src={GGIcon} alt="Logo" width={47} height={47} />
               <CardHeader className="flex flex-col space-y-0 p-0">
-                <CardTitle className="font-bold text-[14px]">
+                <CardTitle className="font-bold text-[14px] text-black">
                   {userName}
                 </CardTitle>
                 <CardDescription className="font-normal text-[11px]">
