@@ -16,32 +16,45 @@ import { FaEdit, FaTrash, FaPlus } from "react-icons/fa";
 interface Category {
   CategoryId: number;
   categoryName: string;
+  categoryType: string;
   categoryDescription:string;
   productQuantity: number;
 
 }
 interface CategoryTableProps {
+  categories:Category[];
   onAddClick: () => void;
+  onEditClick:(category:any)=>void
+  onDeleteClick:(categoryId:any)=>void
 }
-const CategoryTable = ({ onAddClick }:CategoryTableProps) => {
+const CategoryTable = ({ onAddClick,onEditClick,categories ,onDeleteClick}:CategoryTableProps) => {
     
-  const categories: Category[] = [
-    {
-      CategoryId: 1,
-      categoryName: "Virtual",
-      categoryDescription:"non-tengible,digitally created ",
-      productQuantity:20, 
-    },
+  // const categories: Category[] = [
+  //   {
+  //     CategoryId: 1,
+  //     categoryName: "Tv",
+  //     categoryType:"PHYSICAL",
+  //     categoryDescription:" television ,watch your favourite show",
+  //     productQuantity:20, 
+  //   },
 
-    {
-        CategoryId: 2,
-        categoryName: "Physical",
-        categoryDescription:"tengible products ",
-        productQuantity:20, 
-      },
+  //   {
+  //       CategoryId: 2,
+  //       categoryName: "watch",
+  //       categoryType:"PHYSICAL",
+  //       categoryDescription:"time date ",
+  //       productQuantity:20, 
+  //     },
+  //     {
+  //       CategoryId: 3,
+  //       categoryName: "watch",
+  //       categoryType:"PHYSICAL",
+  //       categoryDescription:"time date ",
+  //       productQuantity:20, 
+  //     },
   
  
-  ];
+  // ];
 
   return (
     <div className="p-2">
@@ -70,6 +83,7 @@ const CategoryTable = ({ onAddClick }:CategoryTableProps) => {
           <TableRow>
             <TableHead>S.N</TableHead>
             <TableHead>Category Id</TableHead>
+            <TableHead>Category Name</TableHead>
             <TableHead>Category Type</TableHead>
             <TableHead>Category Description</TableHead>
             <TableHead>Number of Product</TableHead>
@@ -82,6 +96,7 @@ const CategoryTable = ({ onAddClick }:CategoryTableProps) => {
               <TableCell>{index + 1}</TableCell>
               <TableCell>{category.CategoryId}</TableCell>
               <TableCell className="text-blue-500">{category.categoryName}</TableCell>
+              <TableCell>{category.categoryType} </TableCell>
               <TableCell>{category.categoryDescription}</TableCell>
               <TableCell>{category.productQuantity}</TableCell>
               <TableCell>
@@ -93,13 +108,14 @@ const CategoryTable = ({ onAddClick }:CategoryTableProps) => {
                     <BiShow />
                   </button>
                   <button
-                  onClick={onAddClick}
+                    onClick={() => onEditClick(category)}
                     className="text-blue-500 hover:text-blue-700 text-2xl"
                     aria-label="Edit"
                   >
                     <FaEdit />
                   </button>
                   <button
+                  onClick={()=>onDeleteClick(category.CategoryId)}
                     className="text-red-500 hover:text-red-700 text-2xl"
                     aria-label="Delete"
                   >

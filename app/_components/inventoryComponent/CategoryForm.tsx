@@ -8,7 +8,6 @@ interface CategoryFormProps {
 }
 
 
-
 const submitCategoryAction = async (prevState: any, formData: FormData) => {
   const data = {
     categoryName: formData.get("categoryName") as string,
