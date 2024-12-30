@@ -3,6 +3,7 @@
 import { v4 as uuidv4 } from "uuid";
 import { PrismaClient } from "@prisma/client";
 import { revalidatePath } from "next/cache";
+import { generateEsewaSignature } from "@/app/lib/esewa-utils";
 
 const prisma = new PrismaClient();
 
@@ -48,8 +49,11 @@ export async function esewaTopup({ amount, userId }: esewaTopupParams) {
       failure_url: `${process.env.NEXT_PUBLIC_APP_URL}/api/esewa/faliure?topupId=${topup.id}`,
     };
 
-    //demosignature
-    const signature = "placeholder_signature";
+    const signatureString = `total_amount=${esewaConfig.total_amount},transaction_uuid=${esewaConfig.transaction_uuid},product_code=${esewaConfig.product_code}`;
+    const signature = generateEsewaSignature(
+      process.env.NEXT_PUBLIC_ESEWA_SECRET_KEY!,
+      signatureString
+    );
 
     console.log("esewa topup initiated", { topupId: topup.id, esewaConfig });
 
