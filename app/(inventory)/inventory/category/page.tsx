@@ -99,7 +99,7 @@ const updateCategoryState=(updatedCategory:any)=>{
 
       <main className="flex-1 p-2 mt-2">
         <section className="grid grid-cols-4 gap-4 mb-4">
-          <div className="bg-white p-4 rounded shadow">Total Category:2</div>
+          <div className="bg-white p-4 rounded shadow">Total Category:{category.length}</div>
           <div className="bg-white p-4 rounded shadow">Max Product:Physical(98)</div>
           <div className="bg-white p-4 rounded shadow">Least Product:virtual(20)</div>
         </section>
