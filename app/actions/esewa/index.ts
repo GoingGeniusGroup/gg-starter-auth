@@ -1,6 +1,6 @@
 "use server";
 
-import { v4 as uuidv4 } from "uuid";
+import { db } from "@/app/lib/db";
 import { PrismaClient } from "@prisma/client";
 import { revalidatePath } from "next/cache";
 import { generateEsewaSignature } from "@/app/lib/esewa-utils";
@@ -16,7 +16,7 @@ interface esewaTopupParams {
 
 export async function esewaTopup({ amount, userId }: esewaTopupParams) {
   try {
-    const userExists = await prisma.user.findUnique({
+    const userExists = await db.user.findUnique({
       where: { id: userId },
     });
 
@@ -25,7 +25,7 @@ export async function esewaTopup({ amount, userId }: esewaTopupParams) {
     }
 
     //create new topup data
-    const topup = await prisma.topup.create({
+    const topup = await db.topup.create({
       data: {
         amount,
         userId,
