@@ -5,14 +5,16 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { categorySchema, categoryData } from "@/inventorySchema";
 import { updateCategory } from "@/action/category"; // Make sure this is imported
 import { toast } from "sonner";
+import { on } from "events";
 
 interface CategoryFormProps {
   onCancel: () => void;
   category: categoryData;
   CategoryId: string; 
+  onCategoryUpdate:(updatedCategory:any)=>void
 }
 
-const CategoryUpdateForm = ({ onCancel, category, CategoryId }: CategoryFormProps) => {
+const CategoryUpdateForm = ({ onCancel, category, CategoryId, onCategoryUpdate }: CategoryFormProps) => {
   const {
     control,
     register,
@@ -44,11 +46,17 @@ const CategoryUpdateForm = ({ onCancel, category, CategoryId }: CategoryFormProp
     try {
       // Call the updateCategory function and pass the CategoryId
       const result = await updateCategory(formData,CategoryId);
-
       if (result.success) {
+        const updatedCategory={
+          ...category,
+          categoryName:data.categoryName,
+          categoryDescription:data.categoryDescription,
+        }
         toast.success("Category updated successfully");
         console.log("Category updated successfully");
         onCancel(); // Close the form after success
+        onCategoryUpdate(updatedCategory)
+
       } else {
         toast.error("Failed to update category");
         console.error("Failed to update category");

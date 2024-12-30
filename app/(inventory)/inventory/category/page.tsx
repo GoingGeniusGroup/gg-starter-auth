@@ -23,7 +23,7 @@ useEffect(()=>{
   async function fetchCategory(){
     try{
       const response=await getAllCategories()
-      if (response.success) {
+      if (response.success && response.data) {
         const categories = response.data.map((cat: any) => ({
           CategoryId: cat.id, 
           categoryName: cat.categoryName,
@@ -42,6 +42,21 @@ useEffect(()=>{
   }
 fetchCategory();
 },[])
+
+const addCategoryState = (newCategory: any) => {
+  setCategory((prevCategories) => [...prevCategories, newCategory]);
+};
+
+
+const updateCategoryState=(updatedCategory:any)=>{
+  setCategory((prevCategories) =>
+    prevCategories.map((category) =>
+      category.CategoryId === updatedCategory.CategoryId ? updatedCategory : category
+    )
+  );
+}
+
+
 
   const viewForm = (): void => {
     setShowForm((prev) => !prev);
@@ -63,6 +78,7 @@ fetchCategory();
       const response=await deleteCategory(categoryId);
       if(response.success){
        toast.success("category deleted successfully")
+       setCategory((prev)=>prev.filter((category)=>category.CategoryId!==categoryId))
       }
       else{
         toast.error("Failed to delete category")
@@ -92,11 +108,12 @@ fetchCategory();
       {(showForm || updateMode) && (
         <div className="fixed inset-0 backdrop-blur-sm flex justify-center items-center z-50">
           <div className="rounded-lg shadow-lg relative w-full max-w-lg">
-          {showForm && <CategoryForm onCancel={hideForm} />}
+          {showForm && <CategoryForm onCancel={hideForm} onCategoryAdd={addCategoryState} />}
             {updateMode && (
               <CategoryUpdateForm
                 onCancel={hideForm}
                 category={selectedCategory}
+                onCategoryUpdate={updateCategoryState}
                 CategoryId={selectedCategory.CategoryId}
               />
             )}
