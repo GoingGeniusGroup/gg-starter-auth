@@ -256,8 +256,8 @@ model Tax {
 
 model UserPaymentMethod {
   id             String      @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  userId         String      @unique @db.Uuid
-  typeId         String      @unique @db.Uuid
+  userId         String      @db.Uuid
+  typeId         String      @db.Uuid
   provider       String?
   account_number String?
   expiry_date    DateTime?
@@ -270,7 +270,7 @@ model UserPaymentMethod {
 model VariantOption {
   id             String           @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   value          String
-  var_id         String           @unique @db.Uuid
+  var_id         String           @db.Uuid
   variantName    String?
   ProductVariant ProductVariant[]
   Variant        Variant          @relation(fields: [var_id], references: [id])
@@ -288,7 +288,7 @@ model Category {
 //VisitProfile Modal
 model visitprofile {
   id         String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  userId     String        @unique @db.Uuid
+  userId     String        @db.Uuid
   visitedBy  String?
   type       ReactionType?
   visitCount Int
@@ -301,7 +301,7 @@ model visitprofile {
 model Topup {
   id          String      @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   amount      Float
-  userId      String      @unique @db.Uuid
+  userId      String      @db.Uuid
   topupType   TopupType   @default(CREDIT)
   topupStatus TopupStatus @default(PENDING)
   user        User        @relation(fields: [userId], references: [id])
@@ -323,7 +323,7 @@ enum TopupType {
 //card modal membership
 model cards {
   id              String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  userId          String   @unique @db.Uuid
+  userId          String   @db.Uuid
   user            User     @relation(fields: [userId], references: [id])
   cardType        cardType @default(BUSINESS)
   backgroundImage String[]

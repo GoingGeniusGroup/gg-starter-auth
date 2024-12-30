@@ -12,28 +12,13 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-// import { DummyDataResponse } from "@/lib/types";
 import { toast } from "sonner";
-
-interface EsewaConfig {
-  tax_amount: number;
-  total_amount: number;
-  transaction_uuid: string;
-  product_code: string;
-  product_service_charge: number;
-  product_delivery_charge: number;
-  success_url: string;
-  failure_url: string;
-  signed_field_names: string;
-  signature: string;
-}
-
-interface PaymentResponse {
-  amount: string;
-  esewaConfig: EsewaConfig;
-}
+import { esewaTopup } from "@/actions/esewa/index";
+import { useSession } from "next-auth/react";
+import { object } from "zod";
 
 export default function EsewaPayment() {
+  const { data: session } = useSession();
   const [formData, setFormData] = useState({
     amount: "",
     productName: "",
@@ -42,104 +27,55 @@ export default function EsewaPayment() {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
 
-  //   useEffect(() => {
-  //     const fetchDummyData = async () => {
-  //       try {
-  //         const response = await fetch("/api/dummy-data?method=esewa");
-  //         if (!response.ok) {
-  //           throw new Error(`HTTP error! status: ${response.status}`);
-  //         }
-  //         const data: DummyDataResponse = await response.json();
-  //         setAmount(data.amount);
-  //         setProductName(data.productName);
-  //         setTransactionId(data.transactionId);
+  // Ensure user is logged in
+  if (!session) {
+    return <div>Please login to proceed with the payment.</div>;
+  }
 
-  //         toast.success(
-  //           "Data loaded successfully. Payment details have been pre-filled."
-  //         );
-  //       } catch (error) {
-  //         const errorMessage =
-  //           error instanceof Error ? error.message : "An unknown error occurred";
-  //         console.error("Error fetching dummy data:", errorMessage);
-
-  //         toast.error("Failed to load initial data. Please refresh the page.");
-  //       }
-  //     };
-
-  //     fetchDummyData();
-  //   }, []);
-  //   const handlePayment = async (e: React.FormEvent<HTMLFormElement>) => {
-  //     e.preventDefault();
-  //     setIsLoading(true);
-  //     setError(null);
-
-  //     try {
-  //       const response = await fetch("/api/initiate-payment", {
-  //         method: "POST",
-  //         headers: {
-  //           "Content-Type": "application/json",
-  //         },
-  //         body: JSON.stringify({
-  //           method: "esewa",
-  //           amount,
-  //           productName,
-  //           transactionId,
-  //         }),
-  //       });
-
-  //       if (!response.ok) {
-  //         throw new Error(`Payment initiation failed: ${response.statusText}`);
-  //       }
-
-  //       const paymentData: PaymentResponse = await response.json();
-  //       toast.success(
-  //         "Payment Initiated. Redirecting to eSewa payment gateway..."
-  //       );
-
-  //       const form = document.createElement("form");
-  //       form.method = "POST";
-  //       form.action = "https://rc-epay.esewa.com.np/api/epay/main/v2/form";
-
-  //       const esewaPayload = {
-  //         amount: paymentData.amount,
-  //         tax_amount: paymentData.esewaConfig.tax_amount,
-  //         total_amount: paymentData.esewaConfig.total_amount,
-  //         transaction_uuid: paymentData.esewaConfig.transaction_uuid,
-  //         product_code: paymentData.esewaConfig.product_code,
-  //         product_service_charge: paymentData.esewaConfig.product_service_charge,
-  //         product_delivery_charge:
-  //           paymentData.esewaConfig.product_delivery_charge,
-  //         success_url: paymentData.esewaConfig.success_url,
-  //         failure_url: paymentData.esewaConfig.failure_url,
-  //         signed_field_names: paymentData.esewaConfig.signed_field_names,
-  //         signature: paymentData.esewaConfig.signature,
-  //       };
-  //       console.log({ esewaPayload });
-  //       Object.entries(esewaPayload).forEach(([key, value]) => {
-  //         const input = document.createElement("input");
-  //         input.type = "hidden";
-  //         input.name = key;
-  //         input.value = String(value);
-  //         form.appendChild(input);
-  //       });
-
-  //       document.body.appendChild(form);
-  //       form.submit();
-  //       document.body.removeChild(form);
-  //     } catch (error) {
-  //       const errorMessage =
-  //         error instanceof Error ? error.message : "An unknown error occurred";
-  //       console.error("Payment error:", errorMessage);
-  //       setError("Payment initiation failed. Please try again.");
-  //       toast.error("Payment initiation failed. Please try again.");
-  //     } finally {
-  //       setIsLoading(false);
-  //     }
-  //   };
-
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log(formData);
+    setIsLoading(true);
+    setError(null);
+
+    const userId = session.user.id;
+
+    try {
+      const response = await esewaTopup({
+        userId,
+        amount: parseFloat(formData.amount),
+        productName: formData.productName,
+        transactionId: formData.transactionId,
+      });
+
+      if (response.success) {
+        const { esewaConfig } = await response.data;
+
+        toast.success("esewa payment integrated successfully");
+
+        // Create a POST form and submit it to eSewa
+        const form = document.createElement("form");
+        form.method = "POST";
+        form.action = "https://rc-epay.esewa.com.np/api/epay/main/v2/form";
+
+        // Append each key-value pair from esewaConfig to the form
+        Object.entries(esewaConfig).forEach(([Key, value]) => {
+          const input = document.createElement("input");
+          (input.type = "hidden"), (input.name = Key);
+          input.value = value as string;
+          form.appendChild(input);
+        });
+
+        // Append the form to the body and submit it
+        document.body.appendChild(form);
+        form.submit();
+      }
+    } catch (error) {
+      console.error("eSewa payment initiation error:", error);
+      setError("Failed to initiate eSewa payment. Please try again.");
+      toast.error("eSewa payment initiation failed.");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   //function to handle input change

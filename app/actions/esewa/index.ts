@@ -9,10 +9,20 @@ const prisma = new PrismaClient();
 interface esewaTopupParams {
   amount: number;
   userId: string;
+  productName: string;
+  transactionId: string;
 }
 
 export async function esewaTopup({ amount, userId }: esewaTopupParams) {
   try {
+    const userExists = await prisma.user.findUnique({
+      where: { id: userId },
+    });
+
+    if (!userExists) {
+      throw new Error(`User with ID ${userId} does not exist.`);
+    }
+
     //create new topup data
     const topup = await prisma.topup.create({
       data: {
