@@ -15,7 +15,6 @@ import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
 import { esewaTopup } from "@/actions/esewa/index";
 import { useSession } from "next-auth/react";
-import { object } from "zod";
 
 export default function EsewaPayment() {
   const { data: session } = useSession();
@@ -56,6 +55,7 @@ export default function EsewaPayment() {
         const form = document.createElement("form");
         form.method = "POST";
         form.action = "https://rc-epay.esewa.com.np/api/epay/main/v2/form";
+        // form.enctype = ""
 
         // Append each key-value pair from esewaConfig to the form
         Object.entries(esewaConfig).forEach(([Key, value]) => {
@@ -68,6 +68,8 @@ export default function EsewaPayment() {
         // Append the form to the body and submit it
         document.body.appendChild(form);
         form.submit();
+      } else {
+        console.log(response);
       }
     } catch (error) {
       console.error("eSewa payment initiation error:", error);

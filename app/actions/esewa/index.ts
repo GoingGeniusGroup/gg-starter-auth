@@ -35,7 +35,8 @@ export async function esewaTopup({ amount, userId }: esewaTopupParams) {
     });
 
     //Generate esewaConfiguration
-    const transactionUuid = `${Date.now()} - ${uuidv4}`;
+    const transactionUuid = `${Date.now()}`;
+    console.log(transactionUuid);
     const esewaConfig = {
       amount: amount.toString(),
       tax_amount: "0",
