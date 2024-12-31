@@ -7,9 +7,10 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+// Account Modal
 model Account {
-  id                String  @id @default(cuid())
-  type              String
+  id                String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  accountType       String
   provider          String
   providerAccountId String
   refresh_token     String?
@@ -20,173 +21,49 @@ model Account {
   id_token          String?
   session_state     String?
   userId            String  @unique @db.Uuid
-  user              User    @relation(fields: [userId], references: [gg_id], onDelete: Cascade)
+  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([provider, providerAccountId])
 }
 
-model cards {
-  card_id           String  @id(map: "card_pkey") @default(uuid()) @db.Uuid
-  gg_id             String  @db.Uuid
-  type              String? @db.VarChar(50)
-  name              String? @db.VarChar(50)
-  description       String?
-  date_in           String? @db.VarChar
-  date_out          String? @db.VarChar
-  blood_group       String?
-  emergency_contact String?
-  emergency_details String?
-  emergency_address String?
-  users             User    @relation(fields: [gg_id], references: [gg_id], onDelete: Cascade, onUpdate: NoAction, map: "card_gg_id_fkey")
+enum UserRole {
+  Admin
+  User
 }
 
-model experience {
-  experience_id    String   @id @default(uuid()) @db.Uuid
-  gg_id            String   @db.Uuid
-  type             String?  @db.VarChar(50)
-  name             String?  @db.VarChar(50)
-  description      String?
-  tools            String[]
-  project_skills   String[]
-  project_pictures String[]
-  link             String?
-  users            User     @relation(fields: [gg_id], references: [gg_id], onDelete: Cascade, onUpdate: NoAction)
-  skills           skills[]
-}
-
-model skills {
-  skill_id         String      @id @default(uuid()) @db.Uuid
-  gg_id            String      @db.Uuid
-  certifications   String[]
-  experience_id    String?     @db.Uuid
-  skill_name       String      @unique
-  skill_percentage Int
-  experiences      experience? @relation(fields: [experience_id], references: [experience_id], onDelete: Cascade, onUpdate: NoAction)
-  users            User        @relation(fields: [gg_id], references: [gg_id], onDelete: Cascade, onUpdate: NoAction)
-}
-
+//user Modal
 model User {
-  email                 String?                @unique @db.VarChar(100)
-  emailVerified         DateTime?
-  image                 String?
-  password              String?                @db.VarChar(255)
-  role                  UserRole               @default(User)
-  isTwoFactorEnabled    Boolean                @default(false)
-  address               String?                @db.VarChar(200)
-  cover_images          String[]
-  created_at            DateTime?              @default(now()) @db.Timestamp(6)
-  description           String?
-  dob                   DateTime?
-  faculty               Json?
-  first_name            String?                @db.VarChar(50)
-  gg_id                 String                 @id @default(uuid()) @db.Uuid
-  guild_id              String?                @db.Uuid
-  image_urls            String[]
-  last_name             String?                @db.VarChar(50)
-  oauth_provider        String?                @db.VarChar(50)
-  oauth_token           String?                @db.VarChar(255)
-  otp                   Int?
-  phone                 String?
-  phone_number          String?                @unique @db.VarChar(15)
-  region                Json?
-  username              String?                @unique
-  accounts              Account?
+  id                     String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  fullName               String?
+  userName               String[]
+  email                  String[]  @unique
+  mobilePhone            String[]
+  emailVerified          DateTime?
+  imageUser              String[]
+  password               String?
+  role                   UserRole  @default(User)
+  isTwoFactorEnabled     Boolean   @default(false)
+  address                String[]  @db.VarChar(50)
+  faculty                String?   @db.VarChar(50)
+  emergencyContactNumber String?   @db.VarChar(50)
+  emergencyContactName   String?   @db.VarChar(50)
+  enrollDate             DateTime?
+  expireDate             DateTime?
+
+  // Relations
+  accounts              Account[]
   Cart                  Cart[]
-  Color                 Color[]
-  ImagePost             ImagePost[]
   Order                 Order[]
-  twoFactorConfirmation TwoFactorConfirmation?
-  UserPaymentMethod     UserPaymentMethod[]
-  avatar                avatar[]
+  Topup                 Topup[]
   cards                 cards[]
-  comment               comment[]
-  coordinate            coordinate[]
-  experience            experience[]
-  skills                skills[]
-  social                social[]
-  visitprofile          visitprofile[]
+  visitProfile          visitprofile[]
+  TwoFactorConfirmation TwoFactorConfirmation?
+  UserPaymentMethod     UserPaymentMethod[]
 }
 
-model ImagePost {
-  img_id      String         @id @default(uuid()) @db.Uuid
-  image_url   String
-  caption     String
-  description String?
-  reactions   ReactionType[] @default([])
-  gg_id       String         @db.Uuid
-  createdAt   DateTime       @default(now())
-  updatedAt   DateTime       @updatedAt
-  users       User           @relation(fields: [gg_id], references: [gg_id], onDelete: Cascade, onUpdate: NoAction)
-  comments    comment[]
-}
-
-model comment {
-  cmt_id    String    @id @default(uuid()) @db.Uuid
-  text      String
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-  gg_id     String    @db.Uuid
-  img_id    String    @db.Uuid
-  users     User      @relation(fields: [gg_id], references: [gg_id], onDelete: Cascade)
-  imagePost ImagePost @relation(fields: [img_id], references: [img_id], onDelete: Cascade)
-}
-
-model social {
-  social_id String     @id @default(uuid()) @db.Uuid
-  key       socialType
-  value     String
-  gg_id     String     @db.Uuid
-  users     User       @relation(fields: [gg_id], references: [gg_id], onDelete: Cascade, onUpdate: NoAction)
-}
-
-model avatar {
-  avatar_id  String  @id @default(uuid()) @db.Uuid
-  gg_id      String  @db.Uuid
-  avatar_url String? @db.VarChar(255)
-  isactive   Boolean @default(false)
-  users      User    @relation(fields: [gg_id], references: [gg_id], onDelete: Cascade, onUpdate: NoAction)
-}
-
-model coordinate {
-  id        String  @id @default(uuid()) @db.Uuid
-  gg_id     String  @db.Uuid
-  longitude String?
-  latitude  String?
-  users     User    @relation(fields: [gg_id], references: [gg_id], onDelete: Cascade, onUpdate: NoAction)
-}
-
-model guilds {
-  description      String?
-  guild_name       String?  @unique
-  avatar_img       String?
-  continent        String?
-  skills           String[]
-  additionalSkills String[]
-  symbol           String?
-  color            String?
-  alignment        String[]
-  element          String?
-  guild_frame      String?
-  faculty_id       String   @db.Uuid
-  guild_id         String   @id @default(uuid()) @db.Uuid
-  faculty          faculty  @relation(fields: [faculty_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
-}
-
-model faculty {
-  id           String   @id @default(uuid()) @db.Uuid
-  description  String?
-  faculty_name String?  @unique
-  faculty_img  String?
-  skills       String[]
-  symbol       String?
-  color        String?
-  alignment    String[]
-  element      String?
-  guilds       guilds[]
-}
-
+// Verification Token Modal
 model VerificationToken {
-  id      String   @id @default(cuid())
+  id      String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   email   String
   token   String   @unique
   expires DateTime
@@ -194,8 +71,9 @@ model VerificationToken {
   @@unique([email, token])
 }
 
+// Reset Password modal
 model ResetPasswordToken {
-  id      String   @id @default(cuid())
+  id      String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   email   String
   token   String   @unique
   expires DateTime
@@ -203,8 +81,9 @@ model ResetPasswordToken {
   @@unique([email, token])
 }
 
+// TwoFactorToken
 model TwoFactorToken {
-  id      String   @id @default(cuid())
+  id      String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   email   String
   token   String   @unique
   expires DateTime
@@ -212,74 +91,87 @@ model TwoFactorToken {
   @@unique([email, token])
 }
 
+// TwoFactorConfirmation
 model TwoFactorConfirmation {
-  id      String   @id @default(cuid())
+  id      String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   expires DateTime
   userId  String   @unique @db.Uuid
-  user    User     @relation(fields: [userId], references: [gg_id], onDelete: Cascade)
+  user    User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
+//Product Modal
 model Product {
-  id              String           @id @default(cuid())
-  name            String
-  description     String?
-  image           String?
-  costPrice       Float
-  quantityInStock Int
-  validity        String?
-  salePrice       Float?
-  margin          String?
-  categoryId      String
-  isFeatured      Boolean?         @default(false)
-  slug            String?
-  taxId           String?
-  discount        Float?
-  status          Boolean          @default(true)
-  carts           Cart[]
-  inventory       Inventory?
-  category        Category         @relation(fields: [categoryId], references: [id])
-  Tax             Tax?             @relation(fields: [taxId], references: [id])
-  ProductVariant  ProductVariant[]
-  Business        Order[]          @relation("ProductOrders")
-  Supplier        Supplier[]       @relation("ProductToSupplier")
+  id            String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name          String
+  description   String?
+  imageUrl      String[]
+  salePrice     Float?
+  costPrice     Float?
+  stockQuantity Int
+  brand         String?
+  rating        Int
+  categoryId    String   @unique @db.Uuid
+  reviews       String[]
+  isFeatured    Boolean? @default(false)
+  taxId         String?  @unique @db.Uuid
+  discount      Float?
+  status        Boolean  @default(true)
+
+  carts          Cart[]
+  inventory      Inventory?
+  category       Category         @relation(fields: [categoryId], references: [id])
+  Tax            Tax?             @relation(fields: [taxId], references: [id])
+  productVariant ProductVariant[]
+  order          Order[]          @relation("ProductOrders")
+  Supplier       Supplier[]       @relation("ProductToSupplier")
 }
 
+// Cart Modal
 model Cart {
-  id             String           @id @default(cuid())
+  id             String           @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   quantity       Int
   status         CartStatus       @default(PENDING)
-  productId      String
-  orderId        String?
+  productId      String           @unique @db.Uuid
+  orderId        String?          @unique @db.Uuid
   amount         Float?
-  userId         String           @db.Uuid
+  userId         String           @unique @db.Uuid
   order          Order?           @relation("OrderCarts", fields: [orderId], references: [id], onDelete: Cascade)
   product        Product          @relation(fields: [productId], references: [id])
-  user           User             @relation(fields: [userId], references: [gg_id], onDelete: Cascade)
+  user           User             @relation(fields: [userId], references: [id], onDelete: Cascade)
   ProductVariant ProductVariant[] @relation("CartToProductVariant")
 }
 
+// Variant Modal
 model Variant {
-  id             String           @id @default(uuid())
+  id             String           @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   name           String
   status         Boolean          @default(true)
   ProductVariant ProductVariant[]
   VariantOption  VariantOption[]
 }
 
+//Inventory Modal
 model Inventory {
-  id          String   @id @default(cuid())
-  status      String
-  quantity    Int
-  restockDate DateTime
-  location    String?
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  productId   String   @unique
-  product     Product  @relation(fields: [productId], references: [id])
+  id                String               @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  stockStatus       inventoryStockStatus @default(AVAILABLE)
+  quantityAvailable Int
+  thresholdValue    Int //Low quantity alert
+  stockUpdatedDate  DateTime
+  address           String?
+  createdAt         DateTime             @default(now())
+  updatedAt         DateTime             @updatedAt
+  productId         String               @unique @db.Uuid
+  product           Product              @relation(fields: [productId], references: [id])
+}
+
+enum inventoryStockStatus {
+  AVAILABLE
+  LOWSTOCK
+  NOTAVAILABLE
 }
 
 model Supplier {
-  id           String    @id @default(cuid())
+  id           String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   supplierName String
   email        String?
   phone        String?
@@ -287,38 +179,47 @@ model Supplier {
   Product      Product[] @relation("ProductToSupplier")
 }
 
+//Order Modal
 model Order {
-  id            String        @id @default(cuid())
+  id            String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   orderDate     DateTime      @default(now())
-  quantity      Int
+  orderQuantity Int
   deliveryDate  DateTime?
   streetAddress String
   state         String
   city          String
-  status        OrderStatus   @default(PENDING)
-  amount        Float?
-  paymentId     String?
+  orderStatus   OrderStatus   @default(PENDING)
+  discount      Float?
+  orderAmount   Float?
+  paymentId     String?       @unique @db.Uuid
   paymentStatus Boolean       @default(false)
-  userId        String        @db.Uuid
+  userId        String        @unique @db.Uuid
   carts         Cart[]        @relation("OrderCarts")
   PaymentType   PaymentType?  @relation(fields: [paymentId], references: [id])
-  user          User          @relation(fields: [userId], references: [gg_id], onDelete: Cascade)
+  user          User          @relation(fields: [userId], references: [id], onDelete: Cascade)
   SalesInvoice  SalesInvoice?
-  orders        Product[]     @relation("ProductOrders")
+  product       Product[]     @relation("ProductOrders")
 }
 
+//Payement Type Modal
 model PaymentType {
-  id                String              @id
-  paymentType       String
+  id                String              @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  paymentType       paymentType         @default(CARD)
   Order             Order[]
   UserPaymentMethod UserPaymentMethod[]
 }
 
+enum paymentType {
+  CASH
+  CARD
+}
+
+//productVatiant Modal
 model ProductVariant {
-  id              String         @id
-  var_id          String
-  var_opt         String?
-  productId       String
+  id              String         @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  var_id          String         @unique @db.Uuid
+  var_opt         String?        @unique @db.Uuid
+  productId       String         @unique @db.Uuid
   var_img         String?
   salePrice       Float
   stock           Int?
@@ -332,18 +233,20 @@ model ProductVariant {
   Cart            Cart[]         @relation("CartToProductVariant")
 }
 
+// SalesInvoice Modal
 model SalesInvoice {
-  id          String   @id
+  id          String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   invoiceDate DateTime @default(now())
   InvoiceId   String   @unique
   totalAmount Float?
-  orderId     String   @unique
+  orderId     String   @unique @db.Uuid
   Order       Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
   Tax         Tax[]    @relation("SalesInvoiceToTax")
 }
 
+//Tax Modal
 model Tax {
-  id           String         @id
+  id           String         @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   name         String
   rate         Float
   description  String?
@@ -352,66 +255,85 @@ model Tax {
 }
 
 model UserPaymentMethod {
-  id             String      @id
-  userId         String      @db.Uuid
-  typeId         String
+  id             String      @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId         String      @unique @db.Uuid
+  typeId         String      @unique @db.Uuid
   provider       String?
   account_number String?
   expiry_date    DateTime?
   is_default     Boolean     @default(true)
   PaymentType    PaymentType @relation(fields: [typeId], references: [id])
-  User           User        @relation(fields: [userId], references: [gg_id], onDelete: Cascade)
+  User           User        @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
+// VatiantOption Modal
 model VariantOption {
-  id             String           @id
+  id             String           @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   value          String
-  var_id         String
+  var_id         String           @unique @db.Uuid
   variantName    String?
   ProductVariant ProductVariant[]
   Variant        Variant          @relation(fields: [var_id], references: [id])
 }
 
+//category Modal
 model Category {
-  id             String           @id
-  categoryName   String
-  description    String?
-  products       Product[]
-  VirtualProduct VirtualProduct[]
+  id                  String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  categoryName        String
+  categoryDescription String?
+  categoryImage       String[]
+  products            Product[]
 }
 
-model Color {
-  id     String    @id @default(cuid())
-  type   ThemeType
-  value  String
-  userId String    @db.Uuid
-  status Boolean   @default(false)
-  user   User      @relation(fields: [userId], references: [gg_id], onDelete: Cascade)
-}
-
+//VisitProfile Modal
 model visitprofile {
-  visit_id  String        @id @db.Uuid
-  gg_id     String        @db.Uuid
-  visit_by  String?
-  type      ReactionType?
-  count     Int
-  createdAt DateTime      @default(now())
-  updatedAt DateTime
-  User      User          @relation(fields: [gg_id], references: [gg_id], onDelete: Cascade, onUpdate: NoAction)
+  id         String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId     String        @unique @db.Uuid
+  visitedBy  String?
+  type       ReactionType?
+  visitCount Int
+  createdAt  DateTime      @default(now())
+  updatedAt  DateTime
+  User       User          @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: NoAction)
 }
 
-model VirtualProduct {
-  id            String   @id @default(uuid()) @db.Uuid
-  name          String
-  description   String?
-  categoryId    String
-  category      Category @relation(fields: [categoryId], references: [id])
-  price         Decimal
-  stockQuantity Int
-  ImageUrl      String[]
-  ratings       Float
-  sourceFile    String[]
-  animation     String?
+//Top up modal
+model Topup {
+  id          String      @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  amount      Float
+  userId      String      @unique @db.Uuid
+  topupType   TopupType   @default(CREDIT)
+  topupStatus TopupStatus @default(PENDING)
+  user        User        @relation(fields: [userId], references: [id])
+  createdAt   DateTime    @default(now())
+}
+
+enum TopupStatus {
+  PENDING
+  SUCCESS
+  FAILED
+}
+
+enum TopupType {
+  CREDIT
+  CASH
+  GGCOIN
+}
+
+//card modal membership
+model cards {
+  id              String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId          String   @unique @db.Uuid
+  user            User     @relation(fields: [userId], references: [id])
+  cardType        cardType @default(BUSINESS)
+  backgroundImage String[]
+}
+
+enum cardType {
+  STUDENT
+  BUSINESS
+  DEVELOPER
+  GAMER
 }
 
 enum ReactionType {
@@ -431,11 +353,6 @@ enum socialType {
   GOOGLE
 }
 
-enum UserRole {
-  Admin
-  User
-}
-
 enum ProductStatus {
   AVAILABLE
   NOTAVAILABLE
@@ -451,9 +368,4 @@ enum OrderStatus {
   SHIPPED
   DELIVERED
   CANCELLED
-}
-
-enum ThemeType {
-  THEME
-  TEXT
 }

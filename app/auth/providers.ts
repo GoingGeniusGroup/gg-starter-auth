@@ -27,10 +27,18 @@ export const CredentialsProvider = Credentials({
       const passwordsMatch = await bcrypt.compare(password, user.password);
 
       if (passwordsMatch) {
+        //extract the email and username from the array
+        const userName = Array.isArray(user.userName)
+          ? user.userName[0]
+          : user.userName;
+
+        const userEmail = Array.isArray(user.email)
+          ? user.email[0]
+          : user.email;
         return {
-          id: user.gg_id,
-          name: user.username,
-          email: user.email,
+          id: user.id,
+          name: userName,
+          email: userEmail,
           role: user.role,
           isTwoFactorEnabled: user.isTwoFactorEnabled,
           isOAuth: false,
