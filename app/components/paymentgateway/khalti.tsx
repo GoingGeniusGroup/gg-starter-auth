@@ -20,11 +20,6 @@ import { useRouter } from "next/navigation";
 export default function KhaltiPayment() {
   const { data: session } = useSession();
   const router = useRouter();
-  const [formData, setFormData] = useState({
-    amount: "",
-    productName: "",
-    transactionId: "",
-  });
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -42,9 +37,9 @@ export default function KhaltiPayment() {
 
     try {
       const response = await khaltiTopup({
-        amount: parseFloat(formData.amount),
-        productName: formData.productName,
-        transactionId: formData.transactionId,
+        amount: 1000,
+        productName: "wallet",
+        transactionId: `${Date.now()}`,
         userId,
       });
 
@@ -62,13 +57,13 @@ export default function KhaltiPayment() {
     }
   };
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { id, value } = e.target;
-    setFormData((prevData) => ({
-      ...prevData,
-      [id]: value,
-    }));
-  };
+  // const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   const { id, value } = e.target;
+  //   setFormData((prevData) => ({
+  //     ...prevData,
+  //     [id]: value,
+  //   }));
+  // };
 
   return (
     <>
@@ -91,44 +86,10 @@ export default function KhaltiPayment() {
               )}
               <div className="space-y-2">
                 <Label htmlFor="amount">Amount (NPR)</Label>
-                <Input
-                  id="amount"
-                  type="number"
-                  value={formData.amount}
-                  onChange={handleInputChange}
-                  required
-                />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="productName">Product Name</Label>
-                <Input
-                  id="productName"
-                  value={formData.productName}
-                  onChange={handleInputChange}
-                  required
-                />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="transactionId">Transaction ID</Label>
-                <Input
-                  id="transactionId"
-                  value={formData.transactionId}
-                  onChange={handleInputChange}
-                  required
-                />
               </div>
             </CardContent>
             <CardFooter>
-              <Button
-                type="submit"
-                className="w-full"
-                disabled={
-                  isLoading ||
-                  !formData.amount ||
-                  !formData.productName ||
-                  !formData.transactionId
-                }
-              >
+              <Button type="submit" className="w-full">
                 {isLoading ? "Processing..." : "Pay with Khalti"}
               </Button>
             </CardFooter>

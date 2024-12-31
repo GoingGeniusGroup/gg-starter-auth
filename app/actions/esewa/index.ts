@@ -1,30 +1,27 @@
 "use server";
 
 import { db } from "@/app/lib/db";
-import { PrismaClient } from "@prisma/client";
 import { revalidatePath } from "next/cache";
 import { generateEsewaSignature } from "@/app/lib/esewa-utils";
 
-const prisma = new PrismaClient();
-
-interface esewaTopupParams {
+interface EsewaTopupParams {
   amount: number;
   userId: string;
-  productName: string;
-  transactionId: string;
 }
 
-export async function esewaTopup({ amount, userId }: esewaTopupParams) {
+export async function esewaTopup({ amount, userId }: EsewaTopupParams) {
   try {
     const userExists = await db.user.findUnique({
       where: { id: userId },
     });
 
     if (!userExists) {
-      throw new Error(`User with ID ${userId} does not exist.`);
+      return {
+        success: false,
+        error: `User with ID ${userId} does not exist.`,
+      };
     }
 
-    //create new topup data
     const topup = await db.topup.create({
       data: {
         amount,
@@ -34,20 +31,21 @@ export async function esewaTopup({ amount, userId }: esewaTopupParams) {
       },
     });
 
-    //Generate esewaConfiguration
     const transactionUuid = `${Date.now()}`;
-    console.log(transactionUuid);
+    const taxAmount = 0;
+    const totalAmount = amount + taxAmount;
+
     const esewaConfig = {
       amount: amount.toString(),
-      tax_amount: "0",
+      tax_amount: taxAmount.toString(),
+      total_amount: totalAmount.toString(),
       transaction_uuid: transactionUuid,
-      total_amount: amount.toString(),
-      product_code: process.env.NEXT_PUBLIC_ESEWA_MERCHANT_CODE,
+      product_code: process.env.NEXT_PUBLIC_ESEWA_MERCHANT_CODE!,
       product_service_charge: "0",
       product_delivery_charge: "0",
-      signed_field_names: "total_amount,transaction_uuid,product_code",
       success_url: `${process.env.NEXT_PUBLIC_APP_URL}/api/esewa/success?topupId=${topup.id}`,
-      failure_url: `${process.env.NEXT_PUBLIC_APP_URL}/api/esewa/faliure?topupId=${topup.id}`,
+      failure_url: `${process.env.NEXT_PUBLIC_APP_URL}/api/esewa/failure?topupId=${topup.id}`,
+      signed_field_names: "total_amount,transaction_uuid,product_code",
     };
 
     const signatureString = `total_amount=${esewaConfig.total_amount},transaction_uuid=${esewaConfig.transaction_uuid},product_code=${esewaConfig.product_code}`;
@@ -56,10 +54,9 @@ export async function esewaTopup({ amount, userId }: esewaTopupParams) {
       signatureString
     );
 
-    console.log("esewa topup initiated", { topupId: topup.id, esewaConfig });
+    console.log("eSewa topup initiated", { topupId: topup.id, esewaConfig });
 
-    //Revalidate path where the user topup might be displayed
-    revalidatePath("user/topups");
+    revalidatePath("/user/topups");
 
     return {
       success: true,
@@ -73,6 +70,6 @@ export async function esewaTopup({ amount, userId }: esewaTopupParams) {
     };
   } catch (error) {
     console.error("eSewa topup initiation error:", error);
-    throw new Error("Failed to initiate eSewa topup");
+    return { success: false, error: "Failed to initiate eSewa topup" };
   }
 }
