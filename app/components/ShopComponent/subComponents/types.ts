@@ -4,8 +4,8 @@ export interface VirtualProduct {
   description: string;
   price: number;
   stockQuantity: number;
-  ratings: number;
-  ImageUrl: string[];
+  rating: number;
+  images: string[];
   category: string;
   sourceFile?: string[];
   animation?: string;

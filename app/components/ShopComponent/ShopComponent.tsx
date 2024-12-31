@@ -14,8 +14,8 @@ import "swiper/css/navigation";
 import "swiper/css/scrollbar";
 import "swiper/css/pagination";
 
-import { getCategories } from "@/actions/category";
-import { getProducts } from "@/actions/virtual product";
+import { getCategories } from "@/actions/virtualCategory";
+import { getProducts } from "@/app/actions/virtualProduct";
 import { Button } from "@/components/ui/button";
 import { FaShoppingCart } from "react-icons/fa";
 import { CartItem } from "./subComponents/types";
@@ -43,6 +43,7 @@ export default function ShopComponent() {
   useEffect(() => {
     const fetchProducts = async () => {
       const data = await getProducts();
+      console.log(data);
       setProducts(data);
     };
     fetchProducts();
@@ -63,7 +64,7 @@ export default function ShopComponent() {
         const category = categories.find(
           (cat) => cat.id === product.categoryId
         );
-        return category && category.categoryName === selectedCategory;
+        return category && category.name === selectedCategory;
       })
     : products;
 
@@ -117,6 +118,8 @@ export default function ShopComponent() {
     (sum, item) => sum + item.price * item.quantity,
     0
   );
+
+  console.log(products);
 
   return (
     <>
@@ -183,13 +186,11 @@ export default function ShopComponent() {
                     <li
                       key={category.id}
                       className={`cursor-pointer py-1 ${
-                        selectedCategory === category.categoryName
-                          ? "bg-gray-100"
-                          : ""
+                        selectedCategory === category.name ? "bg-gray-100" : ""
                       }`}
-                      onClick={() => handleCategoryClick(category.categoryName)}
+                      onClick={() => handleCategoryClick(category.name)}
                     >
-                      {category.categoryName}
+                      {category.name}
                     </li>
                   ))}
                 </ul>
@@ -206,7 +207,7 @@ export default function ShopComponent() {
                     <div className="relative overflow-hidden rounded-md bg-white/40 border border-gray-300 shadow-md dark:bg-white">
                       <div className="h-50 w-full overflow-hidden rounded-md bg-gray-100 flex justify-center">
                         <Image
-                          src={product.ImageUrl[0]}
+                          src={product.images[0]}
                           alt={product.name}
                           width={230}
                           height={300}
@@ -222,7 +223,7 @@ export default function ShopComponent() {
                       </div>
                       <div className="absolute left-2 top-2 rounded-full bg-white p-1 border border-gray-200 shadow-md">
                         <span className="text-sm font-bold text-yellow-400">
-                          {product.ratings}
+                          {product.rating}
                         </span>
                       </div>
                       <div className="p-2 w-full flex justify-center">

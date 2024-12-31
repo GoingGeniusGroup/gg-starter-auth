@@ -59,7 +59,7 @@ const CartSheet: React.FC<CartSheetProps> = ({
               {cartItems.map((item, idx) => (
                 <div key={idx} className="flex items-center space-x-4">
                   <Image
-                    src={item.ImageUrl[0]}
+                    src={item.images[0]}
                     alt={item.name}
                     width={64}
                     height={64}
