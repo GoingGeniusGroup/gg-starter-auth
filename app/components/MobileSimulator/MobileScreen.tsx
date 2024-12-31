@@ -43,7 +43,7 @@ const MobileScreen = forwardRef<HTMLDivElement, MobileScreenProps>(
           currentBackground.name !== "Custom Color"
             ? currentBackground.class
             : ""
-        } rounded-xl overflow-hidden py-2 flex-shrink-0 z-20 backdrop-blur-md border-1 border-white`}
+        } rounded-xl overflow-hidden flex-shrink-0 z-20 backdrop-blur-md border-1 border-white`}
         style={{
           ...backgroundStyle, // Apply background color here
           color: textColor, // Apply text color here

@@ -110,9 +110,6 @@ export default function ShopComponent() {
   const cartItems: CartItem[] = Object.entries(cart).map(([key, quantity]) => {
     const [productType, productId] = key.split("_");
     const product = products.find((p) => p.id === productId);
-    console.log("Cart:", cart);
-    console.log("Products:", products);
-    console.log("Product ID:", productId);
     return { ...product!, quantity, productType };
   });
 
@@ -123,15 +120,15 @@ export default function ShopComponent() {
 
   return (
     <>
-      <div className="p-2 mt-3 overflow-auto">
+      <div className="h-full p-4 overflow-auto bg-white pt-6">
         <div className="flex items-center justify-between mb-4">
           <div>
-            <h1 className="font-bold text-xl">Virtual Shop</h1>
+            <h1 className="font-semibold text-2xl">Virtual Shop</h1>
           </div>
-          <div onClick={() => setIsCartOpen(true)}>
-            <FaShoppingCart className="text-xl cursor-pointer" />
+          <div onClick={() => setIsCartOpen(true)} className="relative">
+            <FaShoppingCart className="text-2xl cursor-pointer" />
             {totalItems > 0 && (
-              <div className="absolute top-2 right-5 h-4 w-4 bg-red-500 text-white flex items-center justify-center rounded-full text-[0.8rem]">
+              <div className="absolute top-[-3px] right-3 h-4 w-4 bg-red-500 text-white flex items-center justify-center rounded-full text-[0.8rem]">
                 {totalItems}
               </div>
             )}
@@ -207,12 +204,12 @@ export default function ShopComponent() {
                 {searchedProducts.map((product) => (
                   <CarouselItem key={product.id} className="shrink-0 pb-4">
                     <div className="relative overflow-hidden rounded-md bg-white/40 border border-gray-300 shadow-md dark:bg-white">
-                      <div className="h-50 w-full overflow-hidden rounded-md bg-gray-100">
+                      <div className="h-50 w-full overflow-hidden rounded-md bg-gray-100 flex justify-center">
                         <Image
                           src={product.ImageUrl[0]}
                           alt={product.name}
-                          width={300}
-                          height={200}
+                          width={230}
+                          height={300}
                           className="object-cover"
                           unoptimized
                         />
@@ -230,12 +227,21 @@ export default function ShopComponent() {
                       </div>
                       <div className="p-2 w-full flex justify-center">
                         <Button
-                          className="w-full text-md font-normal"
+                          className="w-full text-md font-normal flex items-center justify-center"
                           onClick={() => {
                             addToCart(product.id);
                           }}
                         >
-                          Buy Now
+                          <span>Buy Now</span>
+                          <span
+                            className={`ml-2 px-2 py-1 text-sm font-medium rounded-md ${
+                              cart[`virtual_${product.id}`] > 0
+                                ? "text-white bg-blue-500"
+                                : "invisible"
+                            }`}
+                          >
+                            {cart[`virtual_${product.id}`] || 0}
+                          </span>
                         </Button>
                       </div>
                     </div>

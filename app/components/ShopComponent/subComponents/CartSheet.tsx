@@ -1,4 +1,5 @@
-import React from "react";
+"use Client";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Plus, Minus } from "lucide-react";
@@ -12,6 +13,8 @@ import {
 } from "@/components/ui/sheet";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { CartItem } from "./types";
+import { useRouter } from "next/navigation";
+import axios from "axios";
 
 interface CartSheetProps {
   isOpen: boolean;
@@ -30,6 +33,15 @@ const CartSheet: React.FC<CartSheetProps> = ({
   onRemoveFromCart,
   totalPrice,
 }) => {
+  const { push } = useRouter();
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true); // Ensures this code runs only on the client side
+  }, []);
+
+  const handleCheckout = () => {};
+
   return (
     <Sheet open={isOpen} onOpenChange={onClose}>
       <SheetContent className={"w-full sm:max-w-[100vw]"}>
@@ -103,7 +115,7 @@ const CartSheet: React.FC<CartSheetProps> = ({
             <Button
               className="w-full"
               disabled={cartItems.length === 0}
-              onClick={() => alert("Proceeding to checkout")}
+              onClick={handleCheckout}
             >
               Checkout
             </Button>
