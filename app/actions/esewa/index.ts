@@ -22,15 +22,6 @@ export async function esewaTopup({ amount, userId }: EsewaTopupParams) {
       };
     }
 
-    const topup = await db.topup.create({
-      data: {
-        amount,
-        userId,
-        topupType: "CREDIT",
-        topupStatus: "PENDING",
-      },
-    });
-
     const transactionUuid = `${Date.now()}`;
     const taxAmount = 0;
     const totalAmount = amount + taxAmount;
@@ -43,8 +34,8 @@ export async function esewaTopup({ amount, userId }: EsewaTopupParams) {
       product_code: process.env.NEXT_PUBLIC_ESEWA_MERCHANT_CODE!,
       product_service_charge: "0",
       product_delivery_charge: "0",
-      success_url: `${process.env.NEXT_PUBLIC_APP_URL}/api/esewa/success?topupId=${topup.id}`,
-      failure_url: `${process.env.NEXT_PUBLIC_APP_URL}/api/esewa/failure?topupId=${topup.id}`,
+      success_url: `${process.env.NEXT_PUBLIC_APP_URL}/api/esewa/success?trsactionuuid=${transactionUuid}`,
+      failure_url: `${process.env.NEXT_PUBLIC_APP_URL}/api/esewa/failure?trsactionuuid=${transactionUuid}`,
       signed_field_names: "total_amount,transaction_uuid,product_code",
     };
 
@@ -54,7 +45,16 @@ export async function esewaTopup({ amount, userId }: EsewaTopupParams) {
       signatureString
     );
 
-    console.log("eSewa topup initiated", { topupId: topup.id, esewaConfig });
+    console.log("eSewa topup initiated", { esewaConfig });
+
+    const topup = await db.topup.create({
+      data: {
+        amount,
+        userId,
+        topupType: "CREDIT",
+        topupStatus: "PENDING",
+      },
+    });
 
     revalidatePath("/user/topups");
 
