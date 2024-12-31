@@ -3,7 +3,7 @@
 import { db } from "@/app/lib/db";
 import { revalidatePath } from "next/cache";
 
-interface khaltiTopupParams {
+interface KhaltiTopupParams {
   amount: number;
   userId: string;
   productName: string;
@@ -15,10 +15,10 @@ export async function khaltiTopup({
   userId,
   productName,
   transactionId,
-}: khaltiTopupParams) {
+}: KhaltiTopupParams) {
   try {
-    //check if user exists
-    const userExists = db.user.findUnique({
+    // Check if user exists
+    const userExists = await db.user.findUnique({
       where: { id: userId },
     });
 
@@ -26,7 +26,7 @@ export async function khaltiTopup({
       throw new Error(`User with ID ${userId} does not exist.`);
     }
 
-    //create new topup data
+    // Create new topup data
     const topup = await db.topup.create({
       data: {
         amount,
@@ -37,29 +37,47 @@ export async function khaltiTopup({
     });
 
     const khaltiConfig = {
-      return_url: `${process.env.NEXT_PUBLIC_APP_URL}/api/esewa/success?topupId=${topup.id}`,
+      return_url: `${process.env.NEXT_PUBLIC_APP_URL}/api/khalti/success?topupId=${topup.id}`,
       website_url: `${process.env.NEXT_PUBLIC_APP_URL}`,
-      amount: Math.round(parseFloat(amount.toString()) * 100),
+      amount: Math.round(amount * 100),
       purchase_order_id: transactionId,
       purchase_order_name: productName,
     };
 
-    console.log("Khalti topup initiated", { topupId: topup.id, khaltiConfig });
+    // Initiate Khalti payment
+    const khaltiResponse = await fetch(
+      "https://a.khalti.com/api/v2/epayment/initiate/",
+      {
+        method: "POST",
+        headers: {
+          Authorization: `Key ${process.env.NEXT_PUBLIC_KHALTI_SECRET_KEY}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(khaltiConfig),
+      }
+    );
 
-    //Revalidate path where the user topup might be displayed
-    revalidatePath("user/topups");
+    if (!khaltiResponse.ok) {
+      throw new Error("Failed to initiate Khalti payment");
+    }
+
+    const khaltiData = await khaltiResponse.json();
+
+    // Revalidate path where the user topup might be displayed
+    revalidatePath("/user/topups");
 
     return {
       success: true,
-      data: {
-        topupId: topup.id,
-        khaltiConfig: {
-          ...khaltiConfig,
-        },
+      khaltiConfig: {
+        ...khaltiConfig,
       },
+      paymentUrl: khaltiData.payment_url,
     };
   } catch (error) {
     console.error("Khalti topup initiation error:", error);
-    throw new Error("Failed to initiate Khalti topup");
+    return {
+      success: false,
+      error: "Failed to initiate Khalti topup",
+    };
   }
 }

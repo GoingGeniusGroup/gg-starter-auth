@@ -13,8 +13,13 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import Script from "next/script";
+import { useSession } from "next-auth/react";
+import { khaltiTopup } from "@/app/actions/khalti";
+import { useRouter } from "next/navigation";
 
 export default function KhaltiPayment() {
+  const { data: session } = useSession();
+  const router = useRouter();
   const [formData, setFormData] = useState({
     amount: "",
     productName: "",
@@ -23,64 +28,38 @@ export default function KhaltiPayment() {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
 
-  //   useEffect(() => {
-  //     const fetchDummyData = async () => {
-  //       try {
-  //         const response = await fetch("/api/dummy-data?method=khalti");
-  //         if (!response.ok) {
-  //           throw new Error("Failed to fetch dummy data");
-  //         }
-  //         const data = await response.json();
-  //         setAmount(data.amount);
-  //         setProductName(data.productName);
-  //         setTransactionId(data.transactionId);
-  //       } catch (error) {
-  //         console.error("Error fetching dummy data:", error);
-  //       }
-  //     };
+  // Ensure user is logged in
+  if (!session) {
+    return <div>Please login to proceed with the payment.</div>;
+  }
 
-  //     fetchDummyData();
-  //   }, []);
-
-  //   const handlePayment = async (e: React.FormEvent) => {
-  //     e.preventDefault();
-  //     setIsLoading(true);
-
-  //     try {
-  //       const response = await fetch("/api/initiate-payment", {
-  //         method: "POST",
-  //         headers: {
-  //           "Content-Type": "application/json",
-  //         },
-  //         body: JSON.stringify({
-  //           method: "khalti",
-  //           amount,
-  //           productName,
-  //           transactionId,
-  //         }),
-  //       });
-
-  //       if (!response.ok) {
-  //         throw new Error("Payment initiation failed");
-  //       }
-
-  //       const data = await response.json();
-
-  //       if (!data.khaltiPaymentUrl) {
-  //         throw new Error("Khalti payment URL not received");
-  //       }
-  //       window.location.href = data.khaltiPaymentUrl;
-  //     } catch (error) {
-  //       console.error("Payment error:", error);
-  //       alert("Payment initiation failed. Please try again.");
-  //     } finally {
-  //       setIsLoading(false);
-  //     }
-  //   };
-
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log(formData);
+    setIsLoading(true);
+    setError(null);
+
+    const userId = session.user.id;
+
+    try {
+      const response = await khaltiTopup({
+        amount: parseFloat(formData.amount),
+        productName: formData.productName,
+        transactionId: formData.transactionId,
+        userId,
+      });
+
+      if (response.success && response.paymentUrl) {
+        router.push(response.paymentUrl);
+      } else {
+        setError(
+          response.error || "Failed to initiate payment. Please try again."
+        );
+      }
+    } catch (error) {
+      setError("An error occurred. Please try again.");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
