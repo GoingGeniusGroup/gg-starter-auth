@@ -1,6 +1,4 @@
 "use client";
-import { useEffect } from "react";
-import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { CheckCircle } from "lucide-react";
@@ -12,20 +10,10 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Suspense } from "react";
 
 function PaymentSuccessContent() {
-  const searchParams = useSearchParams();
-  const method = searchParams.get("method");
-
-  useEffect(() => {
-    if (method) {
-      console.log(`Payment successful via ${method}`);
-    }
-  }, [method]);
-
   return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
+    <div className="min-h-[50vh] flex items-center justify-center p-2">
       <Card className="w-full max-w-md">
         <CardHeader>
           <div className="flex justify-center mb-4">
@@ -53,19 +41,13 @@ function PaymentSuccessContent() {
                 Thank you for your payment. Your transaction has been completed
                 successfully.
               </p>
-              {method && (
-                <p className="text-sm text-gray-500">
-                  Payment method:{" "}
-                  <span className="font-semibold">{method}</span>
-                </p>
-              )}
             </div>
           </div>
         </CardContent>
 
         <CardFooter className="flex flex-col gap-4">
           <Button variant="outline" asChild className="w-full">
-            <Link href="/">Return to Home</Link>
+            <Link href="http://localhost:3000/">Return to Home</Link>
           </Button>
         </CardFooter>
       </Card>
@@ -73,10 +55,4 @@ function PaymentSuccessContent() {
   );
 }
 
-export default function PaymentSuccess() {
-  return (
-    <Suspense fallback={<div>Loading...</div>}>
-      <PaymentSuccessContent />
-    </Suspense>
-  );
-}
+export default PaymentSuccessContent;
