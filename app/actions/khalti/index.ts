@@ -1,10 +1,7 @@
 "use server";
 
 import { db } from "@/app/lib/db";
-import { PrismaClient } from "@prisma/client";
 import { revalidatePath } from "next/cache";
-
-const prisma = new PrismaClient();
 
 interface khaltiTopupParams {
   amount: number;
@@ -46,5 +43,23 @@ export async function khaltiTopup({
       purchase_order_id: transactionId,
       purchase_order_name: productName,
     };
-  } catch (error) {}
+
+    console.log("Khalti topup initiated", { topupId: topup.id, khaltiConfig });
+
+    //Revalidate path where the user topup might be displayed
+    revalidatePath("user/topups");
+
+    return {
+      success: true,
+      data: {
+        topupId: topup.id,
+        khaltiConfig: {
+          ...khaltiConfig,
+        },
+      },
+    };
+  } catch (error) {
+    console.error("Khalti topup initiation error:", error);
+    throw new Error("Failed to initiate Khalti topup");
+  }
 }
