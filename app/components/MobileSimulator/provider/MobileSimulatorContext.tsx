@@ -25,14 +25,9 @@ import { BackgroundProps } from "../interface/Background.interface";
 import MobileSimulatorContainer from "../MobileSimulatorContainer";
 import SimulatorToggleButton from "../SimulatorToggleButton";
 import NotificationComponent from "@/components/Notification/NotificationComponent";
-<<<<<<< HEAD
-import { getColorsbyUserId } from "@/services/color";
-import { ThemeType } from "@prisma/client";
 import ShopComponent from "../../ShopComponent/ShopComponent";
-=======
 // import { getColorsbyUserId } from "@/services/color";
 // import { ThemeType } from "@prisma/client";
->>>>>>> 30db23467a4e06b54477a4eeef8aa5f3891f0509
 
 interface MobileSimulatorContextType {
   showMobile: boolean;
