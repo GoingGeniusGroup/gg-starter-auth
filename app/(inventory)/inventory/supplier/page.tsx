@@ -1,11 +1,14 @@
 "use client";
 import React, { useState,useEffect } from "react";
 import SupplierForm from "@/components/inventoryComponent/SupplierForm";
+import SupplierUpdateForm from "@/components/inventoryComponent/SupplierUpdateForm";
 import SupplierTable from "@/components/inventoryComponent/SupplierTable";
-import { getAllSuppliers } from "@/action/supplier";
+import { getAllSuppliers, updateSupplier } from "@/action/supplier";
 const Supplier = () => {
   const [showForm, setShowForm] = useState<boolean>(false);
+  const [updateMode, setUpdateMode] = useState<boolean>(false);
   const[supplier,setSupplier]=useState<any[]>([])
+  const [currentSupplier, setCurrentSupplier] = useState<any | null>(null);
   useEffect(() => {
     const fetchSuppliers = async () => {
       try {
@@ -23,25 +26,40 @@ const Supplier = () => {
     fetchSuppliers();
   }, []);
  
-  const handleSupplierAdded = (newSupplier: any) => {
-    setSupplier((prev) => [...prev, newSupplier]);
-  };
+  // const handleSupplierAdded = (newSupplier: any) => {
+  //   setSupplier((prev) => [...prev, newSupplier]);
+  // };
+
+const updateSupplierState=(updatedSupplier:any)=>{
+  setSupplier((prevSuppliers) =>
+    prevSuppliers.map((supplier) =>
+      supplier.id === updatedSupplier.id ? updatedSupplier : supplier
+    )
+  );
+}
 
   useEffect(() => {
-    if (showForm) {
+    if (showForm || updateMode) {
       document.body.style.overflow = "hidden";
     } else {
       document.body.style.overflow = "auto";
     }
-  }, [showForm]);
+  }, [showForm,updateMode]);
   
 
   const viewForm = (): void => {
     setShowForm((prev) => !prev);
   };
 
+  const handleEditClick = (supplier: any) => {
+    setCurrentSupplier(supplier);
+    setUpdateMode(true);
+  };
+
   const hideForm = (): void => {
     setShowForm(false);
+    setUpdateMode(false);
+    setCurrentSupplier(null);
   };
 
   return (
@@ -58,18 +76,19 @@ const Supplier = () => {
           <div className="bg-white p-4 rounded shadow">Least Active (Month):Mahesh</div>
         </section>
       </main>
-      <SupplierTable onAddClick={viewForm} suppliers={supplier} />
-      {/* <footer className="bg-gray-800 text-white p-4 text-center">
-    
-        <p>© 2024 GG_POS | <a href="#" className="text-blue-400">Help/Support</a></p>
-
-      </footer> */}
+      <SupplierTable onAddClick={viewForm}  onEditClick={handleEditClick} updatedValue={supplier} />
+     
 
       
-      {showForm && (
+      {(showForm ||updateMode) && (
         <div className="fixed inset-0 backdrop-blur-sm flex justify-center items-center z-50">
           <div className="rounded-lg shadow-lg relative w-full max-w-lg">
-            <SupplierForm onCancel={hideForm}  onSupplierAdded={handleSupplierAdded}/>
+          {showForm &&  <SupplierForm onCancel={hideForm} />} 
+          {updateMode && <SupplierUpdateForm onCancel={hideForm}
+          supplier={currentSupplier}
+          supplierId={currentSupplier.id}
+          onSupplierUpdate={updateSupplierState}
+          />}
           </div>
         </div>
       )}

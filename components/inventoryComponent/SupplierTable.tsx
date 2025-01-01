@@ -1,4 +1,5 @@
-import React from "react";
+"use client";
+import React,{useState,useEffect} from "react";
 import {
   Table,
   TableBody,
@@ -12,7 +13,10 @@ import { Input } from "@/components/ui/input";
 import { LuListFilter } from "react-icons/lu";
 import { BiShow } from "react-icons/bi";
 import { FaEdit, FaTrash, FaPlus } from "react-icons/fa";
-
+import { getAllSuppliers } from "@/action/supplier";
+import { toast } from "sonner";
+import { deleteSupplier } from "@/action/supplier";
+import { update } from "@/auth";
 interface Supplier {
   id: string;
   supplierName: string;
@@ -22,11 +26,55 @@ interface Supplier {
   Product: string[];
 }
 interface SupplierTableProps {
-  suppliers:Supplier[];
+  updatedValue:Supplier[]
   onAddClick: () => void;
+  onEditClick:(supplier:any)=>void
+
 }
-const SupplierTable = ({ onAddClick ,suppliers}:SupplierTableProps) => {
- 
+const SupplierTable = ({ onAddClick,onEditClick,updatedValue }:SupplierTableProps) => {
+   const[suppliers,setSuppliers]=useState<any[]>([])
+
+   useEffect(() => {
+    const fetchSuppliers = async () => {
+      try {
+        const response = await getAllSuppliers();
+        if (response.success && response.data) {
+          console.log("Supplier:", response.data);
+          setSuppliers(response.data);
+        } else {
+          console.error("Failed to fetch suppliers");
+        }
+      } catch (error) {
+        console.error("failed to fetch suppliers");
+      }
+    };
+     fetchSuppliers();
+   }, []);
+   
+   useEffect(() => {
+    setSuppliers(updatedValue);
+  }, [updatedValue]);
+  
+   const removeSupplier=async(supplierId:string)=>{
+    const confirmed=window.confirm("Are you sure you want to delete this supplier?");
+    if(confirmed){
+      try{
+        const response=await deleteSupplier(supplierId);
+        if(response.success){
+          setSuppliers((prev)=>prev.filter((supplier)=>supplier.id!==supplierId))
+          toast.success("Supplier deleted successfully")
+        }
+        else{
+          console.error("Failed to delete supplier")
+          toast.error("Failed to delete supplier")
+        }
+      }
+      catch(error){
+        console.error("Failed to delete supplier")
+        toast.error("Failed to delete supplier")
+      }
+    }
+   }
 
   return (
     <div className="p-2">
@@ -86,13 +134,14 @@ const SupplierTable = ({ onAddClick ,suppliers}:SupplierTableProps) => {
                     <BiShow />
                   </button>
                   <button
-                  onClick={onAddClick}
+                  onClick={()=>onEditClick(supplier)}
                     className="text-blue-500 hover:text-blue-700 text-2xl"
                     aria-label="Edit"
                   >
                     <FaEdit />
                   </button>
                   <button
+                  onClick={()=>removeSupplier(supplier.id)}
                     className="text-red-500 hover:text-red-700 text-2xl"
                     aria-label="Delete"
                   >
