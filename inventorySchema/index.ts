@@ -40,3 +40,10 @@ brand: z.string().optional(),
  discount: z.number().min(0).max(100).optional(),
  status: z.boolean().default(true),
 })
+
+export const supplierSchema=z.object({
+  supplierName:z.string().min(3,"Name must be at least 3 characters"),
+  phone:z.string().min(10,"Phone number must be at least 10 characters"),
+  email:z.string().email("Invalid email address"),
+  address:z.string()
+})

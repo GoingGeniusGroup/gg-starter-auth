@@ -14,70 +14,19 @@ import { BiShow } from "react-icons/bi";
 import { FaEdit, FaTrash, FaPlus } from "react-icons/fa";
 
 interface Supplier {
-  supplierId: number;
-  name: string;
+  id: string;
+  supplierName: string;
   email: string;
   phone: string;
-  product: string;
-  lastSupplied: Date;
+  address:string;
+  Product: string[];
 }
 interface SupplierTableProps {
+  suppliers:Supplier[];
   onAddClick: () => void;
 }
-const SupplierTable = ({ onAddClick }:SupplierTableProps) => {
-  const suppliers: Supplier[] = [
-    {
-      supplierId: 1,
-      name: "Milan Magar",
-      email: "contact@abc.com",
-      phone: "9800000000",
-      product: "LED Bulb",
-      lastSupplied: new Date("2024-08-15"),
-    },
-    {
-      supplierId: 2,
-      name: "Global Foods",
-      email: "sales@globalfoods.com",
-      phone: "9876543210",
-      product: "Preeti Instant Noodle",
-      lastSupplied: new Date("2024-09-01"),
-    },
-    {
-      supplierId: 3,
-      name: "Pashupati Prasad",
-      email: "pashu@gmail.com",
-      phone: "6667778888",
-      product: "Good Knight",
-      
-      lastSupplied: new Date("2024-09-05"),
-    },
-    {
-      supplierId: 4,
-      name: "SteelWorks Ltd.",
-      email: "info@steelworksltd.com",
-      phone: "555-111-2222",
-      product: "Steel",
-      
-      lastSupplied: new Date("2024-09-10"),
-    },
-    {
-      supplierId: 5,
-      name: "Textile World",
-      email: "support@textileworld.com",
-      phone: "444-222-3333",
-      product: "Classic T-shirt",
-      
-      lastSupplied: new Date("2024-08-28"),
-    },
-    {
-      supplierId: 6,
-      name: "Fresh Produce Co.",
-      email: "fresh@produceco.com",
-      phone: "666-777-8888",
-      product: "Potatoes",
-      lastSupplied: new Date("2024-09-05"),
-    },
-  ];
+const SupplierTable = ({ onAddClick ,suppliers}:SupplierTableProps) => {
+ 
 
   return (
     <div className="p-2">
@@ -101,17 +50,17 @@ const SupplierTable = ({ onAddClick }:SupplierTableProps) => {
       </div>
 
       <Table className="w-full border-collapse border shadow rounded bg-white">
-        <TableCaption>A list of your Suppliers.</TableCaption>
+        {/* <TableCaption>A list of your Suppliers.</TableCaption> */}
         <TableHeader>
           <TableRow>
             <TableHead>S.N</TableHead>
             <TableHead>Supplier Id</TableHead>
-            <TableHead>Supplier</TableHead>
+            <TableHead>Supplier Name</TableHead>
             <TableHead>Supplier Contact</TableHead>
             <TableHead>Supplier Email</TableHead>
-            <TableHead>Products</TableHead>
-            <TableHead>Last Supplied</TableHead>
-           
+            <TableHead>Supplier Address</TableHead>
+            {/* <TableHead>Products</TableHead>
+            <TableHead>Last Supplied</TableHead> */}
             <TableHead>Actions</TableHead>
           </TableRow>
         </TableHeader>
@@ -119,12 +68,14 @@ const SupplierTable = ({ onAddClick }:SupplierTableProps) => {
           {suppliers.map((supplier, index) => (
             <TableRow key={index}>
               <TableCell>{index + 1}</TableCell>
-              <TableCell>{supplier.supplierId}</TableCell>
-              <TableCell className="text-blue-500">{supplier.name}</TableCell>
+              <TableCell>{supplier.id}</TableCell>
+              <TableCell className="text-blue-500">{supplier.supplierName}</TableCell>
               <TableCell>{supplier.phone}</TableCell>
               <TableCell>{supplier.email}</TableCell>
-              <TableCell className="text-green-600">{supplier.product}</TableCell>
-              <TableCell>{supplier.lastSupplied.toLocaleDateString()}</TableCell>
+              <TableCell>{supplier.address}</TableCell>
+              
+              {/* <TableCell className="text-green-600">{supplier.product}</TableCell>
+              <TableCell>{supplier.lastSupplied.toLocaleDateString()}</TableCell> */}
               
               <TableCell>
                 <div className="flex space-x-2">
