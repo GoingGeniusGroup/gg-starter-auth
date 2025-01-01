@@ -8,7 +8,7 @@ export const categorySchema = z.object({
   categoryName: z.string().min(3, "At least 3 characters are needed"),
   categoryDescription: z
     .string()
-    .min(20, "Description should be at least 20 characters")
+    .min(10, "Description should be at least 10 characters")
     .max(500, "Description should not exceed 500 characters"),
   categoryImage: z
     .array(
@@ -23,3 +23,20 @@ export const categorySchema = z.object({
 });
 
 export type categoryData = z.infer<typeof categorySchema>;
+
+export const productScheme=z.object({
+name:z.string().min(3,"name must be of  characters"),
+description: z.string().optional(),
+salePrice: z.number().nonnegative("sale price must be positive").optional(),
+costPrice: z.number().nonnegative("cost price must be positive").optional(),
+stockQuantity: z.number().int().nonnegative().min(0,"stock must be at least 0"),
+productImage: z.array(z.instanceof(File)
+.refine((file)=>ACCEPTED_IMAGE_TYPES.includes(file.type),{message:"Only .jpg, .jpeg, .png, .webp files are accepted"}))
+.optional(),
+brand: z.string().optional(),
+ rating: z.number().int().min(0).max(5,"rating must be between 0 and 5"),
+ category: z.string(),
+ isFeatured: z.boolean().optional(),
+ discount: z.number().min(0).max(100).optional(),
+ status: z.boolean().default(true),
+})
