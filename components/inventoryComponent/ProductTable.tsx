@@ -1,4 +1,5 @@
-import React from "react";
+"use client"
+import React,{useState,useEffect} from "react";
 import {
   Table,
   TableBody,
@@ -8,9 +9,8 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table1";
-
 import Link from "next/link";
-
+import { getAllproducts } from '@/action/product'
 import { Input } from "@/components/ui/input"
 import { LuListFilter } from "react-icons/lu";
 import {  BiShow } from 'react-icons/bi';
@@ -30,6 +30,8 @@ interface Product {
 interface ProductTableProps {
     products:Product[];
 }
+
+
   const truncateText = (text: string, maxLength: number): string => {
     if (!text) return "N/A";
     return text.length > maxLength ? text.substring(0, maxLength) + "..." : text;
@@ -37,8 +39,26 @@ interface ProductTableProps {
 
 
   
-const ProductTable = ({products}:ProductTableProps) => {
+const ProductTable = () => {
+    const[products,setProducts]=useState<any[]>([])
+  
+  useEffect(()=>{
+     async function fetchProducts(){
+       try{
+         const response=await getAllproducts()
+         if (response.success && response.data) {
+           setProducts(response.data);
  
+         } else {
+           console.error("Failed to fetch products");
+         }
+       }
+       catch(error){
+         console.error("failed to fetch products")
+       }
+     }
+     fetchProducts()
+   },[])
   return (
     <div className="p-2 ">
         <div className="flex justify-between items-center h-[55px] px-4 bg-white my-2 mb-3 rounded">

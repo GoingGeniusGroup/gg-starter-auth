@@ -75,7 +75,15 @@ try{
         });
         return { success: false, errors: fieldErrors };
       }
-    console.error("Unexpected error has occured:", error);
+    if (error instanceof Error) {
+      console.error("Unexpected error has occured:", {
+        message: error.message,
+        // stack: error.stack,
+        data,
+      });
+    } else {
+      console.error("Unexpected error has occured:", error);
+    }
     return { success: false, message: "An unexpected error has occurred" };
     }
 }

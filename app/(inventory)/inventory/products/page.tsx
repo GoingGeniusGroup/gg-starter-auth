@@ -22,6 +22,9 @@ const Product = () => {
     }
     fetchProducts()
   },[])
+
+  
+
   return (
     <div className='bg-gray-100'>
   
@@ -39,7 +42,7 @@ const Product = () => {
   
     <div>
       {/* <InventProdTable/> */}
-      <ProductTable products={products}/>
+      <ProductTable />
     </div>
     {/* <footer className="bg-gray-800 text-white p-4 text-center">
         <p>© 2024 GG_POS | <a href="#" className="text-blue-400">Help/Support</a></p>
