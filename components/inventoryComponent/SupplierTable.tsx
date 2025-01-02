@@ -1,4 +1,5 @@
-import React from "react";
+"use client";
+import React,{useState,useEffect} from "react";
 import {
   Table,
   TableBody,
@@ -12,72 +13,68 @@ import { Input } from "@/components/ui/input";
 import { LuListFilter } from "react-icons/lu";
 import { BiShow } from "react-icons/bi";
 import { FaEdit, FaTrash, FaPlus } from "react-icons/fa";
-
+import { getAllSuppliers } from "@/action/supplier";
+import { toast } from "sonner";
+import { deleteSupplier } from "@/action/supplier";
+import { update } from "@/auth";
 interface Supplier {
-  supplierId: number;
-  name: string;
+  id: string;
+  supplierName: string;
   email: string;
   phone: string;
-  product: string;
-  lastSupplied: Date;
+  address:string;
+  Product: string[];
 }
 interface SupplierTableProps {
+  updatedValue:Supplier[]
   onAddClick: () => void;
+  onEditClick:(supplier:any)=>void
+
 }
-const SupplierTable = ({ onAddClick }:SupplierTableProps) => {
-  const suppliers: Supplier[] = [
-    {
-      supplierId: 1,
-      name: "Milan Magar",
-      email: "contact@abc.com",
-      phone: "9800000000",
-      product: "LED Bulb",
-      lastSupplied: new Date("2024-08-15"),
-    },
-    {
-      supplierId: 2,
-      name: "Global Foods",
-      email: "sales@globalfoods.com",
-      phone: "9876543210",
-      product: "Preeti Instant Noodle",
-      lastSupplied: new Date("2024-09-01"),
-    },
-    {
-      supplierId: 3,
-      name: "Pashupati Prasad",
-      email: "pashu@gmail.com",
-      phone: "6667778888",
-      product: "Good Knight",
-      
-      lastSupplied: new Date("2024-09-05"),
-    },
-    {
-      supplierId: 4,
-      name: "SteelWorks Ltd.",
-      email: "info@steelworksltd.com",
-      phone: "555-111-2222",
-      product: "Steel",
-      
-      lastSupplied: new Date("2024-09-10"),
-    },
-    {
-      supplierId: 5,
-      name: "Textile World",
-      email: "support@textileworld.com",
-      phone: "444-222-3333",
-      product: "Classic T-shirt",
-      
-      lastSupplied: new Date("2024-08-28"),
-    },
-    {
-      supplierId: 6,
-      name: "Fresh Produce Co.",
-      email: "fresh@produceco.com",
-      phone: "666-777-8888",
-      product: "Potatoes",
-      lastSupplied: new Date("2024-09-05"),
-    },
-  ];
+const SupplierTable = ({ onAddClick,onEditClick,updatedValue }:SupplierTableProps) => {
+   const[suppliers,setSuppliers]=useState<any[]>([])
+
+   useEffect(() => {
+    const fetchSuppliers = async () => {
+      try {
+        const response = await getAllSuppliers();
+        if (response.success && response.data) {
+          console.log("Supplier:", response.data);
+          setSuppliers(response.data);
+        } else {
+          console.error("Failed to fetch suppliers");
+        }
+      } catch (error) {
+        console.error("failed to fetch suppliers");
+      }
+    };
+     fetchSuppliers();
+   }, []);
+   
+   useEffect(() => {
+    setSuppliers(updatedValue);
+  }, [updatedValue]);
+  
+   const removeSupplier=async(supplierId:string)=>{
+    const confirmed=window.confirm("Are you sure you want to delete this supplier?");
+    if(confirmed){
+      try{
+        const response=await deleteSupplier(supplierId);
+        if(response.success){
+          setSuppliers((prev)=>prev.filter((supplier)=>supplier.id!==supplierId))
+          toast.success("Supplier deleted successfully")
+        }
+        else{
+          console.error("Failed to delete supplier")
+          toast.error("Failed to delete supplier")
+        }
+      }
+      catch(error){
+        console.error("Failed to delete supplier")
+        toast.error("Failed to delete supplier")
+      }
+    }
+   }
 
   return (
     <div className="p-2">
@@ -101,17 +98,17 @@ const SupplierTable = ({ onAddClick }:SupplierTableProps) => {
       </div>
 
       <Table className="w-full border-collapse border shadow rounded bg-white">
-        <TableCaption>A list of your Suppliers.</TableCaption>
+        {/* <TableCaption>A list of your Suppliers.</TableCaption> */}
         <TableHeader>
           <TableRow>
             <TableHead>S.N</TableHead>
             <TableHead>Supplier Id</TableHead>
-            <TableHead>Supplier</TableHead>
+            <TableHead>Supplier Name</TableHead>
             <TableHead>Supplier Contact</TableHead>
             <TableHead>Supplier Email</TableHead>
-            <TableHead>Products</TableHead>
-            <TableHead>Last Supplied</TableHead>
-           
+            <TableHead>Supplier Address</TableHead>
+            {/* <TableHead>Products</TableHead>
+            <TableHead>Last Supplied</TableHead> */}
             <TableHead>Actions</TableHead>
           </TableRow>
         </TableHeader>
@@ -119,12 +116,14 @@ const SupplierTable = ({ onAddClick }:SupplierTableProps) => {
           {suppliers.map((supplier, index) => (
             <TableRow key={index}>
               <TableCell>{index + 1}</TableCell>
-              <TableCell>{supplier.supplierId}</TableCell>
-              <TableCell className="text-blue-500">{supplier.name}</TableCell>
+              <TableCell>{supplier.id}</TableCell>
+              <TableCell className="text-blue-500">{supplier.supplierName}</TableCell>
               <TableCell>{supplier.phone}</TableCell>
               <TableCell>{supplier.email}</TableCell>
-              <TableCell className="text-green-600">{supplier.product}</TableCell>
-              <TableCell>{supplier.lastSupplied.toLocaleDateString()}</TableCell>
+              <TableCell>{supplier.address}</TableCell>
+              
+              {/* <TableCell className="text-green-600">{supplier.product}</TableCell>
+              <TableCell>{supplier.lastSupplied.toLocaleDateString()}</TableCell> */}
               
               <TableCell>
                 <div className="flex space-x-2">
@@ -135,13 +134,14 @@ const SupplierTable = ({ onAddClick }:SupplierTableProps) => {
                     <BiShow />
                   </button>
                   <button
-                  onClick={onAddClick}
+                  onClick={()=>onEditClick(supplier)}
                     className="text-blue-500 hover:text-blue-700 text-2xl"
                     aria-label="Edit"
                   >
                     <FaEdit />
                   </button>
                   <button
+                  onClick={()=>removeSupplier(supplier.id)}
                     className="text-red-500 hover:text-red-700 text-2xl"
                     aria-label="Delete"
                   >

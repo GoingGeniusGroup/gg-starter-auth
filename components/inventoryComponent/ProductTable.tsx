@@ -1,4 +1,5 @@
-import React from "react";
+"use client"
+import React,{useState,useEffect} from "react";
 import {
   Table,
   TableBody,
@@ -8,24 +9,29 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table1";
-
 import Link from "next/link";
-
+import { getAllproducts ,deleteProduct} from '@/action/product'
 import { Input } from "@/components/ui/input"
 import { LuListFilter } from "react-icons/lu";
 import {  BiShow } from 'react-icons/bi';
 
 import { FaEdit, FaTrash,FaPlus,FaFilter } from "react-icons/fa"; 
+import { toast } from "sonner";
 interface Product {
-    pd_id: number; 
-    productId: string; 
+    id: string; 
     name: string; 
-    quantity:number;
-    unit: string; 
-    unitPrice: number; 
-    category:string,
+    stockQuantity:number;
+    salePrice?: number;
+    costPrice?: number;
+    category:string[],
+    isFeatured:boolean,
+    status:boolean,
     description?: string;
   }
+interface ProductTableProps {
+    products:Product[];
+}
+
 
   const truncateText = (text: string, maxLength: number): string => {
     if (!text) return "N/A";
@@ -34,83 +40,47 @@ interface Product {
 
 
   
-const InventProdTable = () => {
-  const products = [
-    {
-      pd_id: 1,
-      productId: "MOB-001",
-      name: "ABC Mobile Black",
-      quantity:20,
-      unit: "Piece",
-      unitPrice: 500,
-      category:"Physical",
-      description: "Smartphone with 64GB storage",
-    },
-    {
-      pd_id: 2,
-      productId: "MOB-002",
-      name: "ABC Mobile Red",
-   
-      unit: "Piece",
-      unitPrice: 500,
-      quantity:20,
-      category:"Physical",
-      description: "Smartphone with 64GB storage",
-    },
-    {
-        pd_id: 3,
-        productId: "ABC-3",
-        name: "ABC Mobile blue",
-        unit: "Piece",
-        unitPrice: 5000,
-        quantity:6,
-        category:"Physical",
-        description: "Smartphone",
-      },
-      {
-        pd_id: 4,
-        productId: "MOB-003",
-        name: "ABC Mobile Blue",
-        unit: "Piece",
-        unitPrice: 550,
-        quantity:20,
-        category:"Physical",
-        description: "Smartphone with 64GB storage and AMOLED display",
-      },
-      {
-        pd_id: 5,
-        productId: "XYZ-001",
-        name: "XYZ Laptop Silver",
-        unit: "Piece",
-        unitPrice: 1000,
-        quantity:20,
-        category:"Physical",
-        description: "Laptop with Intel i5 processor and 256GB SSD",
-      },
-      {
-        pd_id: 6,
-        productId: "AMB-56",
-        name: "Ambuja Cement",
-        quantity:20,
-        unit: "Sack",
-        unitPrice: 900,
-        category:"Physical",
-        description: "Ordinary portland cement",
-      },
-      {
-        pd_id: 7,
-        productId: "WHT-12",
-        name: "Gyan chakki Aata",
-        unit: "Kg",
-        unitPrice: 90,
-        quantity:20,
-        category:"Physical",
-        description: "Polish white wheat powder",
-      },
-  ];
-
+const ProductTable = () => {
+    const[products,setProducts]=useState<any[]>([])
+  
+  useEffect(()=>{
+     async function fetchProducts(){
+       try{
+         const response=await getAllproducts()
+         if (response.success && response.data) {
+           setProducts(response.data);
  
+         } else {
+           console.error("Failed to fetch products");
+         }
+       }
+       catch(error){
+         console.error("failed to fetch products")
+       }
+     }
+     fetchProducts()
+   },[])
 
+    const removeProduct=async(productId:string)=>{
+      const confirmed=window.confirm("Are you sure you want to delete this product?");
+      if(confirmed){
+        try{
+          const response=await deleteProduct(productId);
+          if(response.success){
+            setProducts((prevProducts) =>
+            prevProducts.filter((product) => product.id !== productId));
+            toast.success("Product deleted successfully");
+          }
+          else{
+            console.error("Failed to delete product");
+            toast.error("Failed to delete product");
+          }
+        }catch(error){
+          console.error("Failed to delete product");
+          toast.error("Failed to delete product");
+        }
+      }
+    }
   return (
     <div className="p-2 ">
         <div className="flex justify-between items-center h-[55px] px-4 bg-white my-2 mb-3 rounded">
@@ -133,17 +103,17 @@ const InventProdTable = () => {
 
     
     <Table className="w-full border-collapse border  shadow rounded  bg-white" >
-        <TableCaption>A list of your products in inventory.</TableCaption>
+        {/* <TableCaption>A list of your products in inventory.</TableCaption> */}
         <TableHeader>
           <TableRow>
             <TableHead>S.N</TableHead>
-            <TableHead>Product ID</TableHead>
             <TableHead>Name</TableHead>
-            <TableHead>Category</TableHead>
             <TableHead>Quantity</TableHead>
-            <TableHead>Unit</TableHead>
-            <TableHead>Unit Price(Rs)</TableHead>
+            <TableHead>Cost Price</TableHead>
+            <TableHead>Sell Price</TableHead>
+            <TableHead>Category</TableHead>
             <TableHead>Description</TableHead>
+            <TableHead>Featured</TableHead>
             <TableHead>Actions</TableHead>
           </TableRow>
         </TableHeader>
@@ -151,15 +121,13 @@ const InventProdTable = () => {
           {products.map((product,index) => (
             <TableRow key={index}>
               <TableCell>{index+1}</TableCell>
-              <TableCell>{product.productId}</TableCell>
               <TableCell className="text-blue-500">{product.name}</TableCell>
-              <TableCell>{product.category}</TableCell>
-              <TableCell>{product.quantity}</TableCell>
-              <TableCell>{product.unit}</TableCell>
-              <TableCell className="text-green-500">{product.unitPrice.toFixed(2)}</TableCell>
-
-              <TableCell>{truncateText(product.description, 20)}</TableCell>
-            
+              <TableCell>{product.stockQuantity}</TableCell>
+                <TableCell>{product.costPrice}</TableCell>
+                <TableCell>{product.salePrice}</TableCell>
+              <TableCell>{product.category && product.category.categoryName}</TableCell>
+              <TableCell>{truncateText(product.description ?? "", 20)}</TableCell>
+                <TableCell>{product.isFeatured?"Yes":"No"}</TableCell>
 
               <TableCell>
                 <div className="flex space-x-2">
@@ -170,17 +138,19 @@ const InventProdTable = () => {
                   >
                     <BiShow />
                   </button>
-        
+                  <Link href={`/inventory/products/update/${product.id}`}>
                   <button
-                    
                     className="text-blue-500 hover:text-blue-700 text-xl"
                     aria-label="Edit"
                   >
                     <FaEdit />
                   </button>
+                  </Link>
+        
+                 
                 
                   <button
-                    
+                    onClick={()=>removeProduct(product.id)}
                     className="text-red-500 hover:text-red-700 text-xl"
                     aria-label="Delete"
                   >
@@ -198,4 +168,4 @@ const InventProdTable = () => {
   );
 };
 
-export default InventProdTable;
+export default ProductTable;

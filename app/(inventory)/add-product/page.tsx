@@ -1,13 +1,12 @@
 import React from 'react'
 import ProductForm from '@/components/inventoryComponent/ProductForm' 
 
-const page = () => {
+const AddProduct = () => {
   return (
     <div>
       <ProductForm/>
-
     </div>
   )
 }
 
-export default page
+export default AddProduct
