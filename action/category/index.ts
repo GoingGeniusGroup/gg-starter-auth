@@ -9,7 +9,7 @@ import { revalidatePath } from "next/cache";
 const writeImageToDisk = async (image: File) => {
   await fs.mkdir("public/upload/category", { recursive: true });
   const imagepath = `category/${crypto.randomUUID()}~${image.name}`;
-  await fs.writeFile(`public/upload/${imagepath}`, Buffer.from(await image.arrayBuffer()));
+  await fs.writeFile(`public/upload/${imagepath}`, new Uint8Array(await image.arrayBuffer()));
   return imagepath;
 };
 
@@ -32,11 +32,11 @@ export async function savecategory(formData: FormData) {
     }
 
     // Process each image
-    const imgPaths = await Promise.all(
+    const imgPaths = validData.categoryImage ? await Promise.all(
       validData.categoryImage.map(async (file) => {
         return await writeImageToDisk(file);
       })
-    );
+    ) : [];
 
     const newCategory = await db.category.create({
       data: {

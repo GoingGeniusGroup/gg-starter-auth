@@ -43,16 +43,12 @@ try{
         return {success:false,message:"Product must be unique"}
       }
 
-      // const imgPaths = validData.productImage ? await Promise.all(
-      //   validData.productImage.map(async (file) => {
-      //     return await writeImageToDisk(file);
-      //   })
-      // ) : [];
-      const imgPaths = await Promise.all(
-       validData && validData.productImage.map(async (file) => {
+     
+      const imgPaths = validData.productImage ? await Promise.all(
+        validData.productImage.map(async (file) => {
           return await writeImageToDisk(file);
         })
-      );
+      ) : [];
       console.log("hello")
       const newProduct=await db.product.create({
         data:{

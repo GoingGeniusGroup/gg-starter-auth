@@ -7,6 +7,7 @@ import { savecategory } from "@/action/category";
 import { revalidatePath } from "next/cache";
 import { Toaster, toast } from 'sonner'
 
+
 interface CategoryFormProps {
   onCancel: () => void;
   onCategoryAdd: (newCategory: any) => void;
@@ -44,7 +45,8 @@ const CategoryForm = ({ onCancel ,onCategoryAdd}: CategoryFormProps) => {
           categoryName: result.data.categoryName,
           categoryDescription: result.data.categoryDescription || "",
           categoryType: "PHYSICAL",
-          productQuantity: result.data.products ? result.data.products.length : 0,
+          // productQuantity: result.data.products ? result.data.products.length : 0,
+          productQuantity: 0,
         };
         onCategoryAdd(newCategory); // Add to parent state
         reset();
