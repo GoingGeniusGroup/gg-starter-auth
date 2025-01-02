@@ -96,7 +96,7 @@ export async function updateCategory(formData: FormData, categoryid: string) {
 
     // If new images are uploaded, write them to disk
     let imgPaths: string[] = [];
-    if (validData.categoryImage.length > 0) {
+    if (validData.categoryImage && validData.categoryImage.length > 0) {
       imgPaths = await Promise.all(
         validData.categoryImage.map(async (file) => {
           return await writeImageToDisk(file);

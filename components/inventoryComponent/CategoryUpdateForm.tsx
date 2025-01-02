@@ -34,7 +34,7 @@ const CategoryUpdateForm = ({ onCancel, category, CategoryId, onCategoryUpdate }
     });
   }, [category, reset]);
 
-  const onFormSubmit = async (data: categoryData) => {
+  const onSubmit = async (data: categoryData) => {
     const formData = new FormData();
     formData.append("categoryName", data.categoryName);
     formData.append("categoryDescription", data.categoryDescription);
@@ -69,7 +69,7 @@ const CategoryUpdateForm = ({ onCancel, category, CategoryId, onCategoryUpdate }
 
   return (
     <div className="flex justify-center items-center">
-      <form onSubmit={handleSubmit(onFormSubmit)} className="w-full max-w-lg bg-white shadow-lg rounded-lg p-6 space-y-6">
+      <form onSubmit={handleSubmit(onSubmit)} className="w-full max-w-lg bg-white shadow-lg rounded-lg p-6 space-y-6">
         <fieldset className="my-1 border border-blue-500 rounded-lg p-4">
           <legend className="text-xl font-semibold text-blue-500 px-2">Categories</legend>
 

@@ -116,14 +116,16 @@ const ProductTable = () => {
                   >
                     <BiShow />
                   </button>
-        
+                  <Link href={`/inventory/products/update/${product.id}`}>
                   <button
-                    
                     className="text-blue-500 hover:text-blue-700 text-xl"
                     aria-label="Edit"
                   >
                     <FaEdit />
                   </button>
+                  </Link>
+        
+                 
                 
                   <button
                     
