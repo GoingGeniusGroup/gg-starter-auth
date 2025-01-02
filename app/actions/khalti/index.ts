@@ -55,12 +55,13 @@ export async function khaltiTopup({
     const khaltiData = await khaltiResponse.json();
 
     // Create new topup data
-    const topup = await db.topup.create({
+    await db.topup.create({
       data: {
         amount,
         userId,
         topupStatus: "PENDING",
         topupType: "CREDIT",
+        createdAt: new Date(parseInt(transactionuuid)),
       },
     });
 
@@ -80,5 +81,46 @@ export async function khaltiTopup({
       success: false,
       error: "Failed to initiate Khalti topup",
     };
+  }
+}
+
+export async function handleKhaltiStatus(
+  transactionuuid: string,
+  status: "success" | "failed"
+) {
+  try {
+    const pendingTopup = await db.topup.findFirst({
+      where: {
+        topupStatus: "PENDING",
+        createdAt: new Date(parseInt(transactionuuid)),
+      },
+    });
+
+    if (!pendingTopup) {
+      throw new Error("No pending topup found for this transaction.");
+    }
+
+    //handle the status based on transiction success | failed
+    const newStatus = status === "success" ? "SUCCESS" : "FAILED";
+
+    //update the topup status to success
+    await db.topup.update({
+      where: { id: pendingTopup.id },
+      data: {
+        topupStatus: newStatus,
+      },
+    });
+
+    // Revalidate path where the user topup might be displayed
+    revalidatePath("/user/topups");
+
+    return {
+      success: true,
+      message: `Topup Status updated to ${newStatus} successfully`,
+      status: newStatus,
+    };
+  } catch (error) {
+    console.error("Error updating Khalti topup status:", error);
+    return { success: false, error: "Failed to update topup status" };
   }
 }
