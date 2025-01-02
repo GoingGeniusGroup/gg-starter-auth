@@ -26,9 +26,18 @@ export async function khaltiTopup({
       throw new Error(`User with ID ${userId} does not exist.`);
     }
 
-    const transactionuuid = `${Date.now()}`;
+    // Create new topup data
+    const newTopup = await db.topup.create({
+      data: {
+        amount,
+        userId,
+        topupStatus: "PENDING",
+        topupType: "CREDIT",
+      },
+    });
+
     const khaltiConfig = {
-      return_url: `${process.env.NEXT_PUBLIC_APP_URL}/api/khalti/success?transactionuuid=${transactionuuid}`,
+      return_url: `${process.env.NEXT_PUBLIC_APP_URL}/api/khalti/success?transactionuuid=${newTopup.id}`,
       website_url: `${process.env.NEXT_PUBLIC_APP_URL}`,
       amount: Math.round(amount * 100),
       purchase_order_id: transactionId,
@@ -49,15 +58,29 @@ export async function khaltiTopup({
     );
 
     if (!khaltiResponse.ok) {
-      throw new Error("Failed to initiate Khalti payment");
+      await db.topup.update({
+        where: {
+          id: newTopup.id,
+        },
+        data: {
+          topupStatus: "FAILED",
+        },
+      });
     }
 
+    await db.topup.update({
+      where: {
+        id: newTopup.id,
+      },
+      data: {
+        topupStatus: "SUCCESS",
+      },
+    });
+
     const khaltiData = await khaltiResponse.json();
-  
 
     return {
       success: true,
-      transactionuuid,
       paymentUrl: khaltiData.payment_url,
     };
   } catch (error) {
@@ -70,48 +93,48 @@ export async function khaltiTopup({
 }
 
 //handle khalti payment status
-export async function handleKhaltiStatus(
-  transactionuuid: string,
-  status: "success" | "failed"
-) {
-  try {
-    console.log("Handling Khalti Status:", { transactionuuid, status });
+// export async function handleKhaltiStatus(
+//   transactionuuid: string,
+//   status: "success" | "failed"
+// ) {
+//   try {
+//     console.log("Handling Khalti Status:", { transactionuuid, status });
 
-    // Query for the pending topup
-    const pendingTopup = await db.topup.findFirst({
-      where: {
-        topupStatus: "PENDING",
-        createdAt: new Date(parseInt(transactionuuid)),
-      },
-    });
+//     // Query for the pending topup
+//     const pendingTopup = await db.topup.findFirst({
+//       where: {
+//         topupStatus: "PENDING",
+//         createdAt: new Date(parseInt(transactionuuid)),
+//       },
+//     });
 
-    if (!pendingTopup) {
-      console.error(
-        `No pending topup found for transactionuuid: ${transactionuuid}`
-      );
-      return {
-        success: false,
-        error: "No pending topup found for this transaction.",
-      };
-    }
+//     if (!pendingTopup) {
+//       console.error(
+//         `No pending topup found for transactionuuid: ${transactionuuid}`
+//       );
+//       return {
+//         success: false,
+//         error: "No pending topup found for this transaction.",
+//       };
+//     }
 
-    // Update the status
-    const newStatus = status === "success" ? "SUCCESS" : "FAILED";
+//     // Update the status
+//     const newStatus = status === "success" ? "SUCCESS" : "FAILED";
 
-    const updatedTopup = await db.topup.update({
-      where: { id: pendingTopup.id },
-      data: { topupStatus: newStatus },
-    });
+//     const updatedTopup = await db.topup.update({
+//       where: { id: pendingTopup.id },
+//       data: { topupStatus: newStatus },
+//     });
 
-    console.log("Topup status updated successfully:", updatedTopup);
+//     console.log("Topup status updated successfully:", updatedTopup);
 
-    return {
-      success: true,
-      message: `Topup Status updated to ${newStatus} successfully`,
-      status: newStatus,
-    };
-  } catch (error) {
-    console.error("Error updating Khalti topup status:", error);
-    return { success: false, error: "Failed to update topup status" };
-  }
-}
+//     return {
+//       success: true,
+//       message: `Topup Status updated to ${newStatus} successfully`,
+//       status: newStatus,
+//     };
+//   } catch (error) {
+//     console.error("Error updating Khalti topup status:", error);
+//     return { success: false, error: "Failed to update topup status" };
+//   }
+// }

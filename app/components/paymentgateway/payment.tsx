@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -12,40 +12,40 @@ import {
 import { toast } from "sonner";
 import { esewaTopup } from "@/actions/esewa/index";
 import { useSession } from "next-auth/react";
-import { khaltiTopup, handleKhaltiStatus } from "@/app/actions/khalti";
+import { khaltiTopup } from "@/app/actions/khalti";
 import { useRouter, useSearchParams } from "next/navigation";
 
 export default function PaymentGateway() {
   const { data: session } = useSession();
   const router = useRouter();
-  const searchparams = useSearchParams();
+  // const searchparams = useSearchParams();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    const checkKhaltiStatus = async () => {
-      const transactionuuid = searchparams.get("transactionuuid");
-      const status = searchparams.get("status");
+  // useEffect(() => {
+  //   const checkKhaltiStatus = async () => {
+  //     const transactionuuid = searchparams.get("transactionuuid");
+  //     const status = searchparams.get("status");
 
-      if (transactionuuid && (status === "success" || status === "failed")) {
-        setIsLoading(true);
-        try {
-          const response = await handleKhaltiStatus(transactionuuid, status);
-          if (response.success) {
-            toast.success(`Khalti payment ${response.message}`);
-          } else {
-            setError(response.error || "failed to update khalti topup status");
-          }
-        } catch (error) {
-          setError("An error occured while updating payment status");
-        } finally {
-          setIsLoading(false);
-        }
-      }
-    };
+  //     if (transactionuuid && (status === "success" || status === "failed")) {
+  //       setIsLoading(true);
+  //       try {
+  //         const response = await handleKhaltiStatus(transactionuuid, status);
+  //         if (response.success) {
+  //           toast.success(`Khalti payment ${response.message}`);
+  //         } else {
+  //           setError(response.error || "failed to update khalti topup status");
+  //         }
+  //       } catch (error) {
+  //         setError("An error occured while updating payment status");
+  //       } finally {
+  //         setIsLoading(false);
+  //       }
+  //     }
+  //   };
 
-    checkKhaltiStatus();
-  }, [searchparams]);
+  //   checkKhaltiStatus();
+  // }, [searchparams]);
 
   if (!session) {
     return <div>Please login to proceed with the payment.</div>;
