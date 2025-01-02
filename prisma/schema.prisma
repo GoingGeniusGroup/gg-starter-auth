@@ -338,6 +338,15 @@ enum TopupType {
   GGCOIN
 }
 
+//card modal membership
+model cards {
+  id              String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId          String   @db.Uuid
+  user            User     @relation(fields: [userId], references: [id])
+  cardType        cardType @default(BUSINESS)
+  backgroundImage String[]
+}
+
 enum cardType {
   STUDENT
   BUSINESS
