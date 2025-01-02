@@ -144,7 +144,7 @@ const {
     }
     try {
       const result = await updateProduct(formData, id);
-      if (result.success && result.data) {
+      if (result?.success && result.data) {
         toast.success("Product updated successfully");
         router.push("/inventory/products");
       } else {

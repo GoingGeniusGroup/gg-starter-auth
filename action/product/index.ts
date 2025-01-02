@@ -5,11 +5,12 @@ import fs from "fs/promises";
 import crypto from "crypto";
 import { revalidatePath } from "next/cache";
 import { productScheme } from "@/inventorySchema";
+import { m } from "framer-motion";
 
 const writeImageToDisk = async (image: File) => {
   await fs.mkdir("public/upload/products", { recursive: true });
   const imagepath = `products/${crypto.randomUUID()}~${image.name}`;
-  await fs.writeFile(`public/upload/${imagepath}`, Buffer.from(await image.arrayBuffer()));
+  await fs.writeFile(`public/upload/${imagepath}`, new Uint8Array(await image.arrayBuffer()));
   return imagepath.replace("public/", "");
 };
 
@@ -190,6 +191,25 @@ export async function getProductDetail(productId:string){
     })
     return {success:true,data:product}
   } catch(error){
+    console.error("Unexpected error has occured:", error);
+    return { success: false, message: "An unexpected error has occurred" };
+  }
+}
+
+export async function deleteProduct(productId:string){
+  try{
+    const existingProduct=await db.product.findUnique({
+      where:{id:productId}
+    })
+    if(!existingProduct){
+      return {success:false,message:"Product not found"}
+    }
+    await db.product.delete({
+      where:{id:productId}
+    })
+    return {success:true,message:"Product deleted successfully"}
+  }
+  catch(error){
     console.error("Unexpected error has occured:", error);
     return { success: false, message: "An unexpected error has occurred" };
   }

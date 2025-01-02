@@ -10,12 +10,13 @@ import {
   TableRow,
 } from "@/components/ui/table1";
 import Link from "next/link";
-import { getAllproducts } from '@/action/product'
+import { getAllproducts ,deleteProduct} from '@/action/product'
 import { Input } from "@/components/ui/input"
 import { LuListFilter } from "react-icons/lu";
 import {  BiShow } from 'react-icons/bi';
 
 import { FaEdit, FaTrash,FaPlus,FaFilter } from "react-icons/fa"; 
+import { toast } from "sonner";
 interface Product {
     id: string; 
     name: string; 
@@ -59,6 +60,27 @@ const ProductTable = () => {
      }
      fetchProducts()
    },[])
+
+    const removeProduct=async(productId:string)=>{
+      const confirmed=window.confirm("Are you sure you want to delete this product?");
+      if(confirmed){
+        try{
+          const response=await deleteProduct(productId);
+          if(response.success){
+            setProducts((prevProducts) =>
+            prevProducts.filter((product) => product.id !== productId));
+            toast.success("Product deleted successfully");
+          }
+          else{
+            console.error("Failed to delete product");
+            toast.error("Failed to delete product");
+          }
+        }catch(error){
+          console.error("Failed to delete product");
+          toast.error("Failed to delete product");
+        }
+      }
+    }
   return (
     <div className="p-2 ">
         <div className="flex justify-between items-center h-[55px] px-4 bg-white my-2 mb-3 rounded">
@@ -128,7 +150,7 @@ const ProductTable = () => {
                  
                 
                   <button
-                    
+                    onClick={()=>removeProduct(product.id)}
                     className="text-red-500 hover:text-red-700 text-xl"
                     aria-label="Delete"
                   >
