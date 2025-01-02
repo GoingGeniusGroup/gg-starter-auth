@@ -47,10 +47,10 @@ model User {
   Order                  Order?
   Topup                  Topup[]
   TwoFactorConfirmation  TwoFactorConfirmation?
+  UserInventory          UserInventory[]
   UserPaymentMethod      UserPaymentMethod[]
   cards                  cards[]
   visitProfile           visitprofile[]
-  inventory              UserInventory[]
 }
 
 model VerificationToken {
@@ -279,35 +279,35 @@ model cards {
   user            User     @relation(fields: [userId], references: [id])
 }
 
+model UserInventory {
+  id             Int            @id @default(autoincrement())
+  userId         String         @db.Uuid
+  productId      String         @db.Uuid
+  quantity       Int            @default(1)
+  VirtualProduct VirtualProduct @relation(fields: [productId], references: [id])
+  User           User           @relation(fields: [userId], references: [id])
+}
+
 model VirtualCategory {
-  id       String           @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  name     String
-  products VirtualProduct[]
+  id             String           @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name           String
+  VirtualProduct VirtualProduct[]
 }
 
 model VirtualProduct {
-  id            String          @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  name          String
-  price         Float
-  type          String
-  images        String[]
-  rating        Float
-  categoryId    String          @db.Uuid
-  category      VirtualCategory @relation(fields: [categoryId], references: [id])
-  description   String
-  src           String?
-  animation     String?
-  stockQuantity Int
-  UserInventory UserInventory[]
-}
-
-model UserInventory {
-  id        Int            @id @default(autoincrement())
-  userId    String         @db.Uuid
-  productId String         @db.Uuid
-  quantity  Int            @default(1)
-  user      User           @relation(fields: [userId], references: [id])
-  product   VirtualProduct @relation(fields: [productId], references: [id])
+  id              String          @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name            String
+  price           Float
+  type            String
+  images          String[]
+  rating          Float
+  categoryId      String          @db.Uuid
+  description     String
+  src             String?
+  animation       String?
+  stockQuantity   Int
+  UserInventory   UserInventory[]
+  VirtualCategory VirtualCategory @relation(fields: [categoryId], references: [id])
 }
 
 enum UserRole {
