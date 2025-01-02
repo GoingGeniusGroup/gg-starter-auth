@@ -35,7 +35,6 @@ const CartSheet: React.FC<CartSheetProps> = ({
     axios
       .post("/api/stripe-checkout", { cartItems })
       .then((response) => {
-        console.log(response?.data?.message?.url);
         window.location.href = response?.data?.message?.url;
       })
       .catch((error) => console.log(error));

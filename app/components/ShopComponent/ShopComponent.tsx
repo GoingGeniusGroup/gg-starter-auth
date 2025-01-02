@@ -20,18 +20,20 @@ import { Button } from "@/components/ui/button";
 import { FaShoppingCart } from "react-icons/fa";
 import { CartItem } from "./subComponents/types";
 import CartSheet from "./subComponents/CartSheet";
+import { VirtualProduct } from "./subComponents/types";
+import { VirtualCategory } from "./subComponents/types";
 
 export default function ShopComponent() {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
-  const [categories, setCategories] = useState<any[]>([]);
+  const [categories, setCategories] = useState<VirtualCategory[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const [products, setProducts] = useState<any[]>([]);
+  const [products, setProducts] = useState<VirtualProduct[]>([]);
 
   // Fetch Categories
   useEffect(() => {
     const fetchCategories = async () => {
-      const data = await getCategories();
+      const data: VirtualCategory[] = await getCategories();
       if (data) {
         setCategories(data);
       }
@@ -42,8 +44,7 @@ export default function ShopComponent() {
   // Fetch Products
   useEffect(() => {
     const fetchProducts = async () => {
-      const data = await getProducts();
-      console.log(data);
+      const data: VirtualProduct[] = await getProducts();
       setProducts(data);
     };
     fetchProducts();
@@ -55,7 +56,7 @@ export default function ShopComponent() {
     setIsDropdownOpen(false);
   };
 
-  const handleSearchChange = (event: any) => {
+  const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(event.target.value);
   };
 
