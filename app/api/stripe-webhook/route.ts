@@ -6,11 +6,7 @@ const stripe = new Stripe('sk_test_51QY6IbD3ncKQC69NzzPZBkLcRwT01yEMPKBGLD4TMDLp
   apiVersion: "2024-12-18.acacia",
 });
 
-export const config = {
-  api: {
-    bodyParser: false,
-  },
-};
+export const runtime = 'nodejs';
 
 export async function POST(req: Request) {
   const sig = req.headers.get("stripe-signature");
