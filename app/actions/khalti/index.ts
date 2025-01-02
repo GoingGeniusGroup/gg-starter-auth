@@ -1,7 +1,7 @@
 "use server";
 
 import { db } from "@/app/lib/db";
-import { revalidatePath } from "next/cache";
+import { userAgent } from "next/server";
 
 interface KhaltiTopupParams {
   amount: number;
@@ -53,26 +53,11 @@ export async function khaltiTopup({
     }
 
     const khaltiData = await khaltiResponse.json();
-
-    // Create new topup data
-    await db.topup.create({
-      data: {
-        amount,
-        userId,
-        topupStatus: "PENDING",
-        topupType: "CREDIT",
-        createdAt: new Date(parseInt(transactionuuid)),
-      },
-    });
-
-    // Revalidate path where the user topup might be displayed
-    revalidatePath("/user/topups");
+  
 
     return {
       success: true,
-      khaltiConfig: {
-        ...khaltiConfig,
-      },
+      transactionuuid,
       paymentUrl: khaltiData.payment_url,
     };
   } catch (error) {
@@ -84,11 +69,15 @@ export async function khaltiTopup({
   }
 }
 
+//handle khalti payment status
 export async function handleKhaltiStatus(
   transactionuuid: string,
   status: "success" | "failed"
 ) {
   try {
+    console.log("Handling Khalti Status:", { transactionuuid, status });
+
+    // Query for the pending topup
     const pendingTopup = await db.topup.findFirst({
       where: {
         topupStatus: "PENDING",
@@ -97,22 +86,24 @@ export async function handleKhaltiStatus(
     });
 
     if (!pendingTopup) {
-      throw new Error("No pending topup found for this transaction.");
+      console.error(
+        `No pending topup found for transactionuuid: ${transactionuuid}`
+      );
+      return {
+        success: false,
+        error: "No pending topup found for this transaction.",
+      };
     }
 
-    //handle the status based on transiction success | failed
+    // Update the status
     const newStatus = status === "success" ? "SUCCESS" : "FAILED";
 
-    //update the topup status to success
-    await db.topup.update({
+    const updatedTopup = await db.topup.update({
       where: { id: pendingTopup.id },
-      data: {
-        topupStatus: newStatus,
-      },
+      data: { topupStatus: newStatus },
     });
 
-    // Revalidate path where the user topup might be displayed
-    revalidatePath("/user/topups");
+    console.log("Topup status updated successfully:", updatedTopup);
 
     return {
       success: true,
