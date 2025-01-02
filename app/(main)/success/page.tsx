@@ -10,8 +10,35 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { useEffect } from "react";
+import { useSearchParams } from "next/navigation";
+import { useSession } from "next-auth/react";
 
 function PaymentSuccessContent() {
+  const { data: session } = useSession();
+  const userId = session?.user.id;
+
+  const searchParams = useSearchParams();
+  const session_id = searchParams.get("session_id");
+
+  useEffect(() => {
+    if (session_id && session?.user.id) {
+      fetch(`/api/update-inventory`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          sessionId: session_id,
+          userId: session.user.id, // Pass the userId here
+        }),
+      })
+        .then((res) => res.json())
+        .then((data) => console.log(data))
+        .catch((error) => console.error(error));
+    }
+  }, [session_id, session?.user.id]);
+
   return (
     <div className="min-h-[50vh] flex items-center justify-center p-2">
       <Card className="w-full max-w-md">

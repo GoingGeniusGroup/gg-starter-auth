@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import Stripe from "stripe";
 import { db } from "@/lib/db";
+import { useSession } from "next-auth/react";
 
 const stripe = new Stripe('sk_test_51QY6IbD3ncKQC69NzzPZBkLcRwT01yEMPKBGLD4TMDLp2R3r4CSRj56DSG25VkVT4WTKAPJct5TivQeEQdY4vlsX00dEXCBzn6', {
   apiVersion: "2024-12-18.acacia",
@@ -9,6 +10,11 @@ const stripe = new Stripe('sk_test_51QY6IbD3ncKQC69NzzPZBkLcRwT01yEMPKBGLD4TMDLp
 export const runtime = 'nodejs';
 
 export async function POST(req: Request) {
+  const {data: session} = useSession();
+  if (!session) {
+    return NextResponse.json({ error: "Session is missing" }, { status: 400 });
+  }
+  const userId = session.user.id;
   const sig = req.headers.get("stripe-signature");
   const webhookSecret = 'whsec_62ab313976081fc5b31bd9c3c9ee4c4330cb60b4067c301677f1d184f45e1ab6';
   let event;
@@ -46,7 +52,7 @@ export async function POST(req: Request) {
           // Check if the entry already exists in UserInventory
           const userInventory = await db.userInventory.findFirst({
             where: {
-              userId: '3d462102-36e8-4718-959a-f750f1fbd8b2',  
+              userId: userId,  
               productId: item.id,  
             },
           });
@@ -65,7 +71,7 @@ export async function POST(req: Request) {
             // If the entry does not exist, insert a new record
             await db.userInventory.create({
               data: {
-                userId: '3d462102-36e8-4718-959a-f750f1fbd8b2',  
+                userId: userId,  
                 productId: item.id,
                 quantity: item.quantity,  
               },
