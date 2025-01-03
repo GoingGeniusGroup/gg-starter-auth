@@ -122,18 +122,18 @@ const InventProdTable = () => {
         </button>
       </div>   
       
-      <Link href="/add-product">
+      {/* <Link href="">
       <button className="flex items-center gap-2 justify-end bg-blue-500 text-white px-4 py-2 rounded-md shadow hover:bg-blue-600 active:bg-blue-700">
         <FaPlus className="w-4 h-4" /> 
         Add
       </button>
-      </Link>
+      </Link> */}
      
        </div>
 
     
     <Table className="w-full border-collapse border  shadow rounded  bg-white" >
-        <TableCaption>A list of your products in inventory.</TableCaption>
+        {/* <TableCaption>A list of your products in inventory.</TableCaption> */}
         <TableHeader>
           <TableRow>
             <TableHead>S.N</TableHead>

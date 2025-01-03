@@ -95,15 +95,15 @@ const updateCategoryState=(updatedCategory:any)=>{
 
   return (
     <div className="bg-gray-100   min-h-screen">
-      <header className="bg-gray-800 text-white p-4 shadow-md">
+      {/* <header className="bg-gray-800 text-white p-4 shadow-md">
         <h2 className="text-3xl font-semibold text-center">Category</h2>
-      </header>
+      </header> */}
 
       <main className="flex-1 p-2 mt-2">
         <section className="grid grid-cols-4 gap-4 mb-4">
           <div className="bg-white p-4 rounded shadow">Total Category:{category.length}</div>
-          <div className="bg-white p-4 rounded shadow">Max Product:Physical(98)</div>
-          <div className="bg-white p-4 rounded shadow">Least Product:virtual(20)</div>
+          {/* <div className="bg-white p-4 rounded shadow">Max Product:Physical(98)</div>
+          <div className="bg-white p-4 rounded shadow">Least Product:virtual(20)</div> */}
         </section>
       </main>
       <CategoryTable updatedValue={category} onAddClick={viewForm} onEditClick={editCategory} onDeleteClick={removeCategory} />
