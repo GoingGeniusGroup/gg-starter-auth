@@ -1,7 +1,6 @@
 "use server";
 
 import { db } from "@/app/lib/db";
-import { userAgent } from "next/server";
 
 interface KhaltiTopupParams {
   amount: number;
@@ -37,7 +36,7 @@ export async function khaltiTopup({
     });
 
     const khaltiConfig = {
-      return_url: `${process.env.NEXT_PUBLIC_APP_URL}/api/khalti/success?transactionuuid=${newTopup.id}`,
+      return_url: `${process.env.NEXT_PUBLIC_APP_URL}/api/khalti/success?transactionid=${newTopup.id}`,
       website_url: `${process.env.NEXT_PUBLIC_APP_URL}`,
       amount: Math.round(amount * 100),
       purchase_order_id: transactionId,
