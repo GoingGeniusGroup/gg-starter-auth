@@ -76,7 +76,7 @@ useEffect(() => {
         <TableHeader>
           <TableRow>
             <TableHead>S.N</TableHead>
-            <TableHead>Category Id</TableHead>
+            {/* <TableHead>Category Id</TableHead> */}
             <TableHead>Category Name</TableHead>
             <TableHead>Category Type</TableHead>
             <TableHead>Category Description</TableHead>
@@ -88,7 +88,7 @@ useEffect(() => {
           {category.map((category, index) => (
             <TableRow key={index}>
               <TableCell>{index + 1}</TableCell>
-              <TableCell>{category.id}</TableCell>
+              {/* <TableCell>{category.id}</TableCell> */}
               <TableCell className="text-blue-500">{category.categoryName}</TableCell>
               <TableCell>Physical</TableCell>
               <TableCell>{category.categoryDescription}</TableCell>
