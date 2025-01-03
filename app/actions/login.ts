@@ -118,10 +118,19 @@ export const signInCredentials = async (login: string, password: string) => {
       });
     }
 
+    //check user to get userrole
+    const user =
+      (await getUserByEmail(login)) ||
+      (await getUserByPhone(login)) ||
+      (await getUserByUsername(login));
+
     return response({
       success: true,
       code: 200,
       message: "Login successful.",
+      data: {
+        role: user?.role,
+      },
     });
   } catch (error) {
     if (error instanceof AuthError) {
