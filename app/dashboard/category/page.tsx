@@ -94,7 +94,7 @@ const updateCategoryState=(updatedCategory:any)=>{
   }
 
   return (
-    <div className="bg-gray-100  relative min-h-screen">
+    <div className="bg-gray-100   min-h-screen">
       <header className="bg-gray-800 text-white p-4 shadow-md">
         <h2 className="text-3xl font-semibold text-center">Category</h2>
       </header>

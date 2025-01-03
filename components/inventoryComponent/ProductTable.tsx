@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/table1";
 import Link from "next/link";
 import { getAllproducts ,deleteProduct} from '@/action/product'
-import { Input } from "@/components/ui/input"
+import { Input } from "@/components/ui/input1"
 import { LuListFilter } from "react-icons/lu";
 import {  BiShow } from 'react-icons/bi';
 
@@ -92,7 +92,7 @@ const ProductTable = () => {
         </button>
       </div>   
       
-      <Link href="/add-product">
+      <Link href="/dashboard/product/add">
       <button className="flex items-center gap-2 justify-end bg-blue-500 text-white px-4 py-2 rounded-md shadow hover:bg-blue-600 active:bg-blue-700">
         <FaPlus className="w-4 h-4" /> 
         Add
@@ -138,7 +138,7 @@ const ProductTable = () => {
                   >
                     <BiShow />
                   </button>
-                  <Link href={`/inventory/products/update/${product.id}`}>
+                  <Link href={`/dashboard/product/update/${product.id}`}>
                   <button
                     className="text-blue-500 hover:text-blue-700 text-xl"
                     aria-label="Edit"

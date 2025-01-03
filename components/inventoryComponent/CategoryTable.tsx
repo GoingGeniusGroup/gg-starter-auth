@@ -1,4 +1,5 @@
-import React from "react";
+"use client"
+import React ,{useState,useEffect, use}from "react";
 import {
   Table,
   TableBody,
@@ -8,7 +9,8 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table1";
-import { Input } from "@/components/ui/input";
+import { getAllCategories } from "@/action/category";
+import { Input } from "@/components/ui/input1";
 import { LuListFilter } from "react-icons/lu";
 import { BiShow } from "react-icons/bi";
 import { FaEdit, FaTrash, FaPlus } from "react-icons/fa";
@@ -16,45 +18,37 @@ import { FaEdit, FaTrash, FaPlus } from "react-icons/fa";
 interface Category {
   CategoryId: number;
   categoryName: string;
-  categoryType: string;
   categoryDescription:string;
-  productQuantity: number;
+  products:string
 
 }
 interface CategoryTableProps {
-  categories:Category[];
+  updatedValue:Category[];
   onAddClick: () => void;
   onEditClick:(category:any)=>void
   onDeleteClick:(categoryId:any)=>void
 }
-const CategoryTable = ({ onAddClick,onEditClick,categories ,onDeleteClick}:CategoryTableProps) => {
-    
-  // const categories: Category[] = [
-  //   {
-  //     CategoryId: 1,
-  //     categoryName: "Tv",
-  //     categoryType:"PHYSICAL",
-  //     categoryDescription:" television ,watch your favourite show",
-  //     productQuantity:20, 
-  //   },
+const CategoryTable = ({ onAddClick,onEditClick,updatedValue ,onDeleteClick}:CategoryTableProps) => {
+   const[category,setCategory]=useState<any[]>([]) 
 
-  //   {
-  //       CategoryId: 2,
-  //       categoryName: "watch",
-  //       categoryType:"PHYSICAL",
-  //       categoryDescription:"time date ",
-  //       productQuantity:20, 
-  //     },
-  //     {
-  //       CategoryId: 3,
-  //       categoryName: "watch",
-  //       categoryType:"PHYSICAL",
-  //       categoryDescription:"time date ",
-  //       productQuantity:20, 
-  //     },
-  
- 
-  // ];
+useEffect(()=>{
+  const fetchCategory = async () => { 
+    try {
+      const response = await getAllCategories();
+      if (response.success && response.data) {
+        setCategory(response.data);
+      } else {
+        console.error("Failed to fetch categories");
+      }
+    } catch (error) {
+      console.error("failed to fetch categories");
+    }
+  }
+  fetchCategory();
+},[])
+useEffect(() => {
+  setCategory(updatedValue);
+}, [updatedValue]);
 
   return (
     <div className="p-2">
@@ -77,7 +71,7 @@ const CategoryTable = ({ onAddClick,onEditClick,categories ,onDeleteClick}:Categ
         
       </div>
 
-      <Table className="w-full border-collapse border shadow rounded bg-white">
+      <Table className=" w-full border-collapse border shadow rounded bg-white">
         {/* <TableCaption>A list of Category Type.</TableCaption> */}
         <TableHeader>
           <TableRow>
@@ -91,14 +85,16 @@ const CategoryTable = ({ onAddClick,onEditClick,categories ,onDeleteClick}:Categ
           </TableRow>
         </TableHeader>
         <TableBody>
-          {categories.map((category, index) => (
+          {category.map((category, index) => (
             <TableRow key={index}>
               <TableCell>{index + 1}</TableCell>
-              <TableCell>{category.CategoryId}</TableCell>
+              <TableCell>{category.id}</TableCell>
               <TableCell className="text-blue-500">{category.categoryName}</TableCell>
-              <TableCell>{category.categoryType} </TableCell>
+              <TableCell>Physical</TableCell>
               <TableCell>{category.categoryDescription}</TableCell>
-              <TableCell>{category.productQuantity}</TableCell>
+              {/* <TableCell>{category.products.length || 0}</TableCell> */}
+
+              <TableCell>{category.products ? 1:0}</TableCell>
               <TableCell>
                 <div className="flex space-x-2">
                   <button
