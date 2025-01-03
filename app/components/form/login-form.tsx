@@ -31,7 +31,7 @@ export const LoginForm = ({ isMobile }: { isMobile: boolean }) => {
         .then((data) => {
           if (!data) return;
           if (!data.success) {
-            return toast.error(data.error.message);
+            return toast.error(data.error?.message);
           }
           if (data.code === 200 && data.message?.includes("two-factor")) {
             toast.success(data.message);
@@ -43,8 +43,7 @@ export const LoginForm = ({ isMobile }: { isMobile: boolean }) => {
 
           // 2. Small delay to ensure toast is shown
           setTimeout(() => {
-            const userRole = data.data?.role;
-            if (userRole === "Admin") {
+            if (data.data?.role === "Admin") {
               router.push("/dashboard");
             } else {
               window.location.reload();

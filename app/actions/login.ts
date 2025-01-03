@@ -129,7 +129,7 @@ export const signInCredentials = async (login: string, password: string) => {
       code: 200,
       message: "Login successful.",
       data: {
-        role: user?.role,
+        role: user?.role || null,
       },
     });
   } catch (error) {
