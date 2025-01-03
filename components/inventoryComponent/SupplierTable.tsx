@@ -9,7 +9,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table1";
-import { Input } from "@/components/ui/input";
+import { Input } from "@/components/ui/input1";
 import { LuListFilter } from "react-icons/lu";
 import { BiShow } from "react-icons/bi";
 import { FaEdit, FaTrash, FaPlus } from "react-icons/fa";

@@ -23,8 +23,6 @@ const Product = () => {
     fetchProducts()
   },[])
 
-  
-
   return (
     <div className='bg-gray-100'>
   

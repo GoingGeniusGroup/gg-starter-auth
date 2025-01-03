@@ -10,10 +10,10 @@ import { Toaster, toast } from 'sonner'
 
 interface CategoryFormProps {
   onCancel: () => void;
-  onCategoryAdd: (newCategory: any) => void;
+  // onCategoryAdd: (newCategory: any) => void;
 }
 
-const CategoryForm = ({ onCancel ,onCategoryAdd}: CategoryFormProps) => {
+const CategoryForm = ({ onCancel}: CategoryFormProps) => {
   const {
     control,
     register,
@@ -40,15 +40,15 @@ const CategoryForm = ({ onCancel ,onCategoryAdd}: CategoryFormProps) => {
         // alert("Category saved successfully!");
         toast.success('Category has saved successfully!')
         console.log("Saved category:", result.data);
-        const newCategory = {
-          CategoryId: result.data.id,
-          categoryName: result.data.categoryName,
-          categoryDescription: result.data.categoryDescription || "",
-          categoryType: "PHYSICAL",
-          // productQuantity: result.data.products ? result.data.products.length : 0,
-          productQuantity: 0,
-        };
-        onCategoryAdd(newCategory); // Add to parent state
+        // const newCategory = {
+        //   CategoryId: result.data.id,
+        //   categoryName: result.data.categoryName,
+        //   categoryDescription: result.data.categoryDescription || "",
+        //   categoryType: "PHYSICAL",
+        //   // productQuantity: result.data.products ? result.data.products.length : 0,
+        //   productQuantity: 0,
+        // };
+        // onCategoryAdd(newCategory); // Add to parent state
         reset();
         onCancel();
       } else {

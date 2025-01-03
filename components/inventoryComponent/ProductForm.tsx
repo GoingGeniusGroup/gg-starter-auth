@@ -100,7 +100,7 @@ const onsubmit=async(data:Product)=>{
       console.log("Saved product:", result.data);
       reset();
       // revalidatePath("/inventory/products");
-      router.push("/inventory/products")
+      router.push("/dashboard/product")
     }
     else{
       console.error("Validation errors:", result.errors);
