@@ -10,13 +10,6 @@ export const getUserByEmail = async (email: string) => {
           has: email,
         },
       },
-      select: {
-        id: true,
-        email: true,
-        password: true,
-        role: true,
-        isTwoFactorEnabled: true,
-      },
     });
     return user;
   } catch (error) {
@@ -50,13 +43,6 @@ export const getUserByPhone = async (phone: string) => {
         mobilePhone: {
           has: phone,
         },
-      },
-      select: {
-        id: true,
-        email: true,
-        password: true,
-        role: true,
-        isTwoFactorEnabled: true,
       },
     });
     if (!user) {
@@ -97,13 +83,6 @@ export const getUserByUsername = async (username: string) => {
         userName: {
           has: username,
         },
-      },
-      select: {
-        id: true,
-        email: true,
-        password: true,
-        role: true,
-        isTwoFactorEnabled: true,
       },
     });
     if (!user) {

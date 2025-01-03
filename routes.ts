@@ -11,6 +11,8 @@ export const authRoutes: string[] = [
   "/hi",
 ];
 
+export const adminRoutes: string[] = ["/dashboard"];
+
 export const apiAuthPrefix: string = "/api/auth";
 
 export const DEFAULT_LOGIN_REDIRECT: string = "/";
