@@ -17,6 +17,7 @@ import {
   FaSignInAlt,
   FaUserPlus,
 } from "react-icons/fa";
+import { MdInventory } from "react-icons/md";
 import ShopSection from "../../shop/ShopSection";
 import { LoginForm } from "@/components/form/login-form";
 import { SectionProps } from "../interface/Section.interface";
@@ -26,6 +27,7 @@ import MobileSimulatorContainer from "../MobileSimulatorContainer";
 import SimulatorToggleButton from "../SimulatorToggleButton";
 import NotificationComponent from "@/components/Notification/NotificationComponent";
 import ShopComponent from "../../ShopComponent/ShopComponent";
+import UserInventoryComponent from "../../UserInventory/UserInventoryComponent";
 // import { getColorsbyUserId } from "@/services/color";
 // import { ThemeType } from "@prisma/client";
 
@@ -202,6 +204,12 @@ export const MobileSimulatorProvider = ({
       },
       {
         id: 3,
+        title: "UserInventory",
+        icon: <MdInventory />,
+        content: <UserInventoryComponent />,
+      },
+      {
+        id: 4,
         title: "Notifications",
         icon: <FaBell />,
         content: <NotificationComponent />,
@@ -216,7 +224,7 @@ export const MobileSimulatorProvider = ({
       if (isOpen) {
         return prev.filter((id) => id !== section.id);
       } else {
-        return [section.id, ...prev].slice(0, 2);
+        return [section.id, ...prev].slice(0, 3);
       }
     });
   }, []);

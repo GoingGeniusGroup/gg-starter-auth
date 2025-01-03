@@ -23,7 +23,7 @@ const nextConfig = {
         hostname: "fakestoreapi.com",
       },
     ],
-    domains: ["media.steampowered.com"],
+    domains: ["media.steampowered.com", "png.pngtree.com"],
   },
   transpilePackages: ["swiper"],
 };
