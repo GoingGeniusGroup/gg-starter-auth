@@ -23,5 +23,5 @@ export const getInventory = cache(
     }
   },
   ["user/userInventory", "getInventory"],
-  { revalidate: 60 * 60 * 24 }
+  { revalidate: 60 }
 );

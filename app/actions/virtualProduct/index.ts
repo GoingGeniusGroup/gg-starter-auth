@@ -14,5 +14,5 @@ export const getProducts = cache(
     }
   },
   ["user/virtualProducts", "getProducts"],
-  { revalidate: 60 * 60 * 24 }
+  { revalidate: 60 }
 );
