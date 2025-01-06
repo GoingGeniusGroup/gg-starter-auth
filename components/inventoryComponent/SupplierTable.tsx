@@ -9,7 +9,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table1";
-import { Input } from "@/components/ui/input";
+import { Input } from "@/components/ui/input1";
 import { LuListFilter } from "react-icons/lu";
 import { BiShow } from "react-icons/bi";
 import { FaEdit, FaTrash, FaPlus } from "react-icons/fa";
@@ -102,7 +102,7 @@ const SupplierTable = ({ onAddClick,onEditClick,updatedValue }:SupplierTableProp
         <TableHeader>
           <TableRow>
             <TableHead>S.N</TableHead>
-            <TableHead>Supplier Id</TableHead>
+            {/* <TableHead>Supplier Id</TableHead> */}
             <TableHead>Supplier Name</TableHead>
             <TableHead>Supplier Contact</TableHead>
             <TableHead>Supplier Email</TableHead>
@@ -116,7 +116,7 @@ const SupplierTable = ({ onAddClick,onEditClick,updatedValue }:SupplierTableProp
           {suppliers.map((supplier, index) => (
             <TableRow key={index}>
               <TableCell>{index + 1}</TableCell>
-              <TableCell>{supplier.id}</TableCell>
+              {/* <TableCell>{supplier.id}</TableCell> */}
               <TableCell className="text-blue-500">{supplier.supplierName}</TableCell>
               <TableCell>{supplier.phone}</TableCell>
               <TableCell>{supplier.email}</TableCell>

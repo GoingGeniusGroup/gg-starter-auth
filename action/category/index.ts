@@ -151,7 +151,11 @@ export async function deleteCategory(categoryId:string){
 ///listing of all category
 export async function getAllCategories() {
   try {
-      const categories = await db.category.findMany();
+      const categories = await db.category.findMany({
+        include: {products: true}
+      }
+       
+      );
 
       return { success: true, data: categories };
   } catch (error) {

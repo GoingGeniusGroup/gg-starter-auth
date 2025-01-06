@@ -16,6 +16,7 @@ const menuItems = [
     iconPath: "/assets/productIcon.svg",
     path: "/dashboard/product",
   },
+ 
   {
     name: "Inventory",
     iconPath: "/assets/inventoryIcon.svg",
@@ -25,6 +26,11 @@ const menuItems = [
     name: "Order",
     iconPath: "/assets/orderIcon.svg",
     path: "/dashboard/order",
+  },
+  {
+    name: "Virtual",
+    iconPath: "/assets/productIcon.svg",
+    path: "/dashboard/virtualProduct",
   },
   {
     name: "Account",
@@ -66,7 +72,7 @@ const Sidebar: React.FC<{
           isCollapsed
             ? "  "
             : "flex items-center px-4 py-4 border-b border-gray-200"
-        }  ${isCollapsed ? "justify-center" : ""} transition-all`}
+        }  ${isCollapsed ? "justify-center" : ""} transition-all sticky top-0 bg-white z-50`}
       >
         <div
           className={`${
@@ -93,7 +99,7 @@ const Sidebar: React.FC<{
       </div>
 
       {/* Menu Container */}
-      <div className="mt-3 flex-grow px-3">
+      <div className="mt-3 flex-grow px-3 overflow-y-auto">
         {menuItems.map((item, index) => (
           <Link href={item.path} key={index}>
             <div
@@ -113,8 +119,8 @@ const Sidebar: React.FC<{
               <Image
                 src={item.iconPath}
                 alt={`${item.name} Icon`}
-                width={20}
-                height={20}
+                width={18}
+                height={18}
               />
               {!isCollapsed && (
                 <span className="ml-6 font-medium text-gray-900">

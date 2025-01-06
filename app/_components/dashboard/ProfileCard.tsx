@@ -10,7 +10,7 @@ import {
 import Image from "next/image";
 export default function ProfileCard() {
   return (
-    <div className="w-full max-w-md">
+    <div className="w-full max-w-md  ">
       <div className="relative overflow-hidden rounded-2xl border border-white/35 bg-white/10 backdrop-blur-md backdrop-filter">
         <div className="p-6 space-y-6">
           {/* Profile section */}
