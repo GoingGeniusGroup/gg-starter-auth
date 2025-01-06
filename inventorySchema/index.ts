@@ -54,3 +54,13 @@ export const inventorySchema=z.object({
   address:z.string().optional().nullable(),
   product:z.string()
 })
+
+export const virtualSchema=z.object({
+  name:z.string().min(3,"Name must be at least 3 characters"),
+  description:z.string(),
+  price:z.number().int().nonnegative(),
+  stockQuantity:z.number().int().nonnegative(),
+  type:z.string(),
+  categoryId:z.string(),
+  images: z.string()
+})
