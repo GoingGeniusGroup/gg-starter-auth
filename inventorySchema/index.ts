@@ -1,5 +1,5 @@
 
-import { z } from "zod";
+import { optional, z } from "zod";
 
 const MAX_FILE_SIZE = 3145728; // 3 MB
 const ACCEPTED_IMAGE_TYPES = ["image/jpeg", "image/jpg", "image/png", "image/webp"];
@@ -46,4 +46,11 @@ export const supplierSchema=z.object({
   phone:z.string().min(10,"Phone number must be at least 10 characters"),
   email:z.string().email("Invalid email address"),
   address:z.string()
+})
+
+export const inventorySchema=z.object({
+  quantityAvailable: z.number().int().nonnegative(),
+  thresholdValue:z.number().int().nonnegative(),
+  address:z.string().optional().nullable(),
+  product:z.string()
 })
