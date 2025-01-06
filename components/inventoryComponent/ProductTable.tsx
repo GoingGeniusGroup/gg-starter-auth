@@ -17,6 +17,7 @@ import {  BiShow } from 'react-icons/bi';
 
 import { FaEdit, FaTrash,FaPlus,FaFilter } from "react-icons/fa"; 
 import { toast } from "sonner";
+
 interface Product {
     id: string; 
     name: string; 
@@ -28,6 +29,7 @@ interface Product {
     status:boolean,
     description?: string;
   }
+  
 interface ProductTableProps {
     products:Product[];
 }
