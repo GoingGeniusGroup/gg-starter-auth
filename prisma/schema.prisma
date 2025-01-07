@@ -157,25 +157,26 @@ model Supplier {
 }
 
 model Order {
-  id             String           @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  orderDate      DateTime         @default(now())
-  orderQuantity  Int
-  deliveryDate   DateTime?
-  streetAddress  String
-  state          String
-  city           String
-  orderStatus    OrderStatus      @default(PENDING)
-  discount       Float?
-  orderAmount    Float?
-  paymentId      String?          @unique @db.Uuid
-  paymentStatus  Boolean          @default(false)
-  userId         String           @unique @db.Uuid
-  carts          Cart?            @relation("OrderCarts")
-  PaymentType    PaymentType?     @relation(fields: [paymentId], references: [id])
-  user           User             @relation(fields: [userId], references: [id], onDelete: Cascade)
-  SalesInvoice   SalesInvoice?
-  product        Product[]        @relation("ProductOrders")
-  virtualProduct VirtualProduct[] @relation("VirtualProductOrders")
+  id               String          @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  orderDate        DateTime        @default(now())
+  orderQuantity    Int
+  deliveryDate     DateTime?
+  streetAddress    String
+  state            String
+  city             String
+  orderStatus      OrderStatus     @default(PENDING)
+  discount         Float?
+  orderAmount      Float?
+  paymentId        String?         @unique @db.Uuid
+  paymentStatus    Boolean         @default(false)
+  userId           String          @unique @db.Uuid
+  carts            Cart?           @relation("OrderCarts")
+  PaymentType      PaymentType?    @relation(fields: [paymentId], references: [id])
+  user             User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  SalesInvoice     SalesInvoice?
+  product          Product[]       @relation("ProductOrders")
+  virtualProductId String?         @db.Uuid
+  virtualProduct   VirtualProduct? @relation("VirtualProductOrders", fields: [virtualProductId], references: [id])
 }
 
 model PaymentType {
@@ -309,7 +310,7 @@ model VirtualProduct {
   stockQuantity   Int
   UserInventory   UserInventory[]
   VirtualCategory VirtualCategory @relation(fields: [categoryId], references: [id])
-  order           Order[]         @relation("VirtualProductOrders")
+  orders          Order[]         @relation("VirtualProductOrders")
 }
 
 enum UserRole {
