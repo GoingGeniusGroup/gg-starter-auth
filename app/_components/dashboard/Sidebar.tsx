@@ -56,7 +56,7 @@ const Sidebar: React.FC<{
 
   return (
     <aside
-      className={`bg-white text-gray-900 h-full fixed flex-shrink-0 top-0 z-40 flex flex-col shadow-lg transition-all duration-300 ${
+      className={`bg-white text-gray-900 mt-28 h-[85%] fixed flex-shrink-0 top-0 z-40 flex flex-col shadow-lg transition-all duration-300 ${
         isCollapsed ? "w-30" : "w-64"
       }`}
     >

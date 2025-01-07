@@ -16,6 +16,7 @@ import {
   FaShoppingCart,
   FaSignInAlt,
   FaUserPlus,
+  FaUser,
 } from "react-icons/fa";
 import ShopSection from "../../shop/ShopSection";
 import { LoginForm } from "@/components/form/login-form";
@@ -25,6 +26,7 @@ import { BackgroundProps } from "../interface/Background.interface";
 import MobileSimulatorContainer from "../MobileSimulatorContainer";
 import SimulatorToggleButton from "../SimulatorToggleButton";
 import NotificationComponent from "@/components/Notification/NotificationComponent";
+import ProfileComponent from "../../Profile/ProfileComponent";
 // import { getColorsbyUserId } from "@/services/color";
 // import { ThemeType } from "@prisma/client";
 
@@ -203,6 +205,13 @@ export const MobileSimulatorProvider = ({
         title: "Notifications",
         icon: <FaBell />,
         content: <NotificationComponent />,
+      },
+      {
+        id: 4,
+        title:"Profile",
+        icon: <FaUser/>,
+        content: <ProfileComponent/>
+
       },
     ],
     [isLoggedIn, showLogin, handleToggleAuth]
