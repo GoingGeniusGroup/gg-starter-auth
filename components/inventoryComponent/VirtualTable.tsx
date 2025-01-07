@@ -12,8 +12,10 @@ import {
   import { Input } from "@/components/ui/input1"
 import { LuListFilter } from "react-icons/lu";
 import {  BiShow } from 'react-icons/bi';
+import { toast } from "sonner";
+
 import Link from "next/link";
-import { getVirtualProducts } from '@/action/virtualProducts';
+import { deleteVirtual, getVirtualProducts } from '@/action/virtualProducts';
 import { FaEdit, FaTrash,FaPlus,FaFilter } from "react-icons/fa"; 
 const truncateText = (text: string, maxLength: number): string => {
     if (!text) return "N/A";
@@ -49,6 +51,28 @@ const VirtualTable = () => {
     }
     fetchProducts()
   },[])
+
+const removeVirtual=async(virtualId:string)=>{
+  const confirmed=window.confirm("Are you sure you want to delete this product?");
+  if(confirmed){
+    try{
+      const response=await deleteVirtual(virtualId);
+      if(response.success){
+        setVirtualProduct((prev)=>prev.filter((virtual)=>virtual.id!==virtualId))
+        toast.success("product deleted successfully")
+      }
+      else{
+        console.error("Failed to delete product")
+        toast.error("Failed to delete product")
+      }
+    }
+    catch(error){
+      console.error("Failed to delete product")
+      toast.error("Failed to delete product")
+    }
+  }
+}
+
     return (
     <div className="p-2 ">
         <div className="flex justify-between items-center h-[55px] px-4 bg-white my-2 mb-3 rounded">
@@ -111,7 +135,7 @@ const VirtualTable = () => {
                   </button>
                 
                   <button
-                    
+                    onClick={()=>removeVirtual(virtual.id)}
                     className="text-red-500 hover:text-red-700 text-xl"
                     aria-label="Delete"
                   >
