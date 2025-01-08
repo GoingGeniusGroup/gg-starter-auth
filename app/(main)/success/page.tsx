@@ -74,7 +74,7 @@ function PaymentSuccessContent() {
 
         <CardFooter className="flex flex-col gap-4">
           <Button variant="outline" asChild className="w-full">
-            <Link href="/home">Return to Home</Link>
+            <Link href="/">Return to Home</Link>
           </Button>
         </CardFooter>
       </Card>
