@@ -1,78 +1,71 @@
 "use client"
-import React ,{useState,useEffect} from "react";
+import React,{useState,useEffect} from 'react'
 import {
-  Table,
-  TableBody,
-  TableCaption,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table1";
-import Link from "next/link";
-import { Input } from "@/components/ui/input1"
+    Table,
+    TableBody,
+    TableCaption,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow,
+  } from "@/components/ui/table1";
+  import { Input } from "@/components/ui/input1"
 import { LuListFilter } from "react-icons/lu";
 import {  BiShow } from 'react-icons/bi';
-import { getAllInventory } from "@/action/inventory";
+import Link from "next/link";
+import { getVirtualProducts } from '@/action/virtualProducts';
 import { FaEdit, FaTrash,FaPlus,FaFilter } from "react-icons/fa"; 
-interface Product {
-    pd_id: number; 
-    productId: string; 
-    name: string; 
-    quantity:number;
-    unit: string; 
-    unitPrice: number; 
-    category:string,
-    description?: string;
-  }
-interface Inventory{
-  id:string;
-  stockStatus: string
-  address?:string;
-  stockUpdateDate :Date;
-  quantityAvailable:number;
-  thresholdValue:number;
-  product:string[]
+const truncateText = (text: string, maxLength: number): string => {
+    if (!text) return "N/A";
+    return text.length > maxLength ? text.substring(0, maxLength) + "..." : text;
+  };
+interface Vproduct{
+    id: string;
+    name: string;
+    price:number;
+    type:string;
+    VirtualCategory: string;
+    stockQuantity: number;
+    description: string;
 }
-  
 
+const VirtualTable = () => {
+  const[virtualProduct,setVirtualProduct]=useState<any[]>([])
 
-  
-const InventProdTable = () => {
- const[inventorys,setInventorys]=useState<any[]>([])
- useEffect(()=>{
-      async function fetchInventory(){
-        try{
-          const response=await getAllInventory()
-          if (response.success && response.data) {
-            setInventorys(response.data);
-  
-          } else {
-            console.error("Failed to fetch inventory");
-          }
-        }
-        catch(error){
-          console.error("failed to fetch data")
+  useEffect(()=>{
+    async function fetchProducts(){
+      try{
+        const data=await getVirtualProducts()
+        if(data){
+          setVirtualProduct(data)
+        } else{
+          console.error("failed to fetch vitual product")
         }
       }
-      fetchInventory()
-    },[])
-  return (
+      catch(error){
+        console.error("failed to fetch products")
+
+      }
+    }
+    fetchProducts()
+  },[])
+    return (
     <div className="p-2 ">
         <div className="flex justify-between items-center h-[55px] px-4 bg-white my-2 mb-3 rounded">
         <div className="flex items-center py-4 w-1/4 gap-2">
             <Input type="text" placeholder="search"  />
+        {/* <input type="text" placeholder="search" className="px-3 py-2 w-80 bg-slate-50 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 " /> */}
         <button type="button" className="flex items-center justify-center  p-2 rounded hover:bg-gray-300">
           <LuListFilter className="w-5 h-5" />
         </button>
       </div>   
       
-      <Link href="/dashboard/inventory/add">
+      <Link href="/dashboard/virtualProduct/add">
       <button className="flex items-center gap-2 justify-end bg-blue-500 text-white px-4 py-2 rounded-md shadow hover:bg-blue-600 active:bg-blue-700">
         <FaPlus className="w-4 h-4" /> 
         Add
       </button>
-      </Link> 
+      </Link>
      
        </div>
 
@@ -82,26 +75,24 @@ const InventProdTable = () => {
         <TableHeader>
           <TableRow>
             <TableHead>S.N</TableHead>
-            <TableHead>Product</TableHead>
+            <TableHead>Name</TableHead>
+            <TableHead>Type</TableHead>
             <TableHead>Quantity</TableHead>
-            <TableHead>Threshhold</TableHead>
-            <TableHead>Status</TableHead>
-            <TableHead>Address</TableHead>
-            
-            {/* <TableHead>Actions</TableHead> */}
+            <TableHead>Price</TableHead>
+            <TableHead>Description</TableHead>
+            <TableHead>Actions</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
-          {inventorys.map((inventory,index) => (
+          {virtualProduct.map((virtual,index) => (
             <TableRow key={index}>
               <TableCell>{index+1}</TableCell>
-              <TableCell className="text-blue-500">{inventory.product && inventory.product.name}</TableCell>
-              <TableCell>{inventory.quantityAvailable}</TableCell>
-              <TableCell>{inventory.thresholdValue}</TableCell>
-              <TableCell>{inventory.stockStatus}</TableCell>
-              <TableCell>{inventory.address}</TableCell>
-
-              {/* <TableCell>
+              <TableCell className="text-blue-500">{virtual.name}</TableCell>
+              <TableCell>{virtual.type}</TableCell>
+              <TableCell>{virtual.stockQuantity}</TableCell>
+              <TableCell className="text-green-500">{virtual.price}</TableCell>
+              <TableCell>{truncateText(virtual.description, 40)}</TableCell>
+              <TableCell>
                 <div className="flex space-x-2">
                 <button
                     
@@ -127,7 +118,7 @@ const InventProdTable = () => {
                     <FaTrash />
                   </button>
                 </div>
-              </TableCell> */}
+              </TableCell>
             </TableRow>
           ))}
         </TableBody>
@@ -135,7 +126,7 @@ const InventProdTable = () => {
 
     
     </div>
-  );
-};
+  )
+}
 
-export default InventProdTable;
+export default VirtualTable

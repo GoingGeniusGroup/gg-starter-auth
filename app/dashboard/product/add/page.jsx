@@ -1,3 +1,4 @@
+
 import React from 'react'
 import ProductForm from '@/components/inventoryComponent/ProductForm' 
 

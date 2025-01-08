@@ -63,17 +63,17 @@ const updateSupplierState=(updatedSupplier:any)=>{
   };
 
   return (
-    <div className="bg-gray-100 relative min-h-screen">
-      <header className="bg-gray-800 text-white p-4 shadow-md">
+    <div className="bg-gray-100  min-h-screen">
+      {/* <header className="bg-gray-800 text-white p-4 shadow-md">
         <h2 className="text-3xl font-semibold text-center">Supplier</h2>
-      </header>
+      </header> */}
 
       <main className="flex-1 p-2 mt-2">
         <section className="grid grid-cols-4 gap-4 mb-4">
           <div className="bg-white p-4 rounded shadow">Total Supplier:{supplier.length}</div>
-          <div className="bg-white p-4 rounded shadow">Recent:Ram Bdr</div>
+          {/* <div className="bg-white p-4 rounded shadow">Recent:Ram Bdr</div>
           <div className="bg-white p-4 rounded shadow">Most Active (Month):Bidur</div>
-          <div className="bg-white p-4 rounded shadow">Least Active (Month):Mahesh</div>
+          <div className="bg-white p-4 rounded shadow">Least Active (Month):Mahesh</div> */}
         </section>
       </main>
       <SupplierTable onAddClick={viewForm}  onEditClick={handleEditClick} updatedValue={supplier} />

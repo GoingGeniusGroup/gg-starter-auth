@@ -10,7 +10,7 @@ const DashboardLayout = ({ children }: { children: ReactNode }) => {
   return (
     <div className="flex flex-col h-screen relative">
       {/* Topbar */}
-      <Topbar isCollapsed={isCollapsed} />
+      <Topbar isCollapsed={isCollapsed}  />
 
       <div className="flex flex-grow  ">
         {" "}
