@@ -64,3 +64,7 @@ export const virtualSchema=z.object({
   categoryId:z.string(),
   images: z.string()
 })
+
+export const virtualCategorySchema=z.object({
+  name: z.string().min(3, "At least 3 characters are needed"),
+})
