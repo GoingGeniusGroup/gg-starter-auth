@@ -91,6 +91,7 @@ export const login = async (payload: z.infer<typeof loginSchema>) => {
         success: true,
         code: 200,
         message: "Please confirm your two-factor authentication code.",
+        data: null,
       });
     }
   }

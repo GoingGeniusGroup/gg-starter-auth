@@ -40,7 +40,6 @@ export default auth(async (req) => {
         );
         return Response.redirect(redirectUrl);
       } else {
-        console.log(user);
         if (user === "User") {
           return Response.redirect(new URL("/", nextUrl));
         }

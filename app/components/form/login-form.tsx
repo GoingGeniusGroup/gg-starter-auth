@@ -12,10 +12,12 @@ import { useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
-// import { currentRole } from "@/app/lib/auth";
 
-export const LoginForm = ({ isMobile }: { isMobile: boolean }) => {
-  // const user = await currentRole();
+interface LoginFormProps {
+  isMobile: boolean;
+}
+
+export const LoginForm = ({ isMobile }: LoginFormProps) => {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
   const form = useForm<z.infer<typeof loginSchema>>({

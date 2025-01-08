@@ -42,10 +42,10 @@ type ResponseError = {
 
 export type ResponseWithMessage<T> =
   | {
+      data: any;
       success: true;
       code: ResponseCode;
       message: string;
-      data: T;
     }
   | ResponseError;
 
@@ -54,7 +54,7 @@ export type ResponseSuccess<T> =
       success: true;
       code: ResponseCode;
       message?: string;
-      data: T;
+      data: string;
     }
   | ResponseError;
 

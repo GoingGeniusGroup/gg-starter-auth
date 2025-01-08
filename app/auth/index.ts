@@ -31,7 +31,6 @@ export const {
   },
   callbacks: {
     async jwt({ token, user, account }) {
-      console.log("JWT Callback - Input:", { token, user, account });
       if (user) {
         token.id = user.id;
         token.email = user.email;
