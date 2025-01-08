@@ -76,9 +76,12 @@ const VirtualCategoryTable = () => {
                     <button className="text-green-500 hover:text-green-700 text-xl" aria-label="View">
                       <BiShow />
                     </button>
+                    <Link href={`/dashboard/virtualProduct/category/update/${category.id}`}>
                     <button className="text-blue-500 hover:text-blue-700 text-xl" aria-label="Edit">
                       <FaEdit />
                     </button>
+                    </Link>
+                  
                     <button className="text-red-500 hover:text-red-700 text-xl" aria-label="Delete">
                       <FaTrash />
                     </button>
