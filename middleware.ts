@@ -1,20 +1,22 @@
 "use client";
 
 import { authConfig } from "@/auth/config";
-import { apiAuthPrefix, authRoutes, publicRoutes, adminRoutes } from "@/routes";
+import { apiAuthPrefix, authRoutes, publicRoutes } from "@/routes";
 import NextAuth from "next-auth";
 import { NextResponse } from "next/server";
+import { currentRole } from "./app/lib/auth";
 
 export const { auth } = NextAuth(authConfig);
 
-export default auth((req) => {
+export default auth(async (req) => {
   const { nextUrl } = req;
   const isLoggedIn = !!req.auth;
+  const user = await currentRole();
 
   const isApiAuthRoute = nextUrl.pathname.startsWith(apiAuthPrefix);
   const isPublicRoutes = publicRoutes.includes(nextUrl.pathname);
   const isAuthRoutes = authRoutes.includes(nextUrl.pathname);
-  const isDashboardRoutes = adminRoutes.includes(nextUrl.pathname);
+  const isDashboardRoutes = nextUrl.pathname.startsWith("/dashboard");
 
   if (isApiAuthRoute) {
     return null;
@@ -38,8 +40,8 @@ export default auth((req) => {
         );
         return Response.redirect(redirectUrl);
       } else {
-        console.log(req.auth?.user);
-        if (req.auth?.user.role === "User") {
+        console.log(user);
+        if (user === "User") {
           return Response.redirect(new URL("/", nextUrl));
         }
       }
