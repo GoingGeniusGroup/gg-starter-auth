@@ -13,7 +13,8 @@ import { Input } from "@/components/ui/input1";
 import { LuListFilter } from "react-icons/lu";
 import { BiShow } from 'react-icons/bi';
 import { FaEdit, FaTrash, FaPlus } from "react-icons/fa"; 
-import { getVirtualCategory } from "@/action/virtualCategory";
+import { deleteVirtualCategory, getVirtualCategory } from "@/action/virtualCategory";
+import { toast } from "sonner";
 
 interface VCategory {
   name: string;
@@ -38,6 +39,26 @@ const VirtualCategoryTable = () => {
     }
     fetchInventory();
   }, []);
+  const removeCategory=async(categoryId:string)=>{
+    const confirmed=window.confirm("Are you sure you want to delete this category?");
+    if(confirmed){
+      try{
+        const response=await deleteVirtualCategory(categoryId);
+        if(response.success){
+          setCategories((prev)=>prev.filter((cat)=>cat.id!==categoryId))
+          toast.success("category deleted successfully")
+        }
+        else{
+          console.error("Failed to delete category")
+          toast.error("Failed to delete category")
+        }
+      }
+      catch(error){
+        console.error("Failed to delete category")
+        toast.error("Failed to delete category")
+      }
+    }
+   }
 
   return (
     <div>
@@ -82,7 +103,9 @@ const VirtualCategoryTable = () => {
                     </button>
                     </Link>
                   
-                    <button className="text-red-500 hover:text-red-700 text-xl" aria-label="Delete">
+                    <button
+                    onClick={()=>removeCategory(category.id)}
+                    className="text-red-500 hover:text-red-700 text-xl" aria-label="Delete">
                       <FaTrash />
                     </button>
                   </div>

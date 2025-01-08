@@ -125,3 +125,27 @@ export async function updateVirtualCategory(formData: FormData, categoryId: stri
     return { success: false, message: "An unexpected error occurred" };
   }
 }
+
+export async function deleteVirtualCategory(categoryId:string){
+    try{
+        const existingCategory=await db.virtualCategory.findUnique({
+            where:{id:categoryId}
+        })
+
+    if (!existingCategory) {
+        return { success: false, message: "Category not found" };
+      }
+
+    // Delete the category
+    await db.virtualCategory.delete({
+      where: { id: categoryId },
+    });
+    return { success: true, message: "Category deleted successfully" };
+
+    }
+    catch(error){
+        console.error("Unexpected error:", error);
+        return { success: false, message: "An unexpected error occurred" };
+    }
+
+}
