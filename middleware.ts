@@ -1,7 +1,8 @@
+"use client";
+
 import { authConfig } from "@/auth/config";
 import { apiAuthPrefix, authRoutes, publicRoutes, adminRoutes } from "@/routes";
 import NextAuth from "next-auth";
-import { UserRole } from "@prisma/client";
 import { NextResponse } from "next/server";
 
 export const { auth } = NextAuth(authConfig);
@@ -37,8 +38,8 @@ export default auth((req) => {
         );
         return Response.redirect(redirectUrl);
       } else {
-        console.log(req.auth);
-        if (!UserRole.Admin) {
+        console.log(req.auth?.user);
+        if (req.auth?.user.role === "User") {
           return Response.redirect(new URL("/", nextUrl));
         }
       }
