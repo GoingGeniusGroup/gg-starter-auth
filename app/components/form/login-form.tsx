@@ -13,7 +13,11 @@ import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
 
-export const LoginForm = ({ isMobile }: { isMobile: boolean }) => {
+interface LoginFormProps {
+  isMobile: boolean;
+}
+
+export const LoginForm = ({ isMobile }: LoginFormProps) => {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
   const form = useForm<z.infer<typeof loginSchema>>({
@@ -31,9 +35,9 @@ export const LoginForm = ({ isMobile }: { isMobile: boolean }) => {
         .then((data) => {
           if (!data) return;
           if (!data.success) {
-            return toast.error(data.error.message);
+            return toast.error(data.error?.message);
           }
-          if (data.code === 200 && data.message.includes("two-factor")) {
+          if (data.code === 200 && data.message?.includes("two-factor")) {
             toast.success(data.message);
             return router.push("/two-factor");
           }
@@ -43,11 +47,11 @@ export const LoginForm = ({ isMobile }: { isMobile: boolean }) => {
 
           // 2. Small delay to ensure toast is shown
           setTimeout(() => {
-            // 3. Reload the entire page
-            window.location.reload();
-
-            // 4. Optional: Replace current history entry with home page
-            window.location.href = "/";
+            if (data.data?.role === "Admin") {
+              router.push("/dashboard");
+            } else {
+              window.location.reload();
+            }
           }, 1000);
         })
         .catch(() => toast.error("Something went wrong."));

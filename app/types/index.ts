@@ -40,8 +40,9 @@ type ResponseError = {
   };
 };
 
-export type ResponseWithMessage =
+export type ResponseWithMessage<T> =
   | {
+      data: any;
       success: true;
       code: ResponseCode;
       message: string;
@@ -53,8 +54,10 @@ export type ResponseSuccess<T> =
       success: true;
       code: ResponseCode;
       message?: string;
-      data: T;
+      data: string;
     }
   | ResponseError;
 
-export type Response<T = boolean> = T extends object ? ResponseSuccess<T> : ResponseWithMessage;
+export type Response<T = boolean> = T extends object
+  ? ResponseSuccess<T>
+  : ResponseWithMessage<T>;
