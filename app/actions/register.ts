@@ -74,6 +74,7 @@ export const register = async (payload: z.infer<typeof registerSchema>) => {
   // Return a success response
   return response({
     success: true,
+    data: null,
     code: 201,
     message: email
       ? "Confirmation email sent. Please check your email."

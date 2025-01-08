@@ -86,6 +86,7 @@ export const profile = async (payload: z.infer<typeof profileSchema>) => {
       success: true,
       code: 201,
       message: "Confirmation email sent. Please check your email.",
+      data: null,
     });
   }
 
@@ -143,5 +144,6 @@ export const profile = async (payload: z.infer<typeof profileSchema>) => {
     success: true,
     code: 204,
     message: "Profile updated.",
+    data: null,
   });
 };

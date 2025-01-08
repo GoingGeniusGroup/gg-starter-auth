@@ -1,7 +1,7 @@
 "use server";
 
 import { db } from "@/app/lib/db";
-import { revalidatePath } from "next/cache";
+import { userAgent } from "next/server";
 
 interface KhaltiTopupParams {
   amount: number;
@@ -53,25 +53,11 @@ export async function khaltiTopup({
     }
 
     const khaltiData = await khaltiResponse.json();
-
-    // Create new topup data
-    const topup = await db.topup.create({
-      data: {
-        amount,
-        userId,
-        topupStatus: "PENDING",
-        topupType: "CREDIT",
-      },
-    });
-
-    // Revalidate path where the user topup might be displayed
-    revalidatePath("/user/topups");
+  
 
     return {
       success: true,
-      khaltiConfig: {
-        ...khaltiConfig,
-      },
+      transactionuuid,
       paymentUrl: khaltiData.payment_url,
     };
   } catch (error) {
@@ -80,5 +66,52 @@ export async function khaltiTopup({
       success: false,
       error: "Failed to initiate Khalti topup",
     };
+  }
+}
+
+//handle khalti payment status
+export async function handleKhaltiStatus(
+  transactionuuid: string,
+  status: "success" | "failed"
+) {
+  try {
+    console.log("Handling Khalti Status:", { transactionuuid, status });
+
+    // Query for the pending topup
+    const pendingTopup = await db.topup.findFirst({
+      where: {
+        topupStatus: "PENDING",
+        createdAt: new Date(parseInt(transactionuuid)),
+      },
+    });
+
+    if (!pendingTopup) {
+      console.error(
+        `No pending topup found for transactionuuid: ${transactionuuid}`
+      );
+      return {
+        success: false,
+        error: "No pending topup found for this transaction.",
+      };
+    }
+
+    // Update the status
+    const newStatus = status === "success" ? "SUCCESS" : "FAILED";
+
+    const updatedTopup = await db.topup.update({
+      where: { id: pendingTopup.id },
+      data: { topupStatus: newStatus },
+    });
+
+    console.log("Topup status updated successfully:", updatedTopup);
+
+    return {
+      success: true,
+      message: `Topup Status updated to ${newStatus} successfully`,
+      status: newStatus,
+    };
+  } catch (error) {
+    console.error("Error updating Khalti topup status:", error);
+    return { success: false, error: "Failed to update topup status" };
   }
 }

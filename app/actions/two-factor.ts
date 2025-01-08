@@ -101,5 +101,6 @@ export const resendTwoFactor = async (email: string) => {
     success: true,
     code: 201,
     message: "Two factor authentication code has been sent to your email.",
+    data: null,
   });
 };

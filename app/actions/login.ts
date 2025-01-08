@@ -91,6 +91,7 @@ export const login = async (payload: z.infer<typeof loginSchema>) => {
         success: true,
         code: 200,
         message: "Please confirm your two-factor authentication code.",
+        data: null,
       });
     }
   }
@@ -118,10 +119,19 @@ export const signInCredentials = async (login: string, password: string) => {
       });
     }
 
+    //check user to get userrole
+    const user =
+      (await getUserByEmail(login)) ||
+      (await getUserByPhone(login)) ||
+      (await getUserByUsername(login));
+
     return response({
       success: true,
       code: 200,
       message: "Login successful.",
+      data: {
+        role: user?.role || null,
+      },
     });
   } catch (error) {
     if (error instanceof AuthError) {
