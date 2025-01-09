@@ -36,7 +36,7 @@ export async function khaltiTopup({
     });
 
     const khaltiConfig = {
-      return_url: `${process.env.NEXT_PUBLIC_APP_URL}/topup/khaltiSuccess?transactionid=${newTopup.id}`,
+      return_url: `${process.env.NEXT_PUBLIC_APP_URL}/topupSuccess/khalti?transactionid=${newTopup.id}`,
       website_url: `${process.env.NEXT_PUBLIC_APP_URL}`,
       amount: Math.round(amount * 100),
       purchase_order_id: transactionId,
