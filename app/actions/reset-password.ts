@@ -62,5 +62,6 @@ export const resetPassword = async (
     success: true,
     code: 201,
     message: "Email has been sent. Please check to your email.",
+    data: null,
   });
 };

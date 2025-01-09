@@ -55,5 +55,6 @@ export const newVerification = async (token: string) => {
     success: true,
     code: 200,
     message: "Your email address has been verified.",
+    data: null,
   });
 };
