@@ -18,34 +18,8 @@ import { useRouter, useSearchParams } from "next/navigation";
 export default function PaymentGateway() {
   const { data: session } = useSession();
   const router = useRouter();
-  // const searchparams = useSearchParams();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
-
-  // useEffect(() => {
-  //   const checkKhaltiStatus = async () => {
-  //     const transactionuuid = searchparams.get("transactionuuid");
-  //     const status = searchparams.get("status");
-
-  //     if (transactionuuid && (status === "success" || status === "failed")) {
-  //       setIsLoading(true);
-  //       try {
-  //         const response = await handleKhaltiStatus(transactionuuid, status);
-  //         if (response.success) {
-  //           toast.success(`Khalti payment ${response.message}`);
-  //         } else {
-  //           setError(response.error || "failed to update khalti topup status");
-  //         }
-  //       } catch (error) {
-  //         setError("An error occured while updating payment status");
-  //       } finally {
-  //         setIsLoading(false);
-  //       }
-  //     }
-  //   };
-
-  //   checkKhaltiStatus();
-  // }, [searchparams]);
 
   if (!session) {
     return <div>Please login to proceed with the payment.</div>;

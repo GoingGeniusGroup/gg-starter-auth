@@ -36,7 +36,7 @@ export async function khaltiTopup({
     });
 
     const khaltiConfig = {
-      return_url: `${process.env.NEXT_PUBLIC_APP_URL}/api/khalti/success?transactionid=${newTopup.id}`,
+      return_url: `${process.env.NEXT_PUBLIC_APP_URL}/topup/khaltiSuccess?transactionid=${newTopup.id}`,
       website_url: `${process.env.NEXT_PUBLIC_APP_URL}`,
       amount: Math.round(amount * 100),
       purchase_order_id: transactionId,
@@ -67,15 +67,6 @@ export async function khaltiTopup({
       });
     }
 
-    await db.topup.update({
-      where: {
-        id: newTopup.id,
-      },
-      data: {
-        topupStatus: "SUCCESS",
-      },
-    });
-
     const khaltiData = await khaltiResponse.json();
 
     return {
@@ -91,49 +82,45 @@ export async function khaltiTopup({
   }
 }
 
-//handle khalti payment status
-// export async function handleKhaltiStatus(
-//   transactionuuid: string,
-//   status: "success" | "failed"
-// ) {
-//   try {
-//     console.log("Handling Khalti Status:", { transactionuuid, status });
+// handle khalti topup success
+export async function handleKhaltiSuccess(
+  transactionId: string,
+  pidx: string,
+  amount: number,
+  mobile: string,
+  purchase_order_name: string
+) {
+  try {
+    //Find the pending topup
+    const pendingTopup = await db.topup.findUnique({
+      where: { id: transactionId },
+      include: { user: true },
+    });
 
-//     // Query for the pending topup
-//     const pendingTopup = await db.topup.findFirst({
-//       where: {
-//         topupStatus: "PENDING",
-//         createdAt: new Date(parseInt(transactionuuid)),
-//       },
-//     });
+    if (!pendingTopup) {
+      throw new Error("Topup not found");
+    }
 
-//     if (!pendingTopup) {
-//       console.error(
-//         `No pending topup found for transactionuuid: ${transactionuuid}`
-//       );
-//       return {
-//         success: false,
-//         error: "No pending topup found for this transaction.",
-//       };
-//     }
+    //update the topup with khalti transaction details
+    const updatedTopup = await db.topup.update({
+      where: { id: transactionId },
+      data: {
+        topupStatus: "SUCCESS",
+      },
+    });
 
-//     // Update the status
-//     const newStatus = status === "success" ? "SUCCESS" : "FAILED";
-
-//     const updatedTopup = await db.topup.update({
-//       where: { id: pendingTopup.id },
-//       data: { topupStatus: newStatus },
-//     });
-
-//     console.log("Topup status updated successfully:", updatedTopup);
-
-//     return {
-//       success: true,
-//       message: `Topup Status updated to ${newStatus} successfully`,
-//       status: newStatus,
-//     };
-//   } catch (error) {
-//     console.error("Error updating Khalti topup status:", error);
-//     return { success: false, error: "Failed to update topup status" };
-//   }
-// }
+    return {
+      success: true,
+      topup: updatedTopup,
+      message: "Payment Processed Successfully",
+    };
+  } catch (error) {
+    console.error("Error handling Khalti Topup", error);
+    return {
+      success: false,
+      error: "Failed to process Khalti payment",
+      message:
+        error instanceof Error ? error.message : "Unknown error occurred",
+    };
+  }
+}
