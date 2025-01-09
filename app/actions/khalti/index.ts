@@ -36,7 +36,7 @@ export async function khaltiTopup({
     });
 
     const khaltiConfig = {
-      return_url: `${process.env.NEXT_PUBLIC_APP_URL}/topupSuccess/khalti?transactionid=${newTopup.id}`,
+      return_url: `${process.env.NEXT_PUBLIC_APP_URL}/khalti/success?transactionid=${newTopup.id}`,
       website_url: `${process.env.NEXT_PUBLIC_APP_URL}`,
       amount: Math.round(amount * 100),
       purchase_order_id: transactionId,
@@ -88,6 +88,7 @@ export async function handleKhaltiSuccess(
   pidx: string,
   amount: number,
   mobile: string,
+  status: string,
   purchase_order_name: string
 ) {
   try {
@@ -105,14 +106,22 @@ export async function handleKhaltiSuccess(
     const updatedTopup = await db.topup.update({
       where: { id: transactionId },
       data: {
-        topupStatus: "SUCCESS",
+        topupStatus: status === "Completed" ? "SUCCESS" : "FAILED",
       },
     });
 
     return {
       success: true,
-      topup: updatedTopup,
-      message: "Payment Processed Successfully",
+      topup: {
+        amount: updatedTopup.amount,
+        topupStatus: updatedTopup.topupStatus,
+        createdAt: updatedTopup.createdAt,
+        topupType: updatedTopup.topupType,
+      },
+      message:
+        status === "Completed"
+          ? "Payment Processed Successfully"
+          : "Payment Failed",
     };
   } catch (error) {
     console.error("Error handling Khalti Topup", error);
