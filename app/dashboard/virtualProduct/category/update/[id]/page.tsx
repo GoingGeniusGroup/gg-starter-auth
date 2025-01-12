@@ -16,7 +16,7 @@ interface Vcategory {
         id:string
     }
   }
-const updateCategory:React.FC<UpdateProps> = ({params}) => {
+const UpdateCategory:React.FC<UpdateProps> = ({params}) => {
       const router = useRouter();
       const{id}=params
       const[category,setCategory]=useState<Vcategory>()
@@ -105,4 +105,4 @@ const updateCategory:React.FC<UpdateProps> = ({params}) => {
   )
 }
 
-export default updateCategory
+export default UpdateCategory
