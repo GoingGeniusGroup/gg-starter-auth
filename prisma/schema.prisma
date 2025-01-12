@@ -157,24 +157,25 @@ model Supplier {
 }
 
 model Order {
-  id            String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  orderDate     DateTime      @default(now())
-  orderQuantity Int
-  deliveryDate  DateTime?
-  streetAddress String
-  state         String
-  city          String
-  orderStatus   OrderStatus   @default(PENDING)
-  discount      Float?
-  orderAmount   Float?
-  paymentId     String?       @unique @db.Uuid
-  paymentStatus Boolean       @default(false)
-  userId        String        @unique @db.Uuid
-  carts         Cart?         @relation("OrderCarts")
-  PaymentType   PaymentType?  @relation(fields: [paymentId], references: [id])
-  user          User          @relation(fields: [userId], references: [id], onDelete: Cascade)
-  SalesInvoice  SalesInvoice?
-  product       Product[]     @relation("ProductOrders")
+  id                    String                  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  orderDate             DateTime                @default(now())
+  orderQuantity         Int
+  deliveryDate          DateTime?
+  streetAddress         String
+  state                 String
+  city                  String
+  orderStatus           OrderStatus             @default(PENDING)
+  discount              Float?
+  orderAmount           Float?
+  paymentId             String?                 @unique @db.Uuid
+  paymentStatus         Boolean                 @default(false)
+  userId                String                  @unique @db.Uuid
+  carts                 Cart?                   @relation("OrderCarts")
+  PaymentType           PaymentType?            @relation(fields: [paymentId], references: [id])
+  user                  User                    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  SalesInvoice          SalesInvoice?
+  VirtualProductOnOrder VirtualProductOnOrder[]
+  product               Product[]               @relation("ProductOrders")
 }
 
 model PaymentType {
@@ -295,19 +296,29 @@ model VirtualCategory {
 }
 
 model VirtualProduct {
-  id              String          @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  name            String
-  price           Float
-  type            String
-  images          String[]
-  rating          Float
-  categoryId      String          @db.Uuid
-  description     String
-  src             String?
-  animation       String?
-  stockQuantity   Int
-  UserInventory   UserInventory[]
-  VirtualCategory VirtualCategory @relation(fields: [categoryId], references: [id])
+  id                    String                  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name                  String
+  price                 Float
+  type                  String
+  images                String[]
+  rating                Float
+  categoryId            String                  @db.Uuid
+  description           String
+  src                   String?
+  animation             String?
+  stockQuantity         Int
+  UserInventory         UserInventory[]
+  VirtualCategory       VirtualCategory         @relation(fields: [categoryId], references: [id])
+  VirtualProductOnOrder VirtualProductOnOrder[]
+}
+
+model VirtualProductOnOrder {
+  orderId          String         @db.Uuid
+  virtualProductId String         @db.Uuid
+  Order            Order          @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  VirtualProduct   VirtualProduct @relation(fields: [virtualProductId], references: [id], onDelete: Cascade)
+
+  @@id([orderId, virtualProductId])
 }
 
 enum UserRole {

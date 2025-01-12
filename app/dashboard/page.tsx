@@ -12,6 +12,11 @@ import {
   FaExclamationTriangle,
   FaShoppingCart,
   FaDollarSign,
+  FaDigitalOcean,
+  FaCloud,
+  FaCube,
+  FaUnity,
+  FaNetworkWired 
 } from "react-icons/fa";
 
 import { MdCategory, MdOutlineStorefront, MdInventory } from 'react-icons/md';
@@ -72,7 +77,15 @@ const InventoryManagement: React.FC = () => {
       name: "Virtual",
       num: 10,
       path:"/dashboard/virtualProduct",
-      icon: <FaBoxOpen className="text-4xl text-blue-600" />,
+      icon: <FaUnity className="text-4xl text-purple-500" />,
+
+    },
+    {
+      name: "Category",
+      num: 10,
+      path:"/dashboard/virtualProduct/category",
+      icon: <  FaNetworkWired className="text-4xl text-green-500" />,
+
     },
     {
       name: "Stock",
