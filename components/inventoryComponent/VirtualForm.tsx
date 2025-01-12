@@ -27,6 +27,7 @@ interface vProduct {
 }
 
 const VirtualForm = () => {
+  const uploadkey=process.env.NEXT_PUBLIC_UPLOADCARE_PUBLIC_KEY
   const router = useRouter();
   const [categories, setCategories] = useState<Category[]>([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -171,8 +172,7 @@ console.log('hello')
                 <FileUploaderRegular
   sourceList="local, url, gdrive"
   classNameUploader="uc-light"
-  // pubkey={process.env.NEXT_PUBLIC_UPLOADCARE_PUBLIC_KEY}
-  pubkey='6030cb6c891c7bd67e0b'
+  pubkey={`${uploadkey}`}
   onChange={(event) => {
     const file = event.successEntries[0];
     if (file) {
