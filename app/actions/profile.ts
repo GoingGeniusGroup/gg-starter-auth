@@ -24,7 +24,8 @@ export const profile = async (payload: z.infer<typeof profileSchema>) => {
     });
   }
 
-  let { name, email, password, newPassword, isTwoFactorEnabled } = validatedFields.data;
+  let { username, email, password, newPassword, isTwoFactorEnabled } =
+    validatedFields.data;
 
   // Check if current user does not exist, then return an error.
   const user = await currentUser();
@@ -67,20 +68,25 @@ export const profile = async (payload: z.infer<typeof profileSchema>) => {
         success: false,
         error: {
           code: 422,
-          message: "The email address you have entered is already in use. Please use another one.",
+          message:
+            "The email address you have entered is already in use. Please use another one.",
         },
       });
     }
 
     // Generate verification token, then send it to the email.
     const verificationToken = await generateVerificationToken(email);
-    await sendVerificationEmail(verificationToken.email, verificationToken.token);
+    await sendVerificationEmail(
+      verificationToken.email,
+      verificationToken.token
+    );
 
     // Return response success.
     return response({
       success: true,
       code: 201,
       message: "Confirmation email sent. Please check your email.",
+      data: null,
     });
   }
 
@@ -92,7 +98,10 @@ export const profile = async (payload: z.infer<typeof profileSchema>) => {
   // Check if password entered
   if (password && newPassword && existingUser.password) {
     // Check if passwords doesn't matches, then return an error.
-    const isPasswordMatch = await bcrypt.compare(password, existingUser.password);
+    const isPasswordMatch = await bcrypt.compare(
+      password,
+      existingUser.password
+    );
     if (!isPasswordMatch) {
       return response({
         success: false,
@@ -114,19 +123,27 @@ export const profile = async (payload: z.infer<typeof profileSchema>) => {
 
   // Update current user
   const updatedUser = await updateUserById(existingUser.id, {
-    name,
-    email,
+    email: email ? [email] : undefined,
     password,
     isTwoFactorEnabled,
   });
 
   // Update session
-  await update({ user: { ...updatedUser } });
+  await update({
+    user: {
+      name: updatedUser?.fullName,
+      username: updatedUser?.userName[0],
+      email: updatedUser?.email[0],
+      isTwoFactorEnabled: updatedUser?.isTwoFactorEnabled,
+      role: updatedUser?.role,
+    },
+  });
 
   // Return response success.
   return response({
     success: true,
     code: 204,
     message: "Profile updated.",
+    data: null,
   });
 };

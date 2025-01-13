@@ -10,7 +10,10 @@ import { redirect } from "next/navigation";
 import { z } from "zod";
 import { hashPassword, isExpired, response } from "@/lib/utils";
 
-export const newPassword = async (payload: z.infer<typeof newPasswordSchema>, token: string) => {
+export const newPassword = async (
+  payload: z.infer<typeof newPasswordSchema>,
+  token: string
+) => {
   // Check if user input is not valid, then return an error.
   const validatedFields = newPasswordSchema.safeParse(payload);
   if (!validatedFields.success) {
@@ -68,5 +71,6 @@ export const newPassword = async (payload: z.infer<typeof newPasswordSchema>, to
     success: true,
     code: 200,
     message: "Your password has been reset successfully.",
+    data: null,
   });
 };

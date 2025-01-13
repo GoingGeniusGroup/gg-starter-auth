@@ -1,12 +1,13 @@
 import {
-    FormControl,
-    FormField,
-    FormItem,
-    FormLabel,
-    FormMessage,
-} from "@/app/components/ui/form";
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
 import { cn } from "@/lib/utils";
-import { ChangeEvent, ComponentPropsWithRef, useState } from "react";
+import Image from "next/image";
+import React, { ChangeEvent, ComponentPropsWithRef, useState } from "react";
 import { Control, FieldValues, Path, useController } from "react-hook-form";
 
 type ImageInputProps<T extends FieldValues> = ComponentPropsWithRef<"input"> & {
@@ -56,10 +57,14 @@ const ImageInput = <T extends FieldValues>(props: ImageInputProps<T>) => {
                   )}
                 >
                   {imageSrc ? (
-                    <img
+                    <Image
                       src={imageSrc as string}
                       alt="Selected file"
                       className="object-cover w-full h-full"
+                      unoptimized
+                      loading="lazy"
+                      height={100}
+                      width={100}
                     />
                   ) : (
                     <span className=" text-sm text-gray-500 text-center">

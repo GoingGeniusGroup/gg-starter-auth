@@ -1,5 +1,9 @@
 import { loginSchema } from "@/schemas";
-import { getUserByEmail } from "@/services/user";
+import {
+  getUserByEmail,
+  getUserByPhone,
+  getUserByUsername,
+} from "@/services/user";
 import { UserRole } from "@prisma/client";
 import bcrypt from "bcryptjs";
 import Credentials from "next-auth/providers/credentials";
@@ -11,21 +15,33 @@ export const CredentialsProvider = Credentials({
     const validatedFields = loginSchema.safeParse(credentials);
 
     if (validatedFields.success) {
-      const { email, password } = validatedFields.data;
+      const { login, password } = validatedFields.data;
 
-      const user = await getUserByEmail(email);
+      let user =
+        (await getUserByEmail(login)) ||
+        (await getUserByPhone(login)) ||
+        (await getUserByUsername(login));
+
       if (!user || !user.password) return null;
 
       const passwordsMatch = await bcrypt.compare(password, user.password);
 
       if (passwordsMatch) {
+        //extract the email and username from the array
+        const userName = Array.isArray(user.userName)
+          ? user.userName[0]
+          : user.userName;
+
+        const userEmail = Array.isArray(user.email)
+          ? user.email[0]
+          : user.email;
         return {
           id: user.id,
-          name: user.name,
-          email: user.email,
+          name: userName,
+          email: userEmail,
           role: user.role,
           isTwoFactorEnabled: user.isTwoFactorEnabled,
-          isOAuth: false
+          isOAuth: false,
         };
       }
     }
@@ -45,7 +61,7 @@ export const GithubProvider = Github({
       image: profile.avatar_url,
       role: UserRole.User,
       isTwoFactorEnabled: false,
-      isOAuth: true
+      isOAuth: true,
     };
   },
 });
@@ -61,7 +77,7 @@ export const GoogleProvider = Google({
       image: profile.picture,
       role: UserRole.User,
       isTwoFactorEnabled: false,
-      isOAuth: true
+      isOAuth: true,
     };
   },
   authorization: {

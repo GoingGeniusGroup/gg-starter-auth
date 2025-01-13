@@ -1,14 +1,15 @@
 "use server";
 
-import { registerSchema } from "@/schemas";
-import { z } from "zod";
-import { createUser, getUserByEmail } from "@/services/user";
-import { generateVerificationToken } from "@/services/verification-token";
-import { sendVerificationEmail } from "@/services/mail";
 import { hashPassword, response } from "@/lib/utils";
+import { registerSchema } from "@/schemas";
+// import { sendVerificationSMS } from "@/services/sms"; // A hypothetical service for sending SMS
+import { sendVerificationEmail } from "@/services/mail";
+import { createUser, getUserByEmail, getUserByPhone } from "@/services/user";
+import { generateVerificationToken } from "@/services/verification-token";
+import { z } from "zod";
 
 export const register = async (payload: z.infer<typeof registerSchema>) => {
-  // Check if user input is not valid.
+  // Validate the input fields
   const validatedFields = registerSchema.safeParse(payload);
   if (!validatedFields.success) {
     return response({
@@ -19,34 +20,64 @@ export const register = async (payload: z.infer<typeof registerSchema>) => {
       },
     });
   }
-  const { name, email, password } = validatedFields.data;
 
-  // Check if user already exist, then return an error.
-  const existingUser = await getUserByEmail(email);
-  if (existingUser) {
+  // Extract the fields from the validated payload
+  const { username, email, password, phone_number } = validatedFields.data;
+
+  // Check if user already exists by email (if provided) or phone number
+  if (email) {
+    const existingUserByEmail = await getUserByEmail(email);
+    if (existingUserByEmail) {
+      return response({
+        success: false,
+        error: {
+          code: 422,
+          message: "Email address already exists. Please use another one.",
+        },
+      });
+    }
+  }
+
+  const existingUserByPhoneNumber = await getUserByPhone(phone_number);
+  if (existingUserByPhoneNumber) {
     return response({
       success: false,
       error: {
         code: 422,
-        message: "Email address already exists. Please use another one.",
+        message: "Phone number already exists. Please use another one.",
       },
     });
   }
 
-  // Hash password that user entered.
+  // Hash the user's password
   const hashedPassword = await hashPassword(password);
 
-  // Create an user.
-  await createUser({ name, email, password: hashedPassword });
+  // Create the user
+  await createUser({
+    userName: username ? [username as string] : undefined,
+    email: email ? [email as string] : undefined,
+    password: hashedPassword,
+    mobilePhone: phone_number ? [phone_number as string] : undefined,
+  });
 
-  // Generate verification token, then send it to the email.
-  const verificationToken = await generateVerificationToken(email);
-  await sendVerificationEmail(verificationToken.email, verificationToken.token);
+  // Generate a verification token and send verification (SMS or email)
+  const verificationToken = await generateVerificationToken(phone_number);
 
-  // Return response success.
+  if (email) {
+    await sendVerificationEmail(email, verificationToken.token);
+  }
+
+  // else {
+  //   await sendVerificationSMS(phone_number, verificationToken.token); // Use SMS for phone-only registration
+  // }
+
+  // Return a success response
   return response({
     success: true,
+    data: null,
     code: 201,
-    message: "Confirmation email sent. Please check your email.",
+    message: email
+      ? "Confirmation email sent. Please check your email."
+      : "Verification SMS sent. Please check your phone.",
   });
 };
