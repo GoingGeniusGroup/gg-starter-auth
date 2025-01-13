@@ -1,10 +1,10 @@
 "use client";
 
 import { resendTwoFactor, twoFactor } from "@/actions/two-factor";
-import { CardWrapper } from "@/app/components/auth/card-wrapper";
-import { FormInput } from "@/app/components/auth/form-input";
-import { Button } from "@/app/components/ui/button";
-import { Form } from "@/app/components/ui/form";
+import { CardWrapper } from "@/components/auth/card-wrapper";
+import { FormInput } from "@/components/auth/form-input";
+import { Button } from "@/components/ui/button/button";
+import { Form } from "@/components/ui/form";
 import { loginSchema, twoFactorSchema } from "@/schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useTransition } from "react";
@@ -38,7 +38,7 @@ export const TwoFactorForm = ({ payload }: TwoFactorFormProps) => {
 
   const handleResend = () => {
     startTransition(() => {
-      resendTwoFactor(payload.email).then((data) => {
+      resendTwoFactor(payload.login).then((data) => {
         if (data.success) {
           return toast.success(data.message);
         }

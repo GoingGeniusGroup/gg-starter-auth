@@ -57,12 +57,16 @@ const BusinessCardFront: React.FC<BusinessCardFrontProps> = ({
       {/*left side*/}
       <div className="flex flex-col space-y-8">
         <CardHeader className="flex flex-col space-y-0">
-          <CardTitle className="text-[14px]">{data.Name}</CardTitle>
-          <CardDescription className="text-[8px]">{data.Field}</CardDescription>
+          <CardTitle className="text-[14px] text-gray-800">
+            {data.Name}
+          </CardTitle>
+          <CardDescription className="text-[8px] text-gray-800">
+            {data.Field}
+          </CardDescription>
         </CardHeader>
         <CardContent className="space-y-2">
           {data.details.map((detail) => (
-            <div key={detail.id} className="flex space-x-2">
+            <div key={detail.id} className="flex space-x-2 text-gray-800">
               <span className="flex items-center justify-center py-[3px] px-[3px] bg-[#2bbe9b] rounded-[2px] text-white">
                 {detail.icon}
               </span>
@@ -84,8 +88,8 @@ const BusinessCardFront: React.FC<BusinessCardFrontProps> = ({
           xmlns="http://www.w3.org/2000/svg"
         >
           <path
-            fill-rule="evenodd"
-            clip-rule="evenodd"
+            fillRule="evenodd"
+            clipRule="evenodd"
             d="M30.5005 78.5C15.9279 55.3334 1.0761 29.6536 0.34375 0H26.2483C30.7184 16.7575 39.1366 40.6042 54.0005 73C74.4512 117.572 73.6776 160.712 67.0559 192H42.3314C55.436 164.7 63.1014 130.327 30.5005 78.5Z"
             fill="#2BBE9B"
           />
@@ -101,8 +105,8 @@ const BusinessCardFront: React.FC<BusinessCardFrontProps> = ({
           xmlns="http://www.w3.org/2000/svg"
         >
           <path
-            fill-rule="evenodd"
-            clip-rule="evenodd"
+            fillRule="evenodd"
+            clipRule="evenodd"
             d="M30.1853 79C15.5309 55.7033 0.594102 29.8651 0.0175781 0H25.8004C30.2357 16.782 38.6729 40.7807 53.6853 73.5C74.0274 117.835 73.37 160.753 66.8458 192H42.2552C55.2128 164.781 62.5875 130.511 30.1853 79Z"
             fill="#287B67"
           />
@@ -118,8 +122,8 @@ const BusinessCardFront: React.FC<BusinessCardFrontProps> = ({
           xmlns="http://www.w3.org/2000/svg"
         >
           <path
-            fill-rule="evenodd"
-            clip-rule="evenodd"
+            fillRule="evenodd"
+            clipRule="evenodd"
             d="M164 0H0.77564C-0.719816 27.4658 8.85106 49.7127 23.185 72.5C55.8398 124.413 45.83 162.309 31.1499 192H164V0Z"
             fill="#141717"
           />
