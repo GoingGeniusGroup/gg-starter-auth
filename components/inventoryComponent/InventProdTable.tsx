@@ -59,8 +59,8 @@ const InventProdTable = () => {
     },[])
   return (
     <div className="p-2 ">
-        <div className="flex justify-between items-center h-[55px] px-4 bg-white my-2 mb-3 rounded">
-        <div className="flex items-center py-4 w-1/4 gap-2">
+        <div className="flex justify-between items-center h-[55px] dark:bg-black/40 px-4 bg-white my-2 mb-3 rounded">
+        <div className="flex items-center  py-4 w-1/4 gap-2">
             <Input type="text" placeholder="search"  />
         <button type="button" className="flex items-center justify-center  p-2 rounded hover:bg-gray-300">
           <LuListFilter className="w-5 h-5" />
@@ -77,7 +77,7 @@ const InventProdTable = () => {
        </div>
 
     
-    <Table className="w-full border-collapse border  shadow rounded  bg-white" >
+    <Table className="w-full border-collapse border dark:bg-black/40 shadow rounded  bg-white" >
         {/* <TableCaption>A list of your products in inventory.</TableCaption> */}
         <TableHeader>
           <TableRow>
