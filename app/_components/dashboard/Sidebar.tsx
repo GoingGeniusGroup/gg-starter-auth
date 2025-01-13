@@ -2,9 +2,9 @@
 import { usePathname } from "next/navigation";
 import { useEffect } from "react";
 import Image from "next/image";
-import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
+import { FiChevronsLeft, FiChevronsRight } from "react-icons/fi";
 import Link from "next/link";
-
+// import { motion } from "framer-motion";
 const menuItems = [
   {
     name: "Dashboard",
@@ -138,9 +138,9 @@ const Sidebar: React.FC<{
           }`}
         >
           {isCollapsed ? (
-            <FiChevronRight size={30} />
+            <FiChevronsRight size={30} />
           ) : (
-            <FiChevronLeft size={30} />
+            <FiChevronsLeft size={30} />
           )}
         </span>
       </button>
