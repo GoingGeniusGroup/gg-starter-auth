@@ -25,7 +25,7 @@ const menuItems = [
   {
     name: "Order",
     iconPath: "/assets/orderIcon.svg",
-    path: "/dashboard/order",
+    path: "/dashboard/virtualOrder",
   },
   {
     name: "Virtual",
