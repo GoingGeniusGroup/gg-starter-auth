@@ -12,6 +12,7 @@ import { ThemeSwitcher } from "./components/ThemeToggler/ThemeSwitcher";
 import FloatingDockInvertedComponent from "./components/dock/FloatingDockInverted";
 import { ToastProvider } from "./providers/toast-provider";
 import { UserProvider } from "./hooks/UserProvider";
+
 // import {
 //   AvatarProvider,
 //   AvatarType,
@@ -48,19 +49,19 @@ export default async function RootLayout({
                   defaultTheme="system"
                   enableSystem
                 >
-                  <AuroraBackground>
+                  {/* <AuroraBackground> */}
                     <UserProvider>
                       {/* Theme switcher */}
-                      <div className="absolute top-[8px] right-[73px] z-50">
+                      {/* <div className="absolute top-[8px] right-[73px] z-50">
                         <ThemeSwitcher />
-                      </div>
+                      </div> */}
 
                       {/* Dock section */}
-                      <div className="w-full z-40">
+                      {/* <div className="w-full z-40">
                         <div className="p-4 text-black dark:text-white">
                           <FloatingDockInvertedComponent />
                         </div>
-                      </div>
+                      </div> */}
 
                       {/* Content section */}
                       <div className="flex-1 px-8 py-4 w-full overflow-auto">
@@ -68,7 +69,7 @@ export default async function RootLayout({
                       </div>
                     </UserProvider>
                     <ToastProvider />
-                  </AuroraBackground>
+                  {/* </AuroraBackground> */}
                 </ThemeProvider>
               </MobileSimulatorProvider>
             </Providers>
@@ -91,18 +92,18 @@ export default async function RootLayout({
         <Providers>
           <MobileSimulatorProvider>
             <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-              <AuroraBackground>
+              {/* <AuroraBackground> */}
                 <UserProvider>
                   {/* Theme switcher */}
-                  <div className="absolute top-[8px] right-[73px] z-50">
+                  {/* <div className="absolute top-[8px] right-[73px] z-50">
                     <ThemeSwitcher />
-                  </div>
+                  </div> */}
 
                   {/* Dock section */}
                   <div className="w-full z-40">
-                    <div className="p-4 text-black dark:text-white">
+                    {/* <div className="p-4 text-black dark:text-white">
                       <FloatingDockInvertedComponent />
-                    </div>
+                    </div> */}
                   </div>
 
                   {/* Content section */}
@@ -111,7 +112,7 @@ export default async function RootLayout({
                   </div>
                 </UserProvider>
                 <ToastProvider />
-              </AuroraBackground>
+              {/* </AuroraBackground> */}
             </ThemeProvider>
           </MobileSimulatorProvider>
         </Providers>

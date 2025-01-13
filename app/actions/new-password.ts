@@ -71,5 +71,6 @@ export const newPassword = async (
     success: true,
     code: 200,
     message: "Your password has been reset successfully.",
+    data: null,
   });
 };

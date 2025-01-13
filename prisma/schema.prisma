@@ -7,7 +7,6 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-// Account Modal
 model Account {
   id                String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   accountType       String
@@ -26,42 +25,34 @@ model Account {
   @@unique([provider, providerAccountId])
 }
 
-enum UserRole {
-  Admin
-  User
-}
-
-//user Modal
 model User {
-  id                     String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  id                     String                 @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   fullName               String?
   userName               String[]
-  email                  String[]  @unique
+  email                  String[]               @unique
   mobilePhone            String[]
   emailVerified          DateTime?
   imageUser              String[]
   password               String?
-  role                   UserRole  @default(User)
-  isTwoFactorEnabled     Boolean   @default(false)
-  address                String[]  @db.VarChar(50)
-  faculty                String?   @db.VarChar(50)
-  emergencyContactNumber String?   @db.VarChar(50)
-  emergencyContactName   String?   @db.VarChar(50)
+  role                   UserRole               @default(User)
+  isTwoFactorEnabled     Boolean                @default(false)
+  address                String[]               @db.VarChar(50)
+  faculty                String?                @db.VarChar(50)
+  emergencyContactNumber String?                @db.VarChar(50)
+  emergencyContactName   String?                @db.VarChar(50)
   enrollDate             DateTime?
   expireDate             DateTime?
-
-  // Relations
-  accounts              Account[]
-  Cart                  Cart[]
-  Order                 Order[]
-  Topup                 Topup[]
-  cards                 cards[]
-  visitProfile          visitprofile[]
-  TwoFactorConfirmation TwoFactorConfirmation?
-  UserPaymentMethod     UserPaymentMethod[]
+  accounts               Account?
+  Cart                   Cart?
+  Order                  Order[]
+  Topup                  Topup[]
+  TwoFactorConfirmation  TwoFactorConfirmation?
+  UserInventory          UserInventory[]
+  UserPaymentMethod      UserPaymentMethod[]
+  cards                  cards[]
+  visitProfile           visitprofile[]
 }
 
-// Verification Token Modal
 model VerificationToken {
   id      String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   email   String
@@ -71,7 +62,6 @@ model VerificationToken {
   @@unique([email, token])
 }
 
-// Reset Password modal
 model ResetPasswordToken {
   id      String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   email   String
@@ -81,7 +71,6 @@ model ResetPasswordToken {
   @@unique([email, token])
 }
 
-// TwoFactorToken
 model TwoFactorToken {
   id      String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   email   String
@@ -91,7 +80,6 @@ model TwoFactorToken {
   @@unique([email, token])
 }
 
-// TwoFactorConfirmation
 model TwoFactorConfirmation {
   id      String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   expires DateTime
@@ -99,34 +87,31 @@ model TwoFactorConfirmation {
   user    User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
-//Product Modal
 model Product {
-  id            String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  name          String
-  description   String?
-  imageUrl      String[]
-  salePrice     Float?
-  costPrice     Float?
-  stockQuantity Int
-  brand         String?
-  rating        Int
-  categoryId    String   @unique @db.Uuid
-  reviews       String[]
-  isFeatured    Boolean? @default(false)
-  taxId         String?  @unique @db.Uuid
-  discount      Float?
-  status        Boolean  @default(true)
-
-  carts          Cart[]
+  id             String          @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name           String
+  description    String?
+  imageUrl       String[]
+  salePrice      Float?
+  costPrice      Float?
+  stockQuantity  Int
+  brand          String?
+  rating         Int
+  categoryId     String          @unique @db.Uuid
+  reviews        String[]
+  isFeatured     Boolean?        @default(false)
+  taxId          String?         @unique @db.Uuid
+  discount       Float?
+  status         Boolean         @default(true)
+  carts          Cart?
   inventory      Inventory?
-  category       Category         @relation(fields: [categoryId], references: [id])
-  Tax            Tax?             @relation(fields: [taxId], references: [id])
-  productVariant ProductVariant[]
-  order          Order[]          @relation("ProductOrders")
-  Supplier       Supplier[]       @relation("ProductToSupplier")
+  category       Category        @relation(fields: [categoryId], references: [id])
+  Tax            Tax?            @relation(fields: [taxId], references: [id])
+  productVariant ProductVariant?
+  order          Order[]         @relation("ProductOrders")
+  Supplier       Supplier[]      @relation("ProductToSupplier")
 }
 
-// Cart Modal
 model Cart {
   id             String           @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   quantity       Int
@@ -141,33 +126,25 @@ model Cart {
   ProductVariant ProductVariant[] @relation("CartToProductVariant")
 }
 
-// Variant Modal
 model Variant {
-  id             String           @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  id             String          @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   name           String
-  status         Boolean          @default(true)
-  ProductVariant ProductVariant[]
+  status         Boolean         @default(true)
+  ProductVariant ProductVariant?
   VariantOption  VariantOption[]
 }
 
-//Inventory Modal
 model Inventory {
   id                String               @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   stockStatus       inventoryStockStatus @default(AVAILABLE)
   quantityAvailable Int
-  thresholdValue    Int //Low quantity alert
+  thresholdValue    Int
   stockUpdatedDate  DateTime
   address           String?
   createdAt         DateTime             @default(now())
   updatedAt         DateTime             @updatedAt
   productId         String               @unique @db.Uuid
   product           Product              @relation(fields: [productId], references: [id])
-}
-
-enum inventoryStockStatus {
-  AVAILABLE
-  LOWSTOCK
-  NOTAVAILABLE
 }
 
 model Supplier {
@@ -179,42 +156,35 @@ model Supplier {
   Product      Product[] @relation("ProductToSupplier")
 }
 
-//Order Modal
 model Order {
-  id            String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  orderDate     DateTime      @default(now())
-  orderQuantity Int
-  deliveryDate  DateTime?
-  streetAddress String
-  state         String
-  city          String
-  orderStatus   OrderStatus   @default(PENDING)
-  discount      Float?
-  orderAmount   Float?
-  paymentId     String?       @unique @db.Uuid
-  paymentStatus Boolean       @default(false)
-  userId        String        @unique @db.Uuid
-  carts         Cart[]        @relation("OrderCarts")
-  PaymentType   PaymentType?  @relation(fields: [paymentId], references: [id])
-  user          User          @relation(fields: [userId], references: [id], onDelete: Cascade)
-  SalesInvoice  SalesInvoice?
-  product       Product[]     @relation("ProductOrders")
+  id                    String                  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  orderDate             DateTime                @default(now())
+  orderQuantity         Int
+  deliveryDate          DateTime?
+  streetAddress         String
+  state                 String
+  city                  String
+  orderStatus           OrderStatus             @default(PENDING)
+  discount              Float?
+  orderAmount           Float?
+  paymentId             String?                 @unique @db.Uuid
+  paymentStatus         Boolean                 @default(false)
+  userId                String                  @db.Uuid
+  carts                 Cart?                   @relation("OrderCarts")
+  PaymentType           PaymentType?            @relation(fields: [paymentId], references: [id])
+  user                  User                    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  SalesInvoice          SalesInvoice?
+  VirtualProductOnOrder VirtualProductOnOrder[]
+  product               Product[]               @relation("ProductOrders")
 }
 
-//Payement Type Modal
 model PaymentType {
   id                String              @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   paymentType       paymentType         @default(CARD)
-  Order             Order[]
+  Order             Order?
   UserPaymentMethod UserPaymentMethod[]
 }
 
-enum paymentType {
-  CASH
-  CARD
-}
-
-//productVatiant Modal
 model ProductVariant {
   id              String         @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   var_id          String         @unique @db.Uuid
@@ -233,7 +203,6 @@ model ProductVariant {
   Cart            Cart[]         @relation("CartToProductVariant")
 }
 
-// SalesInvoice Modal
 model SalesInvoice {
   id          String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   invoiceDate DateTime @default(now())
@@ -244,20 +213,19 @@ model SalesInvoice {
   Tax         Tax[]    @relation("SalesInvoiceToTax")
 }
 
-//Tax Modal
 model Tax {
   id           String         @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   name         String
   rate         Float
   description  String?
-  Product      Product[]
+  Product      Product?
   SalesInvoice SalesInvoice[] @relation("SalesInvoiceToTax")
 }
 
 model UserPaymentMethod {
   id             String      @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  userId         String      @unique @db.Uuid
-  typeId         String      @unique @db.Uuid
+  userId         String      @db.Uuid
+  typeId         String      @db.Uuid
   provider       String?
   account_number String?
   expiry_date    DateTime?
@@ -266,29 +234,26 @@ model UserPaymentMethod {
   User           User        @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
-// VatiantOption Modal
 model VariantOption {
-  id             String           @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  id             String          @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   value          String
-  var_id         String           @unique @db.Uuid
+  var_id         String          @db.Uuid
   variantName    String?
-  ProductVariant ProductVariant[]
-  Variant        Variant          @relation(fields: [var_id], references: [id])
+  ProductVariant ProductVariant?
+  Variant        Variant         @relation(fields: [var_id], references: [id])
 }
 
-//category Modal
 model Category {
-  id                  String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  id                  String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   categoryName        String
   categoryDescription String?
   categoryImage       String[]
-  products            Product[]
+  products            Product?
 }
 
-//VisitProfile Modal
 model visitprofile {
   id         String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  userId     String        @unique @db.Uuid
+  userId     String        @db.Uuid
   visitedBy  String?
   type       ReactionType?
   visitCount Int
@@ -297,15 +262,79 @@ model visitprofile {
   User       User          @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: NoAction)
 }
 
-//Top up modal
 model Topup {
   id          String      @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   amount      Float
-  userId      String      @unique @db.Uuid
+  userId      String      @db.Uuid
   topupType   TopupType   @default(CREDIT)
   topupStatus TopupStatus @default(PENDING)
-  user        User        @relation(fields: [userId], references: [id])
   createdAt   DateTime    @default(now())
+  user        User        @relation(fields: [userId], references: [id])
+}
+
+model cards {
+  id              String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId          String   @db.Uuid
+  cardType        cardType @default(BUSINESS)
+  backgroundImage String[]
+  user            User     @relation(fields: [userId], references: [id])
+}
+
+model UserInventory {
+  id             Int            @id @default(autoincrement())
+  userId         String         @db.Uuid
+  productId      String         @db.Uuid
+  quantity       Int            @default(1)
+  VirtualProduct VirtualProduct @relation(fields: [productId], references: [id])
+  User           User           @relation(fields: [userId], references: [id])
+}
+
+model VirtualCategory {
+  id             String           @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name           String
+  VirtualProduct VirtualProduct[]
+}
+
+model VirtualProduct {
+  id                    String                  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name                  String
+  price                 Float
+  type                  String
+  images                String[]
+  rating                Float
+  categoryId            String                  @db.Uuid
+  description           String
+  src                   String?
+  animation             String?
+  stockQuantity         Int
+  UserInventory         UserInventory[]
+  VirtualCategory       VirtualCategory         @relation(fields: [categoryId], references: [id])
+  VirtualProductOnOrder VirtualProductOnOrder[]
+}
+
+model VirtualProductOnOrder {
+  orderId          String         @db.Uuid
+  virtualProductId String         @db.Uuid
+  Order            Order          @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  VirtualProduct   VirtualProduct @relation(fields: [virtualProductId], references: [id], onDelete: Cascade)
+
+  @@id([orderId, virtualProductId])
+}
+
+enum UserRole {
+  Admin
+  User
+}
+
+enum inventoryStockStatus {
+  AVAILABLE
+  LOWSTOCK
+  NOTAVAILABLE
+}
+
+enum paymentType {
+  CASH
+  CARD
 }
 
 enum TopupStatus {
@@ -318,15 +347,6 @@ enum TopupType {
   CREDIT
   CASH
   GGCOIN
-}
-
-//card modal membership
-model cards {
-  id              String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  userId          String   @unique @db.Uuid
-  user            User     @relation(fields: [userId], references: [id])
-  cardType        cardType @default(BUSINESS)
-  backgroundImage String[]
 }
 
 enum cardType {
