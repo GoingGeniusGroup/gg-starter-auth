@@ -46,7 +46,7 @@ const Topbar = ({ isCollapsed }: { isCollapsed: boolean }) => {
         isCollapsed ? "pl-[105px]" : "pl-64"
       }`}
     >
-      <div className="container flex h-14 items-center">
+      <div className="container flex h-10 items-center">
         {/* Search Bar */}
         <div className="flex flex-1 items-center gap-2">
           <div className="relative w-[300px] lg:w-[400px]">
@@ -134,7 +134,7 @@ const Topbar = ({ isCollapsed }: { isCollapsed: boolean }) => {
               </div>
             )}
           </div>
-          <div className=" z-50">
+          <div className=" z-55">
                  <ThemeSwitcher />
            </div>
           

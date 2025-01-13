@@ -3,7 +3,7 @@ import React from 'react'
 
 const page = () => {
   return (
-    <div className='bg-gray-100'>
+    <div className=''>
   
     {/* <header className="bg-gray-800 text-white p-4 shadow-md">
       <h2 className="text-3xl font-semibold text-center">Stocks </h2>
