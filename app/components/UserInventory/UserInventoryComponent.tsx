@@ -56,6 +56,7 @@ function InventoryCard({
 export default function UserInventoryComponent() {
   const [inventoryItems, setInventoryItems] = useState<any[]>([]);
   const [equippedItems, setEquippedItems] = useState<number[]>([]);
+  const [searchTerm, setSearchTerm] = useState("");
 
   const handleClick = (id: number) => {
     setEquippedItems((prev) =>
@@ -74,7 +75,19 @@ export default function UserInventoryComponent() {
     fetchInventory();
   }, []);
 
-  console.log(inventoryItems);
+  const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchTerm(event.target.value);
+  };
+
+  const searchedItems = inventoryItems.filter((item) => {
+    const nameMatch = item.VirtualProduct.name
+      .toLowerCase()
+      .includes(searchTerm.toLowerCase());
+    const descriptionMatch = item.VirtualProduct.description
+      .toLowerCase()
+      .includes(searchTerm.toLowerCase());
+    return nameMatch || descriptionMatch;
+  });
 
   return (
     <div className="h-full p-4 overflow-auto bg-white pt-6">
@@ -83,7 +96,16 @@ export default function UserInventoryComponent() {
         <p className="text-center text-gray-600">No items in the inventory.</p>
       ) : (
         <div className="flex flex-col space-y-4 max-w-md mx-auto">
-          {inventoryItems.map((item) => (
+          <div className="mb-4 flex items-center gap-2">
+            <input
+              type="text"
+              placeholder="Search items..."
+              value={searchTerm}
+              onChange={handleSearchChange}
+              className="w-full rounded-md border px-2 py-2"
+            />
+          </div>
+          {searchedItems.map((item) => (
             <InventoryCard
               key={item.id}
               item={item}
