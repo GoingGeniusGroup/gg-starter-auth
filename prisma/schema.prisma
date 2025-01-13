@@ -44,7 +44,7 @@ model User {
   expireDate             DateTime?
   accounts               Account?
   Cart                   Cart?
-  Order                  Order?
+  Order                  Order[]
   Topup                  Topup[]
   TwoFactorConfirmation  TwoFactorConfirmation?
   UserInventory          UserInventory[]
@@ -169,7 +169,7 @@ model Order {
   orderAmount           Float?
   paymentId             String?                 @unique @db.Uuid
   paymentStatus         Boolean                 @default(false)
-  userId                String                  @unique @db.Uuid
+  userId                String                  @db.Uuid
   carts                 Cart?                   @relation("OrderCarts")
   PaymentType           PaymentType?            @relation(fields: [paymentId], references: [id])
   user                  User                    @relation(fields: [userId], references: [id], onDelete: Cascade)

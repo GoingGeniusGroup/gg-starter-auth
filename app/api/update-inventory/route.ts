@@ -70,11 +70,11 @@ export async function POST(req: Request) {
             orderStatus: 'DELIVERED',
             orderAmount: (session.amount_total ?? 0) / 100,
             paymentStatus: true,
-            virtualProducts: {
-              create: cartItems.map((item: any) => ({
-                virtualProductId: item.id,
-              }))
-            }
+            // virtualProducts: {
+            //   create: cartItems.map((item: any) => ({
+            //     virtualProductId: item.id,
+            //   }))
+            // }
           }
         });
       })
