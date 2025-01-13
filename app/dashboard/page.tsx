@@ -39,6 +39,7 @@ const InventoryManagement: React.FC = () => {
     //   icon: <FaClipboardList className="text-4xl text-green-600" />,
     // },
 
+
     {
       name: "Categories",
       num: 10,
@@ -69,6 +70,12 @@ const InventoryManagement: React.FC = () => {
       path: "/dashboard/supplier",
       icon: <FaTruckLoading className="text-4xl text-yellow-600" />,
     },
+    {
+      name: "Stock",
+      num: 500,
+      path:"/dashboard/inventory",
+      icon: <FaCubes className="text-4xl text-teal-600" />,
+    },
     // {
     //   name: "Warehouse",
     //   num: 5,
@@ -76,23 +83,24 @@ const InventoryManagement: React.FC = () => {
     //   icon: <FaWarehouse className="text-4xl text-purple-600" />,
     // },
     {
-      name: "Virtual",
+      name: "Virtual Product",
       num: 10,
       path: "/dashboard/virtualProduct",
       icon: <FaUnity className="text-4xl text-purple-500" />,
     },
     {
-      name: "Category",
+      name: " Virtual Category",
       num: 10,
       path: "/dashboard/virtualProduct/category",
       icon: <FaNetworkWired className="text-4xl text-green-500" />,
     },
     {
-      name: "Stock",
-      num: 500,
-      path: "/dashboard/inventory",
-      icon: <FaCubes className="text-4xl text-teal-600" />,
+      name: " Virtual Order",
+      num: 20,
+      path: "/dashboard/virtualOrder",
+      icon: <FaClipboardList className="text-4xl text-green-600" />,
     },
+ 
 
     // {
     //   name: "Low Stock",
