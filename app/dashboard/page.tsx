@@ -1,4 +1,3 @@
-
 import Link from "next/link";
 import React from "react";
 
@@ -16,25 +15,35 @@ import {
   FaCloud,
   FaCube,
   FaUnity,
-  FaNetworkWired 
+  FaNetworkWired,
 } from "react-icons/fa";
 
-import { MdCategory, MdOutlineStorefront, MdInventory } from 'react-icons/md';
+import { MdCategory, MdOutlineStorefront, MdInventory } from "react-icons/md";
 
 const InventoryManagement: React.FC = () => {
-  
-  const fields: { name: string; num: number, icon: React.ReactNode; path:string }[] = [
+  const fields: {
+    name: string;
+    num: number;
+    icon: React.ReactNode;
+    path: string;
+  }[] = [
     {
       name: "Product",
       num: 10,
-      path:"/dashboard/product",
+      path: "/dashboard/product",
       icon: <FaBoxOpen className="text-4xl text-blue-600" />,
     },
-  
+    // {
+    //   name: "Order",
+    //   num: 20,
+    //   icon: <FaClipboardList className="text-4xl text-green-600" />,
+    // },
+
+
     {
       name: "Categories",
       num: 10,
-      path:"/dashboard/category",
+      path: "/dashboard/category",
       icon: <MdCategory className="text-4xl text-red-500" />,
     },
     // {
@@ -51,14 +60,14 @@ const InventoryManagement: React.FC = () => {
     // },
     // {
     //   name: "Revenue",
-    //   num: 5000, 
+    //   num: 5000,
     //   path:"/dashboard",
-    //   icon: <FaDollarSign className="text-4xl text-green-500" />, 
+    //   icon: <FaDollarSign className="text-4xl text-green-500" />,
     // },
     {
       name: "Supplier",
       num: 15,
-      path:"/dashboard/supplier",
+      path: "/dashboard/supplier",
       icon: <FaTruckLoading className="text-4xl text-yellow-600" />,
     },
     {
@@ -76,68 +85,55 @@ const InventoryManagement: React.FC = () => {
     {
       name: "Virtual Product",
       num: 10,
-      path:"/dashboard/virtualProduct",
+      path: "/dashboard/virtualProduct",
       icon: <FaUnity className="text-4xl text-purple-500" />,
-
     },
     {
       name: " Virtual Category",
       num: 10,
-      path:"/dashboard/virtualProduct/category",
-      icon: <  FaNetworkWired className="text-4xl text-green-500" />,
-
+      path: "/dashboard/virtualProduct/category",
+      icon: <FaNetworkWired className="text-4xl text-green-500" />,
     },
     {
       name: " Virtual Order",
       num: 20,
-      path:"/dashboard/virtualOrder",
+      path: "/dashboard/virtualOrder",
       icon: <FaClipboardList className="text-4xl text-green-600" />,
     },
  
-    
-   
+
     // {
     //   name: "Low Stock",
     //   num: 20,
     //   icon: <FaExclamationTriangle className="text-4xl text-red-600" />,
     // },
-  
   ];
 
- 
   return (
-    <div className="admin-dashboard bg-gray-100 min-h-screen">
-  
+    <div className="admin-dashboard min-h-screen">
       {/* <header className="bg-gray-200 text-black p-6 shadow-md">
         <h2 className="text-3xl font-semibold text-center">Inventory Management</h2>
       </header> */}
-  
-      
+
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 p-6">
         {fields.map((item, index) => (
-         <Link href={item.path} key={index} passHref>
-             <div
-    
-            className="px-6 py-8 shadow-lg rounded-xl hover:scale-105  ease-in duration-300 bg-white flex"
-          >
-            
-            <div className="w-1/3 flex items-center justify-center">
-              <div className="text-4xl">{item.icon}</div>
+          <Link href={item.path} key={index} passHref>
+            <div className="px-6 py-8 shadow-lg rounded-xl dark:bg-gray-300 hover:scale-105  ease-in duration-300 bg-white flex">
+              <div className="w-1/3 flex items-center justify-center">
+                <div className="text-4xl">{item.icon}</div>
+              </div>
+              <div className="w-2/3 flex flex-col justify-center">
+                <h3 className="text-xl font-semibold text-gray-700">
+                  {item.name}
+                </h3>
+                {/* <div className="text-4xl font-bold text-gray-800">{item.num}</div> */}
+              </div>
             </div>
-            
-            <div className="w-2/3 flex flex-col justify-center">
-              <h3 className="text-xl font-semibold text-gray-700">{item.name}</h3>
-              {/* <div className="text-4xl font-bold text-gray-800">{item.num}</div> */}
-            </div>
-          </div>
-         </Link>
+          </Link>
         ))}
       </div>
     </div>
   );
-  
 };
 
 export default InventoryManagement;
-
-

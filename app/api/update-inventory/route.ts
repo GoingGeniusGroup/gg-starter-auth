@@ -1,12 +1,20 @@
 import { NextResponse } from "next/server";
 import Stripe from "stripe";
-import { db } from "@/lib/db"; 
+import { db } from "@/lib/db";
+import { currentUser } from "@/lib/auth";
 
 const stripe = new Stripe('sk_test_51QY6IbD3ncKQC69NzzPZBkLcRwT01yEMPKBGLD4TMDLp2R3r4CSRj56DSG25VkVT4WTKAPJct5TivQeEQdY4vlsX00dEXCBzn6'
 );
 
 export async function POST(req: Request) {
-  const { sessionId, userId } = await req.json(); // Ensure userId is passed
+  const { sessionId } = await req.json(); 
+
+  const user = await currentUser(); 
+      if (!user || !user.id) {
+        throw new Error("User not authenticated");
+      }
+
+  const userId = user.id;
 
   try {
     const session = await stripe.checkout.sessions.retrieve(sessionId);
@@ -70,11 +78,11 @@ export async function POST(req: Request) {
             orderStatus: 'DELIVERED',
             orderAmount: (session.amount_total ?? 0) / 100,
             paymentStatus: true,
-            // virtualProducts: {
-            //   create: cartItems.map((item: any) => ({
-            //     virtualProductId: item.id,
-            //   }))
-            // }
+            VirtualProductOnOrder: {
+              create: cartItems.map((item: any) => ({
+                virtualProductId: item.id,
+              }))
+            }
           }
         });
       })
