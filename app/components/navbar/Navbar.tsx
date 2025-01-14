@@ -32,7 +32,7 @@ const Navbar = async () => {
         />
       </Link>
 
-      <div className="flex items-center gap-4">
+      <div className="flex items-center justify-center gap-4">
         <ProfileHudTop handleServerSignOut={handleServerSignOut} />
       </div>
     </nav>
