@@ -2,6 +2,7 @@ import { Layout } from "@/components/dom/Layout";
 import { TooltipProvider } from "@/components/ui/tooltip/tooltip";
 import { signOut } from "@/auth";
 import { revalidatePath } from "next/cache";
+import Navbar from "../components/navbar/Navbar";
 
 export default async function MainLayoutClient({
   children,
@@ -23,7 +24,10 @@ export default async function MainLayoutClient({
 
   return (
     <>
-      <Layout handleServerSignOut={handleServerSignOut}>{children}</Layout>
+      <div>
+        <Navbar />
+        {children}
+      </div>
     </>
   );
 }
