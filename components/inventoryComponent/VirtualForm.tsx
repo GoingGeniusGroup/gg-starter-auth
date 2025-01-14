@@ -94,7 +94,7 @@ const VirtualForm = () => {
     <div className="p-6 min-h-screen flex justify-center items-center">
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="w-full max-w-5xl bg-white shadow-lg rounded-lg p-6 space-y-6"
+        className="w-full max-w-5xl shadow-lg rounded-lg p-6 space-y-6"
       >
         <fieldset className="my-1 border border-blue-500 rounded-lg p-4">
           <legend className="text-xl font-bold text-blue-500 px-2">
