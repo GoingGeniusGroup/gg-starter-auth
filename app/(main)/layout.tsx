@@ -23,9 +23,7 @@ export default async function MainLayoutClient({
 
   return (
     <>
-      <Layout handleServerSignOut={handleServerSignOut}>
-        <TooltipProvider>{children}</TooltipProvider>
-      </Layout>
+      <Layout handleServerSignOut={handleServerSignOut}>{children}</Layout>
     </>
   );
 }

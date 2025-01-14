@@ -100,11 +100,11 @@ export default async function RootLayout({
                 </div> */}
 
                 {/* Dock section */}
-                <div className="w-full z-40">
-                  {/* <div className="p-4 text-black dark:text-white">
+                {/* <div className="w-full z-40"> */}
+                {/* <div className="p-4 text-black dark:text-white">
                       <FloatingDockInvertedComponent />
                     </div> */}
-                </div>
+                {/* </div> */}
 
                 {/* Content section */}
                 <div className="flex-1 px-8 py-4 w-full overflow-auto">
