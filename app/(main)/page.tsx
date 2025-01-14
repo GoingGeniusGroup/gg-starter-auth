@@ -10,7 +10,7 @@ export default async function Home() {
   const user = await currentUser();
   return (
     <>
-      <div className="text-white">Hello {user?.username}</div>
+      <div>Hello {user?.username}</div>
       {/* <VideoHome /> */}
     </>
   );

@@ -9,19 +9,6 @@ export default async function MainLayoutClient({
 }: {
   children: React.ReactNode;
 }) {
-  async function handleServerSignOut() {
-    "use server";
-
-    try {
-      await signOut({ redirect: false });
-      revalidatePath("/");
-      return { success: true };
-    } catch (error) {
-      console.error("Server logout error:", error);
-      return { success: false, error: "Failed to logout" };
-    }
-  }
-
   return (
     <>
       <div>
