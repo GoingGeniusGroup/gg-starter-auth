@@ -52,9 +52,9 @@ export default async function RootLayout({
                   {/* <AuroraBackground> */}
                   <UserProvider>
                     {/* Theme switcher */}
-                    <div className="absolute top-[8px] right-[73px] z-50">
+                    {/* <div className="absolute top-[8px] right-[73px] z-50">
                       <ThemeSwitcher />
-                    </div>
+                    </div> */}
 
                     {/* Dock section */}
                     {/* <div className="w-full z-40">
@@ -95,9 +95,9 @@ export default async function RootLayout({
               {/* <AuroraBackground> */}
               <UserProvider>
                 {/* Theme switcher */}
-                <div className="absolute top-[8px] right-[73px] z-50">
+                {/* <div className="absolute top-[8px] right-[73px] z-50">
                   <ThemeSwitcher />
-                </div>
+                </div> */}
 
                 {/* Dock section */}
                 <div className="w-full z-40">
