@@ -126,7 +126,7 @@ const ProductForm = () => {
               <div className="mb-4">
                 <label
                   htmlFor="name"
-                  className="block text-sm font-semibold dark:text-gray-300"
+                  className="block text-sm font-semibold text-gray-700 dark:text-gray-300"
                 >
                   Product Name:
                 </label>
@@ -159,7 +159,7 @@ const ProductForm = () => {
               <div className="mb-4">
                 <label
                   htmlFor="stockQuantity"
-                  className="block text-sm font-semibold dark:text-gray-300"
+                  className="block text-sm font-semibold text-gray-700 dark:text-gray-300"
                 >
                   Quantity:
                 </label>
@@ -228,7 +228,7 @@ const ProductForm = () => {
               <div className="mb-4">
                 <label
                   htmlFor="costPrice"
-                  className="block text-sm font-semibold"
+                  className="block text-sm font-semibold text-gray-700 dark:text-gray-300"
                 >
                   Cost Price
                 </label>
@@ -251,7 +251,7 @@ const ProductForm = () => {
               <div className="mb-4">
                 <label
                   htmlFor="salePrice"
-                  className="block text-sm font-semibold dark:text-gray-300"
+                  className="block text-sm font-semibold text-gray-700 dark:text-gray-300"
                 >
                   Sell Price
                 </label>
@@ -275,7 +275,7 @@ const ProductForm = () => {
               <div className="mb-4">
                 <label
                   htmlFor="category"
-                  className="block text-sm font-semibold dark:text-gray-300"
+                  className="block text-sm font-semibold text-gray-700 dark:text-gray-300"
                 >
                   Category:
                 </label>
@@ -305,7 +305,7 @@ const ProductForm = () => {
               <div className="mb-4">
                 <label
                   htmlFor="productImage"
-                  className="block text-sm font-semibold dark:text-gray-300"
+                  className="block text-sm font-semibold text-gray-700 dark:text-gray-300"
                 >
                   Image
                 </label>
@@ -336,7 +336,7 @@ const ProductForm = () => {
               <div className="mb-4">
                 <label
                   htmlFor="description"
-                  className="block text-sm font-semibold dark:text-gray-300"
+                  className="block text-sm font-semibold text-gray-700 dark:text-gray-300"
                 >
                   Product Description:
                 </label>
@@ -368,7 +368,7 @@ const ProductForm = () => {
               <div className="mb-4">
                 <label
                   htmlFor="rating"
-                  className="block text-sm font-semibold dark:text-gray-300"
+                  className="block text-sm font-semibold text-gray-700 dark:text-gray-300"
                 >
                   Rating:(0-5)
                 </label>
@@ -403,7 +403,7 @@ const ProductForm = () => {
               <div className="mb-4">
                 <label
                   htmlFor="discount"
-                  className="block text-sm font-semibold dark:text-gray-300"
+                  className="block text-sm font-semibold text-gray-700 dark:text-gray-300"
                 >
                   Discount(%):
                 </label>
@@ -426,7 +426,7 @@ const ProductForm = () => {
               <div className="mb-4">
                 <label
                   htmlFor="brand"
-                  className="block text-sm font-semibold dark:text-gray-300"
+                  className="block text-sm font-semibold text-gray-700 dark:text-gray-300"
                 >
                   Brand:
                 </label>
@@ -459,7 +459,7 @@ const ProductForm = () => {
               <div className="mb-4 flex items-center gap-4">
                 <label
                   htmlFor="status"
-                  className="text-lg font-medium dark:text-gray-300"
+                  className="text-lg font-medium text-gray-700 dark:text-gray-300"
                 >
                   Available
                 </label>
@@ -480,7 +480,7 @@ const ProductForm = () => {
               <div className="mb-4 flex items-center gap-4">
                 <label
                   htmlFor="isFeatured"
-                  className="text-lg font-medium dark:text-gray-300"
+                  className="text-lg font-medium text-gray-700 dark:text-gray-300"
                 >
                   Featured
                 </label>
