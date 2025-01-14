@@ -107,7 +107,9 @@ export default async function RootLayout({
                 {/* </div> */}
 
                 {/* Content section */}
-                <div className="flex-1 w-full overflow-auto">{children}</div>
+                <div className="flex-1 px-8 py-4 w-full overflow-auto">
+                  {children}
+                </div>
               </UserProvider>
               <ToastProvider />
               {/* </AuroraBackground> */}

@@ -26,7 +26,7 @@ export default async function MainLayoutClient({
     <>
       <div>
         <Navbar />
-        {children}
+        <div className="w-full px-8 py-4 flex-1 overflow-auto">{children}</div>
       </div>
     </>
   );

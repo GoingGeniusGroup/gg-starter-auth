@@ -6,6 +6,7 @@ import { Layout } from "../dom/Layout";
 import ProfileHudTop from "../Huds/ProfileHudTop";
 import { signOut } from "@/app/auth";
 import { revalidatePath } from "next/cache";
+import { ThemeSwitcher } from "../ThemeToggler/ThemeSwitcher";
 
 const Navbar = async () => {
   async function handleServerSignOut() {
@@ -21,7 +22,7 @@ const Navbar = async () => {
     }
   }
   return (
-    <nav className="mx-auto py-2 px-4 flex justify-between border-b-2 shadow-sm">
+    <nav className="mx-auto py-2 px-6 flex justify-between border-b-2 shadow-sm">
       <Link href={"/"} className="flex items-center">
         <Image
           src={logo}
@@ -32,7 +33,8 @@ const Navbar = async () => {
         />
       </Link>
 
-      <div className="flex items-center justify-center gap-4">
+      <div className="flex items-center gap-4">
+        <ThemeSwitcher />
         <ProfileHudTop handleServerSignOut={handleServerSignOut} />
       </div>
     </nav>
