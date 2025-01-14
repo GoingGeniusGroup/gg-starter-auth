@@ -1,19 +1,18 @@
- "use client"
+"use client";
 import React from "react";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { categorySchema, categoryData } from "@/inventorySchema";
 import { savecategory } from "@/action/category";
 import { revalidatePath } from "next/cache";
-import { Toaster, toast } from 'sonner'
-
+import { Toaster, toast } from "sonner";
 
 interface CategoryFormProps {
   onCancel: () => void;
   // onCategoryAdd: (newCategory: any) => void;
 }
 
-const CategoryForm = ({ onCancel}: CategoryFormProps) => {
+const CategoryForm = ({ onCancel }: CategoryFormProps) => {
   const {
     control,
     register,
@@ -25,7 +24,6 @@ const CategoryForm = ({ onCancel}: CategoryFormProps) => {
   });
 
   const onSubmit = async (data: categoryData) => {
-   
     const formData = new FormData();
     formData.append("categoryName", data.categoryName);
     formData.append("categoryDescription", data.categoryDescription);
@@ -38,7 +36,7 @@ const CategoryForm = ({ onCancel}: CategoryFormProps) => {
       const result = await savecategory(formData);
       if (result.success && result.data) {
         // alert("Category saved successfully!");
-        toast.success('Category has saved successfully!')
+        toast.success("Category has saved successfully!");
         console.log("Saved category:", result.data);
         // const newCategory = {
         //   CategoryId: result.data.id,
@@ -54,12 +52,12 @@ const CategoryForm = ({ onCancel}: CategoryFormProps) => {
       } else {
         console.error("Validation errors:", result.errors);
         // alert("Validation errors occurred. Check console for details.");
-        toast.warning('Validation errors occurred. Check console for details.')
+        toast.warning("Validation errors occurred. Check console for details.");
       }
     } catch (error) {
       console.error("Error:", error);
       // alert("Failed to save category");
-      toast.error('Failed to save category')
+      toast.error("Failed to save category");
     }
   };
 
@@ -67,7 +65,7 @@ const CategoryForm = ({ onCancel}: CategoryFormProps) => {
     <div className="flex justify-center items-center">
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="w-full max-w-lg bg-white shadow-lg rounded-lg p-6 space-y-6"
+        className="w-full max-w-lg border shadow-lg rounded-lg p-6 space-y-6"
       >
         <fieldset className="my-1 border border-blue-500 rounded-lg p-4">
           <legend className="text-xl font-semibold text-blue-500 px-2">
@@ -75,7 +73,10 @@ const CategoryForm = ({ onCancel}: CategoryFormProps) => {
           </legend>
 
           <div className="mb-3">
-            <label htmlFor="categoryName" className="block text-sm font-semibold text-gray-700">
+            <label
+              htmlFor="categoryName"
+              className="block text-sm font-semibold text-gray-700 dark:text-gray-300"
+            >
               Categories Name:
             </label>
             <input
@@ -85,12 +86,17 @@ const CategoryForm = ({ onCancel}: CategoryFormProps) => {
               className="w-full mt-1 p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
             {errors.categoryName && (
-              <p className="text-sm text-red-500 mt-1">{errors.categoryName.message}</p>
+              <p className="text-sm text-red-500 mt-1">
+                {errors.categoryName.message}
+              </p>
             )}
           </div>
 
           <div className="mb-3">
-            <label htmlFor="categoryDescription" className="block text-sm font-semibold text-gray-700">
+            <label
+              htmlFor="categoryDescription"
+              className="block text-sm font-semibold text-gray-700 dark:text-gray-300"
+            >
               Category Description:
             </label>
             <textarea
@@ -100,12 +106,17 @@ const CategoryForm = ({ onCancel}: CategoryFormProps) => {
               className="w-full mt-1 p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
             {errors.categoryDescription && (
-              <p className="text-sm text-red-500 mt-1">{errors.categoryDescription.message}</p>
+              <p className="text-sm text-red-500 mt-1">
+                {errors.categoryDescription.message}
+              </p>
             )}
           </div>
 
           <div className="mb-3">
-            <label htmlFor="categoryImage" className="block text-sm font-semibold text-gray-700">
+            <label
+              htmlFor="categoryImage"
+              className="block text-sm font-semibold text-gray-700 dark:text-gray-300"
+            >
               Category Images:
             </label>
             <Controller
@@ -118,13 +129,17 @@ const CategoryForm = ({ onCancel}: CategoryFormProps) => {
                   id="categoryImage"
                   accept="image/*"
                   multiple
-                  onChange={(e) => field.onChange(Array.from(e.target.files || []))}
+                  onChange={(e) =>
+                    field.onChange(Array.from(e.target.files || []))
+                  }
                   className="w-full mt-1 p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
               )}
             />
             {errors.categoryImage && (
-              <p className="text-sm text-red-500 mt-1">{errors.categoryImage.message}</p>
+              <p className="text-sm text-red-500 mt-1">
+                {errors.categoryImage.message}
+              </p>
             )}
           </div>
 
