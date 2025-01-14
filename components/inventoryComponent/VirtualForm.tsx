@@ -8,6 +8,7 @@ import { useRouter } from "next/navigation";
 import { virtualProdSchema } from "@/inventorySchema";
 import { saveVirtualProd } from "@/action/vp";
 import { FileUploaderRegular } from "@uploadcare/react-uploader";
+import { useTheme } from "next-themes";
 
 import "@uploadcare/react-uploader/core.css";
 
@@ -40,6 +41,7 @@ const VirtualForm = () => {
     resolver: zodResolver(virtualProdSchema),
   });
   const [uploadedUrl, setUploadedUrl] = useState<string | null>(null);
+  const { theme } = useTheme();
 
   useEffect(() => {
     async function fetchCategory() {
@@ -106,7 +108,7 @@ const VirtualForm = () => {
               <div className="mb-4">
                 <label
                   htmlFor="name"
-                  className="block text-sm font-semibold text-gray-700"
+                  className="block text-sm font-semibold text-gray-700 dark:text-gray-300"
                 >
                   Name:
                 </label>
@@ -127,7 +129,7 @@ const VirtualForm = () => {
               <div className="mb-4">
                 <label
                   htmlFor="price"
-                  className="block text-sm font-semibold text-gray-700"
+                  className="block text-sm font-semibold text-gray-700 dark:text-gray-300"
                 >
                   Price:
                 </label>
@@ -149,7 +151,7 @@ const VirtualForm = () => {
               <div className="mb-4">
                 <label
                   htmlFor="stockQuantity"
-                  className="block text-sm font-semibold text-gray-700"
+                  className="block text-sm font-semibold text-gray-700 dark:text-gray-300"
                 >
                   Quantity:
                 </label>
@@ -171,7 +173,7 @@ const VirtualForm = () => {
               <div className="mb-4">
                 <label
                   htmlFor="type"
-                  className="block text-sm font-semibold text-gray-700"
+                  className="block text-sm font-semibold text-gray-700 dark:text-gray-300"
                 >
                   Type:
                 </label>
@@ -199,7 +201,7 @@ const VirtualForm = () => {
               <div className="mb-4">
                 <label
                   htmlFor="categoryId"
-                  className="block text-sm font-semibold text-gray-700"
+                  className="block text-sm font-semibold text-gray-700 dark:text-gray-300"
                 >
                   Category:
                 </label>
@@ -228,13 +230,13 @@ const VirtualForm = () => {
               <div className="mb-4">
                 <label
                   htmlFor="source"
-                  className="block text-sm font-semibold text-gray-700"
+                  className="block text-sm font-semibold text-gray-700 dark:text-gray-300"
                 >
                   Source:
                 </label>
                 <FileUploaderRegular
                   sourceList="local, url, gdrive"
-                  classNameUploader="uc-light"
+                  classNameUploader={theme === "dark" ? "uc-dark" : "uc-light"}
                   pubkey={`${uploadkey}`}
                   onChange={(event) => {
                     const file = event.successEntries[0];
@@ -253,7 +255,7 @@ const VirtualForm = () => {
               <div className="mb-4">
                 <label
                   htmlFor="description"
-                  className="block text-sm font-semibold text-gray-700"
+                  className="block text-sm font-semibold text-gray-700 dark:text-gray-300"
                 >
                   Description:
                 </label>
