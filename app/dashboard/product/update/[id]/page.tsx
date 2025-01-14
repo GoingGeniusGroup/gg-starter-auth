@@ -332,6 +332,28 @@ const UpdateProduct: React.FC<UpdateProductProps> = ({ params }) => {
               </div>
               <div className="mb-4">
                 <label
+                  htmlFor="description"
+                  className="block text-sm font-semibold dark:text-gray-300"
+                >
+                  Product Description:
+                </label>
+                <textarea
+                  id="description"
+                  {...register("description")}
+                  name="description"
+                  defaultValue={product.description}
+                  rows={3}
+                  required
+                  className="w-full mt-1 p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+                {errors.description && (
+                  <p className="text-sm text-red-500 mt-1">
+                    {errors.description.message}
+                  </p>
+                )}
+              </div>
+              <div className="mb-4">
+                <label
                   htmlFor="rating"
                   className="block text-sm font-semibold text-gray-700 dark:text-gray-300"
                 >
