@@ -1,78 +1,77 @@
-"use client"
-import React, { use } from 'react'
-import { useState ,useEffect, } from "react";
+"use client";
+import React, { use } from "react";
+import { useState, useEffect } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { productScheme } from "@/inventorySchema";
 import { useRouter } from "next/navigation";
-import { updateProduct,getProductDetail } from "@/action/product";
+import { updateProduct, getProductDetail } from "@/action/product";
 import { getAllCategories } from "@/action/category";
-import { Toaster, toast } from 'sonner'
-interface Category{
-    id:string;
-    categoryName:string;
- 
-  }
-  interface ProductData{
-    id:string
-    name:string,
-    description:string,
-    salePrice:number,
-    costPrice:number,
-    imageUrl:string[],
-    stockQuantity:number,
-    brand:string,
-    rating:number,
-    isFeatured:boolean,
-    status:boolean,
-    discount:number,
-    category: string
-    productImage:string[],
-  }
-  interface Product{
-    id: string;
-    name: string;
-    description?: string;
-    imageUrl: string[];
-    salePrice?: number;
-    costPrice?: number;
-    discount?: number;
-    stockQuantity?: number;
-    rating:number
-    brand?: string;
-    category: {
-      id: string;
-      categoryName: string;
-      categoryDescription?: string;
-      categoryImage: string[];
-    };
-    productImage?: string[];
-    status: boolean;
-    isFeatured: boolean;
-  };
-interface UpdateProductProps {
-//   params: Promise<{
-//     id: string;
-//   }>;
-params:{
-    id:string;
+import { Toaster, toast } from "sonner";
+interface Category {
+  id: string;
+  categoryName: string;
 }
+interface ProductData {
+  id: string;
+  name: string;
+  description: string;
+  salePrice: number;
+  costPrice: number;
+  imageUrl: string[];
+  stockQuantity: number;
+  brand: string;
+  rating: number;
+  isFeatured: boolean;
+  status: boolean;
+  discount: number;
+  category: string;
+  productImage: string[];
+}
+interface Product {
+  id: string;
+  name: string;
+  description?: string;
+  imageUrl: string[];
+  salePrice?: number;
+  costPrice?: number;
+  discount?: number;
+  stockQuantity?: number;
+  rating: number;
+  brand?: string;
+  category: {
+    id: string;
+    categoryName: string;
+    categoryDescription?: string;
+    categoryImage: string[];
+  };
+  productImage?: string[];
+  status: boolean;
+  isFeatured: boolean;
+}
+interface UpdateProductProps {
+  //   params: Promise<{
+  //     id: string;
+  //   }>;
+  params: {
+    id: string;
+  };
 }
 
 const UpdateProduct: React.FC<UpdateProductProps> = ({ params }) => {
   const router = useRouter();
-   const { id } = params
-  const [product, setProduct] = useState<any | null>(null)
-const [categories, setCategories] = useState<Category[]>([]);
-const {
-  control,
-  register,
-  handleSubmit,
-  reset,
-  formState: { errors },
-} = useForm<ProductData>({
-  resolver: zodResolver(productScheme),
-});
+  const { id } = params;
+  const [product, setProduct] = useState<any | null>(null);
+  const [categories, setCategories] = useState<Category[]>([]);
+  const {
+    control,
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm<ProductData>({
+    resolver: zodResolver(productScheme),
+  });
   useEffect(() => {
     async function fetchProduct() {
       try {
@@ -86,8 +85,8 @@ const {
         console.error("failed to fetch product");
       }
     }
-    fetchProduct()
-  },[id])
+    fetchProduct();
+  }, [id]);
   useEffect(() => {
     if (product) {
       reset({
@@ -105,8 +104,7 @@ const {
         productImage: product.productImage,
       });
     }
-  }, [product, reset])
-  
+  }, [product, reset]);
 
   useEffect(() => {
     async function fetchCategory() {
@@ -123,9 +121,6 @@ const {
     }
     fetchCategory();
   }, []);
-
- 
-
 
   const onsubmit = async (data: ProductData) => {
     const formData = new FormData();
@@ -164,10 +159,10 @@ const {
   }
 
   return (
-    <div className="p-6 bg-gray-100 min-h-screen flex justify-center items-center">
+    <div className="p-6 min-h-screen flex justify-center items-center">
       <form
         onSubmit={handleSubmit(onsubmit)}
-        className="w-full max-w-5xl bg-white shadow-lg rounded-lg p-6 space-y-6"
+        className="w-full max-w-5xl shadow-lg rounded-lg p-6 space-y-6"
       >
         <fieldset className="my-1 border border-blue-500 rounded-lg p-4">
           <legend className="text-xl font-bold text-blue-500 px-2">
@@ -181,7 +176,7 @@ const {
               <div className="mb-4">
                 <label
                   htmlFor="name"
-                  className="block text-sm font-semibold text-gray-700"
+                  className="block text-sm font-semibold text-gray-700 dark:text-gray-300"
                 >
                   Product Name:
                 </label>
@@ -204,7 +199,7 @@ const {
               <div className="mb-4">
                 <label
                   htmlFor="stockQuantity"
-                  className="block text-sm font-semibold text-gray-700"
+                  className="block text-sm font-semibold text-gray-700 dark:text-gray-300"
                 >
                   Quantity:
                 </label>
@@ -228,7 +223,7 @@ const {
               <div className="mb-4">
                 <label
                   htmlFor="costPrice"
-                  className="block text-sm font-semibold text-gray-700"
+                  className="block text-sm font-semibold text-gray-700 dark:text-gray-300"
                 >
                   Cost Price
                 </label>
@@ -252,7 +247,7 @@ const {
               <div className="mb-4">
                 <label
                   htmlFor="salePrice"
-                  className="block text-sm font-semibold text-gray-700"
+                  className="block text-sm font-semibold text-gray-700 dark:text-gray-300"
                 >
                   Sell Price
                 </label>
@@ -277,7 +272,7 @@ const {
               <div className="mb-4">
                 <label
                   htmlFor="category"
-                  className="block text-sm font-semibold text-gray-700"
+                  className="block text-sm font-semibold text-gray-700 dark:text-gray-300"
                 >
                   Category:
                 </label>
@@ -295,7 +290,8 @@ const {
                   {categories.map((category) => (
                     <option key={category.id} value={category.id}>
                       {category.categoryName}
-                    </option> ))}
+                    </option>
+                  ))}
                 </select>
                 {errors.category && (
                   <p className="text-sm text-red-500 mt-1">
@@ -305,70 +301,125 @@ const {
               </div>
 
               <div className="mb-4">
-              <label htmlFor="productImage" className="block text-sm font-semibold text-gray-700">Image</label>
-              <Controller name="productImage"
-              control={control}
-              defaultValue={[]}
-              render={({ field }) => (
+                <label
+                  htmlFor="productImage"
+                  className="block text-sm font-semibold text-gray-700 dark:text-gray-300"
+                >
+                  Image
+                </label>
+                <Controller
+                  name="productImage"
+                  control={control}
+                  defaultValue={[]}
+                  render={({ field }) => (
+                    <input
+                      type="file"
+                      id="productImage"
+                      accept="image/*"
+                      multiple
+                      onChange={(e) =>
+                        field.onChange(Array.from(e.target.files || []))
+                      }
+                      className="w-full mt-1 p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    />
+                  )}
+                />
+                {errors.productImage && (
+                  <p className="text-sm text-red-500 mt-1">
+                    {errors.productImage.message}
+                  </p>
+                )}
+              </div>
+              <div className="mb-4">
+                <label
+                  htmlFor="description"
+                  className="block text-sm font-semibold dark:text-gray-300"
+                >
+                  Product Description:
+                </label>
+                <textarea
+                  id="description"
+                  {...register("description")}
+                  name="description"
+                  defaultValue={product.description}
+                  rows={3}
+                  required
+                  className="w-full mt-1 p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+                {errors.description && (
+                  <p className="text-sm text-red-500 mt-1">
+                    {errors.description.message}
+                  </p>
+                )}
+              </div>
+              <div className="mb-4">
+                <label
+                  htmlFor="rating"
+                  className="block text-sm font-semibold text-gray-700 dark:text-gray-300"
+                >
+                  Rating
+                </label>
                 <input
-                  type="file"
-                id="productImage"
-              accept="image/*"
-            multiple
-            onChange={(e) => field.onChange(Array.from(e.target.files || []))}
-            className="w-full mt-1 p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  type="number"
+                  id="rating"
+                  {...register("rating", { valueAsNumber: true })}
+                  name="rating"
+                  defaultValue={product.rating}
+                  min="0"
+                  max="5"
+                  required
+                  className="w-full mt-1 p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+              </div>
 
-              />
-              )}
-              />  
-              {errors.productImage && ( <p className="text-sm text-red-500 mt-1">{errors.productImage.message}</p>)}
-            </div>
-             <div className="mb-4">
-              <label htmlFor="rating" className="block text-sm font-semibold text-gray-700">Rating</label>
-              <input
-                type="number"
-                id="rating"
-                {...register("rating", { valueAsNumber: true })}
-                name="rating"
-                defaultValue={product.rating}                
-                min="0"
-                max="5"
-                required
-                className="w-full mt-1 p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"/>
-             </div>
+              <div className="mb-4">
+                <label
+                  htmlFor="discount"
+                  className="block text-sm font-semibold text-gray-700 dark:text-gray-300"
+                >
+                  Discount(%):
+                </label>
+                <input
+                  type="number"
+                  id="discount"
+                  {...register("discount", { valueAsNumber: true })}
+                  name="discount"
+                  min="0"
+                  max="100"
+                  defaultValue={product.discount}
+                  required
+                  className="w-full mt-1 p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+                {errors.discount && (
+                  <p className="text-sm text-red-500 mt-1">
+                    {errors.discount.message}
+                  </p>
+                )}
+              </div>
+              <div className="mb-4">
+                <label
+                  htmlFor="brand"
+                  className="block text-sm font-semibold text-gray-700 dark:text-gray-300"
+                >
+                  Brand:
+                </label>
+                <input
+                  type="text"
+                  {...register("brand")}
+                  id="brand"
+                  name="brand"
+                  defaultValue={product.brand}
+                  required
+                  className="w-full mt-1 p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+                {errors.brand && (
+                  <p className="text-sm text-red-500 mt-1">
+                    {errors.brand.message}
+                  </p>
+                )}
+              </div>
 
-       
-          <div className="mb-4">
-            <label htmlFor="discount" className="block text-sm font-semibold text-gray-700">Discount(%):</label>
-            <input
-              type="number"
-              id="discount"
-              {...register("discount", { valueAsNumber: true })}
-
-              name="discount"
-              min="0"
-              max="100"
-              defaultValue={product.discount}
-              required
-              className="w-full mt-1 p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
-            { errors.discount && ( <p className="text-sm text-red-500 mt-1">{errors.discount.message}</p>)}
-          </div>
-          <div className="mb-4">
-            <label htmlFor="brand" className="block text-sm font-semibold text-gray-700">Brand:</label>
-            <input
-              type="text"
-              {...register("brand")}
-              id="brand"
-              name="brand"
-            defaultValue={product.brand}
-              required
-              className="w-full mt-1 p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
-            {errors.brand && ( <p className="text-sm text-red-500 mt-1">{errors.brand.message}</p>)}
-          </div>
-        
-          {/* <div className="mb-4">
+              {/* <div className="mb-4">
             <label htmlFor="supplier" className="block text-sm font-semibold text-gray-700">Supplier:</label>
             <input
               type="text"
@@ -379,51 +430,62 @@ const {
               className="w-full mt-1 p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div> */}
-          <div className="mb-4 flex items-center gap-4">
-          <label htmlFor="status" className="text-lg font-medium text-gray-700">
-            Available
-          </label>
-            <input type="checkbox" id="status" 
-            {...register("status")}
-            name="status" 
-            defaultChecked={product.status}
-        
-            className="h-4 w-4 focus:outline-none focus:ring-2 focus:ring-blue-500"
-            required
-            />
-            {errors.status && ( <p className="text-sm text-red-500 mt-1">{errors.status.message}</p>)}
-          </div>
-          <div className="mb-4 flex items-center gap-4">
-          <label htmlFor="isFeatured" className="text-lg font-medium text-gray-700">
-            Featured
-          </label>
-            <input type="checkbox"
-            {
-              ...register("isFeatured")
-            }
-            id="isFeatured" name="isFeatured" 
-            defaultChecked={product.isFeatured}
-            className="h-4 w-4 focus:outline-none focus:ring-2 focus:ring-blue-500"
-            required
-            />
-            {errors.isFeatured && ( <p className="text-sm text-red-500 mt-1">{errors.isFeatured.message}</p>)}
-          </div>
+              <div className="mb-4 flex items-center gap-4">
+                <label
+                  htmlFor="status"
+                  className="text-lg font-medium text-gray-700 dark:text-gray-300"
+                >
+                  Available
+                </label>
+                <input
+                  type="checkbox"
+                  id="status"
+                  {...register("status")}
+                  name="status"
+                  defaultChecked={product.status}
+                  className="h-4 w-4 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  required
+                />
+                {errors.status && (
+                  <p className="text-sm text-red-500 mt-1">
+                    {errors.status.message}
+                  </p>
+                )}
+              </div>
+              <div className="mb-4 flex items-center gap-4">
+                <label
+                  htmlFor="isFeatured"
+                  className="text-lg font-medium text-gray-700 dark:text-gray-300"
+                >
+                  Featured
+                </label>
+                <input
+                  type="checkbox"
+                  {...register("isFeatured")}
+                  id="isFeatured"
+                  name="isFeatured"
+                  defaultChecked={product.isFeatured}
+                  className="h-4 w-4 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  required
+                />
+                {errors.isFeatured && (
+                  <p className="text-sm text-red-500 mt-1">
+                    {errors.isFeatured.message}
+                  </p>
+                )}
+              </div>
+            </div>
+          </fieldset>
+          <button
+            type="submit"
+            className="w-full p-2 my-3 bg-blue-500 text-white rounded hover:bg-blue-600 transition"
+          >
+            Update
+          </button>
+        </fieldset>
+      </form>
+    </div>
+  );
+};
 
-        </div>
-
-      </fieldset>
-      <button
-        type="submit"
-        className="w-full p-2 my-3 bg-blue-500 text-white rounded hover:bg-blue-600 transition"
-      >
-        Update
-      </button>
-      </fieldset>
-      
-
-    </form>
-  </div>
-  )
-}
-
-export default UpdateProduct
+export default UpdateProduct;

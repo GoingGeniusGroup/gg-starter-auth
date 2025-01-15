@@ -22,6 +22,7 @@ import { CartItem } from "./subComponents/types";
 import CartSheet from "./subComponents/CartSheet";
 import { VirtualProduct } from "./subComponents/types";
 import { VirtualCategory } from "./subComponents/types";
+import { Card } from "../ui/card";
 
 export default function ShopComponent() {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
@@ -124,7 +125,7 @@ export default function ShopComponent() {
 
   return (
     <>
-      <div className="h-full p-4 overflow-auto bg-white pt-6">
+      <Card className="h-full p-4 overflow-auto pt-6">
         <div className="flex items-center justify-between mb-4">
           <div>
             <h1 className="font-semibold text-2xl">Virtual Shop</h1>
@@ -205,7 +206,7 @@ export default function ShopComponent() {
               <CarouselContent>
                 {searchedProducts.map((product) => (
                   <CarouselItem key={product.id} className="shrink-0 pb-4">
-                    <div className="relative overflow-hidden rounded-md bg-white/40 border border-gray-300 shadow-md dark:bg-white">
+                    <div className="relative overflow-hidden rounded-md border border-gray-300 shadow-md dark:bg-white">
                       <div className="h-50 w-full overflow-hidden rounded-md bg-gray-100 flex justify-center">
                         <Image
                           src={product.images[0]}
@@ -222,14 +223,14 @@ export default function ShopComponent() {
                           ${product.price}
                         </h1>
                       </div>
-                      <div className="absolute left-2 top-2 rounded-full bg-white p-1 border border-gray-200 shadow-md">
+                      <div className="absolute left-2 top-2 rounded-full p-1 border border-gray-200 shadow-md">
                         <span className="text-sm font-bold text-yellow-400">
                           {product.rating}
                         </span>
                       </div>
                       <div className="p-2 w-full flex justify-center">
                         <Button
-                          className="w-full text-md font-normal flex items-center justify-center"
+                          className="w-full text-md font-normal flex items-center justify-center dark:border dark:border-gray-300"
                           onClick={() => {
                             addToCart(product.id);
                           }}
@@ -250,8 +251,6 @@ export default function ShopComponent() {
                   </CarouselItem>
                 ))}
               </CarouselContent>
-              <CarouselPrevious />
-              <CarouselNext />
             </Carousel>
           </div>
         </div>
@@ -264,7 +263,7 @@ export default function ShopComponent() {
           onRemoveFromCart={removeFromCart}
           totalPrice={totalPrice}
         />
-      </div>
+      </Card>
     </>
   );
 }
