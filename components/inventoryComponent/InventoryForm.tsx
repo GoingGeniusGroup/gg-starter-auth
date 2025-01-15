@@ -16,7 +16,7 @@ interface Products {
 
 interface Inventory {
   product: string;
-  quantityAvailable: number; 
+  quantityAvailable: number;
   thresholdValue: number;
   address?: string;
 }
@@ -54,11 +54,11 @@ const InventoryForm = () => {
 
   const handleProductChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const selectedProductId = event.target.value;
-    const product = products.find(p => p.id === selectedProductId) || null;
+    const product = products.find((p) => p.id === selectedProductId) || null;
     setSelectedProduct(product);
-    
+
     if (product) {
-      setValue("quantityAvailable", product.stockQuantity); 
+      setValue("quantityAvailable", product.stockQuantity);
     } else {
       setValue("quantityAvailable", 0); // Reset if no product is selected
     }
@@ -70,7 +70,7 @@ const InventoryForm = () => {
     formData.append("product", data.product);
     formData.append("quantityAvailable", data.quantityAvailable.toString());
     formData.append("thresholdValue", data.thresholdValue.toString());
-    
+
     if (data.address) {
       formData.append("address", data.address);
     }
@@ -79,13 +79,13 @@ const InventoryForm = () => {
       const result = await saveInventory(formData);
       console.log("Save result:", result); // Debugging statement
       if (result.success && result.data) {
-        toast.success('Inventory has been saved successfully!');
+        toast.success("Inventory has been saved successfully!");
         console.log("Saved Inventory:", result.data);
         reset();
         router.push("/dashboard/inventory");
       } else {
         console.error("Validation errors:", result.errors);
-        toast.warning('Validation errors occurred. Check console for details.');
+        toast.warning("Validation errors occurred. Check console for details.");
       }
     } catch (error) {
       console.error("Failed to submit form", error);
@@ -94,15 +94,27 @@ const InventoryForm = () => {
   };
 
   return (
-    <div className="p-6 bg-gray-100 min-h-screen flex justify-center items-center">
-      <form onSubmit={handleSubmit(onSubmit)} className="w-full max-w-5xl bg-white shadow-lg rounded-lg p-6 space-y-6">
+    <div className="p-6 min-h-screen flex justify-center items-center">
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        className="w-full max-w-5xl shadow-lg border rounded-lg p-6 space-y-6"
+      >
         <fieldset className="my-1 border border-blue-500 rounded-lg p-4">
-          <legend className="text-xl font-bold text-blue-500 px-2">Inventory Form</legend>
+          <legend className="text-xl font-bold text-blue-500 px-2">
+            Inventory Form
+          </legend>
           <fieldset className="my-4 border rounded-lg p-4">
-            <legend className="text-lg text-blue-500 px-2">Item Information</legend>
+            <legend className="text-lg text-blue-500 px-2">
+              Item Information
+            </legend>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="mb-4">
-                <label htmlFor="product" className="block text-sm font-semibold text-gray-700">Product:</label>
+                <label
+                  htmlFor="product"
+                  className="block text-sm font-semibold text-gray-700 dark:text-gray-300"
+                >
+                  Product:
+                </label>
                 <select
                   id="product"
                   {...register("product")}
@@ -110,30 +122,50 @@ const InventoryForm = () => {
                   required
                   className="w-full mt-1 p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
                 >
-                  <option value="" disabled>Select a product</option>
-                  {products.map(product => (
+                  <option value="" disabled>
+                    Select a product
+                  </option>
+                  {products.map((product) => (
                     <option key={product.id} value={product.id}>
                       {product.name}
                     </option>
                   ))}
                 </select>
-                {errors.product && <span className="text-red-500 text-sm">{errors.product.message}</span>}
+                {errors.product && (
+                  <span className="text-red-500 text-sm">
+                    {errors.product.message}
+                  </span>
+                )}
               </div>
 
               <div className="mb-4">
-                <label htmlFor="quantityAvailable" className="block text-sm font-semibold text-gray-700">Quantity Available:</label>
+                <label
+                  htmlFor="quantityAvailable"
+                  className="block text-sm font-semibold text-gray-700 dark:text-gray-300"
+                >
+                  Quantity Available:
+                </label>
                 <input
                   type="number"
                   id="quantityAvailable"
                   {...register("quantityAvailable", { valueAsNumber: true })}
-                  readOnly 
+                  readOnly
                   className="w-full mt-1 p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
-                {errors.quantityAvailable && <span className="text-red-500 text-sm">{errors.quantityAvailable.message}</span>}
+                {errors.quantityAvailable && (
+                  <span className="text-red-500 text-sm">
+                    {errors.quantityAvailable.message}
+                  </span>
+                )}
               </div>
 
               <div className="mb-4">
-                <label htmlFor="thresholdValue" className="block text-sm font-semibold text-gray-700">Threshold Value:</label>
+                <label
+                  htmlFor="thresholdValue"
+                  className="block text-sm font-semibold text-gray-700 dark:text-gray-300"
+                >
+                  Threshold Value:
+                </label>
                 <input
                   type="number"
                   id="thresholdValue"
@@ -142,18 +174,31 @@ const InventoryForm = () => {
                   required
                   className="w-full mt-1 p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
-                {errors.thresholdValue && <span className="text-red-500 text-sm">{errors.thresholdValue.message}</span>}
+                {errors.thresholdValue && (
+                  <span className="text-red-500 text-sm">
+                    {errors.thresholdValue.message}
+                  </span>
+                )}
               </div>
 
               <div className="mb-4">
-                <label htmlFor="address" className="block text-sm font-semibold text-gray-700">Address:</label>
+                <label
+                  htmlFor="address"
+                  className="block text-sm font-semibold text-gray-700 dark:text-gray-300"
+                >
+                  Address:
+                </label>
                 <input
                   type="text"
                   id="address"
                   {...register("address")}
                   className="w-full mt-1 p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
-                {errors.address && <span className="text-red-500 text-sm">{errors.address.message}</span>}
+                {errors.address && (
+                  <span className="text-red-500 text-sm">
+                    {errors.address.message}
+                  </span>
+                )}
               </div>
             </div>
           </fieldset>

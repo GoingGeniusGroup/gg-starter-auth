@@ -1,12 +1,12 @@
-import InventoryForm from '@/components/inventoryComponent/InventoryForm'
-import React from 'react'
+import InventoryForm from "@/components/inventoryComponent/InventoryForm";
+import React from "react";
 
 const AddInventory = () => {
   return (
     <div>
-        <InventoryForm/>
+      <InventoryForm />
     </div>
-  )
-}
+  );
+};
 
-export default AddInventory
+export default AddInventory;
