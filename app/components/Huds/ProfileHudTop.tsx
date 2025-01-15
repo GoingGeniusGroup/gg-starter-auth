@@ -7,6 +7,7 @@ import { LogOut, UserRound } from "lucide-react";
 import { toast } from "react-hot-toast";
 import { ExtendedUser } from "@/types/next-auth";
 import { CgProfile } from "react-icons/cg";
+import { MdOutlineDashboard } from "react-icons/md";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -38,6 +39,7 @@ export default function ProfileHudTop({
     : "";
 
   const user = session?.user as ExtendedUser | undefined;
+  const admin = user?.role === "Admin";
 
   const handleMobileButtonClick = () => {
     setShowMobile((prev) => !prev);
@@ -107,6 +109,14 @@ export default function ProfileHudTop({
               <DropdownMenuItem className="cursor-pointer">
                 <CgProfile className="mr-2 size-4" />
                 Profile
+              </DropdownMenuItem>
+            </Link>
+          )}
+          {admin && (
+            <Link href={`/dashboard`}>
+              <DropdownMenuItem className="cursor-pointer">
+                <MdOutlineDashboard className="mr-2 size-4" />
+                dashboard
               </DropdownMenuItem>
             </Link>
           )}
