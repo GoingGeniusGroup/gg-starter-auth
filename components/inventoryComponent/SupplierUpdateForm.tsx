@@ -4,6 +4,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Toaster, toast } from "sonner";
 import { supplierSchema } from "@/inventorySchema";
 import { updateSupplier } from "@/action/supplier";
+import { useRouter } from "next/navigation";
+
 interface SupplierData {
   supplierName: string;
   phone: string;
@@ -23,6 +25,9 @@ const SupplierUpdateForm = ({
   supplierId,
   onSupplierUpdate,
 }: SupplierFormProps) => {
+
+  const router = useRouter();
+
   const {
     register,
     handleSubmit,
@@ -60,6 +65,8 @@ const SupplierUpdateForm = ({
         onSupplierUpdate(updatedSupplier);
         toast.success("Supplier has saved successfully!");
         console.log("Saved supplier:", result.data);
+        router.push("/dashboard/supplier")
+
         onCancel();
       } else {
         console.error("Validation errors:", result.errors);
@@ -71,6 +78,7 @@ const SupplierUpdateForm = ({
     }
   };
   const [suppliers, setSuppliers] = useState<SupplierData[]>([]);
+  
   return (
     <div className="flex justify-center items-center">
       <form
