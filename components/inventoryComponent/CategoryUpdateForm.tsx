@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import React, { useEffect } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -10,11 +10,16 @@ import { on } from "events";
 interface CategoryFormProps {
   onCancel: () => void;
   category: categoryData;
-  CategoryId: string; 
-  onCategoryUpdate:(updatedCategory:any)=>void
+  CategoryId: string;
+  onCategoryUpdate: (updatedCategory: any) => void;
 }
 
-const CategoryUpdateForm = ({ onCancel, category, CategoryId, onCategoryUpdate }: CategoryFormProps) => {
+const CategoryUpdateForm = ({
+  onCancel,
+  category,
+  CategoryId,
+  onCategoryUpdate,
+}: CategoryFormProps) => {
   const {
     control,
     register,
@@ -45,18 +50,17 @@ const CategoryUpdateForm = ({ onCancel, category, CategoryId, onCategoryUpdate }
     }
     try {
       // Call the updateCategory function and pass the CategoryId
-      const result = await updateCategory(formData,CategoryId);
+      const result = await updateCategory(formData, CategoryId);
       if (result.success) {
-        const updatedCategory={
+        const updatedCategory = {
           ...category,
-          categoryName:data.categoryName,
-          categoryDescription:data.categoryDescription,
-        }
+          categoryName: data.categoryName,
+          categoryDescription: data.categoryDescription,
+        };
         toast.success("Category updated successfully");
         console.log("Category updated successfully");
         onCancel(); // Close the form after success
-        onCategoryUpdate(updatedCategory)
-
+        onCategoryUpdate(updatedCategory);
       } else {
         toast.error("Failed to update category");
         console.error("Failed to update category");
@@ -69,12 +73,22 @@ const CategoryUpdateForm = ({ onCancel, category, CategoryId, onCategoryUpdate }
 
   return (
     <div className="flex justify-center items-center">
-      <form onSubmit={handleSubmit(onSubmit)} className="w-full max-w-lg bg-white shadow-lg rounded-lg p-6 space-y-6">
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        className="w-full max-w-lg shadow-lg border rounded-lg p-6 space-y-6"
+      >
         <fieldset className="my-1 border border-blue-500 rounded-lg p-4">
-          <legend className="text-xl font-semibold text-blue-500 px-2">Categories</legend>
+          <legend className="text-xl font-semibold text-blue-500 px-2">
+            Categories
+          </legend>
 
           <div className="mb-3">
-            <label htmlFor="categoryName" className="block text-sm font-semibold text-gray-700">Category Name:</label>
+            <label
+              htmlFor="categoryName"
+              className="block text-sm font-semibold text-gray-700 dark:text-gray-300"
+            >
+              Category Name:
+            </label>
             <input
               type="text"
               id="categoryName"
@@ -84,12 +98,17 @@ const CategoryUpdateForm = ({ onCancel, category, CategoryId, onCategoryUpdate }
               className="w-full mt-1 p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
             {errors.categoryName && (
-              <p className="text-sm text-red-500 mt-1">{errors.categoryName.message}</p>
+              <p className="text-sm text-red-500 mt-1">
+                {errors.categoryName.message}
+              </p>
             )}
           </div>
 
           <div className="mb-3">
-            <label htmlFor="categoryDescription" className="block text-sm font-semibold text-gray-700">
+            <label
+              htmlFor="categoryDescription"
+              className="block text-sm font-semibold text-gray-700 dark:text-gray-300"
+            >
               Category Description:
             </label>
             <textarea
@@ -101,12 +120,17 @@ const CategoryUpdateForm = ({ onCancel, category, CategoryId, onCategoryUpdate }
               className="w-full mt-1 p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
             {errors.categoryDescription && (
-              <p className="text-sm text-red-500 mt-1">{errors.categoryDescription.message}</p>
+              <p className="text-sm text-red-500 mt-1">
+                {errors.categoryDescription.message}
+              </p>
             )}
           </div>
 
           <div className="mb-3">
-            <label htmlFor="categoryImage" className="block text-sm font-semibold text-gray-700">
+            <label
+              htmlFor="categoryImage"
+              className="block text-sm font-semibold text-gray-700 dark:text-gray-300"
+            >
               Category Images:
             </label>
             <Controller
@@ -119,14 +143,18 @@ const CategoryUpdateForm = ({ onCancel, category, CategoryId, onCategoryUpdate }
                   id="categoryImage"
                   accept="image/*"
                   multiple
-                  onChange={(e) => field.onChange(Array.from(e.target.files || []))}
+                  onChange={(e) =>
+                    field.onChange(Array.from(e.target.files || []))
+                  }
                   className="w-full mt-1 p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
               )}
             />
 
             {errors.categoryImage && (
-              <p className="text-sm text-red-500 mt-1">{errors.categoryImage.message}</p>
+              <p className="text-sm text-red-500 mt-1">
+                {errors.categoryImage.message}
+              </p>
             )}
           </div>
 
