@@ -45,7 +45,7 @@ export async function savecategory(formData: FormData) {
         categoryImage: imgPaths, // Save paths as an array
       },
     });
-    revalidatePath("/inventory/category");
+    revalidatePath("/dashboard/category");
     return { success: true, data: newCategory };
   } catch (error) {
     if (error instanceof z.ZodError) {
@@ -116,7 +116,7 @@ export async function updateCategory(formData: FormData, categoryid: string) {
         categoryImage: imgPaths, // Save updated paths as an array
       },
     });
-    revalidatePath("/inventory/category");
+    revalidatePath("/dashboard/category");
     return { success: true, data: updatedCategory };
   } catch (error) {
     console.error("Unexpected error", error);
@@ -137,7 +137,7 @@ export async function deleteCategory(categoryId:string){
     await db.category.delete({
       where: { id: categoryId },
     });
-    revalidatePath("/inventory/category")
+    revalidatePath("/dashboard/category")
     return { success: true, message: "Category deleted successfully" };
 
     }

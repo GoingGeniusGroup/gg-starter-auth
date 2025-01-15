@@ -2,6 +2,7 @@
 import { db } from "@/lib/db";
 import { z } from "zod";
 import { inventorySchema } from "@/inventorySchema";
+import { revalidatePath } from "next/cache";
 
 export async function saveInventory(formData: FormData) {
   const data = {
@@ -59,6 +60,8 @@ export async function saveInventory(formData: FormData) {
             stockUpdatedDate:stockUpdatedDate
           }
       });
+          revalidatePath("/dashboard/inventory")
+      
       return { success: true, data: newInventory };
     }
   } catch (error) {
