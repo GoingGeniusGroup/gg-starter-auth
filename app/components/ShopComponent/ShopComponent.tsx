@@ -174,11 +174,13 @@ export default function ShopComponent() {
               </svg>
             </div>
             {isDropdownOpen && (
-              <div className="absolute z-10 mt-1 w-full rounded-md bg-white shadow-md">
+              <div className="absolute z-10 mt-1 max-w-64 w-full rounded-md bg-white dark:bg-[#020b24] shadow-md dark:text-gray-300">
                 <ul className="p-2">
                   <li
-                    className={`cursor-pointer py-1 ${
-                      selectedCategory === null ? "bg-gray-100" : ""
+                    className={`cursor-pointer py-1 px-2 ${
+                      selectedCategory === null
+                        ? "bg-gray-100 dark:bg-gray-900 dark:text-gray-300"
+                        : ""
                     }`}
                     onClick={() => handleCategoryClick(null)}
                   >
@@ -187,8 +189,10 @@ export default function ShopComponent() {
                   {categories.map((category) => (
                     <li
                       key={category.id}
-                      className={`cursor-pointer py-1 ${
-                        selectedCategory === category.name ? "bg-gray-100" : ""
+                      className={`cursor-pointer py-1 px-2 dark:text-gray-300 ${
+                        selectedCategory === category.name
+                          ? "bg-gray-100 dark:bg-gray-900 dark:text-gray-300"
+                          : ""
                       }`}
                       onClick={() => handleCategoryClick(category.name)}
                     >
