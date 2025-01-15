@@ -4,6 +4,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Toaster, toast } from "sonner";
 import { saveSupplier } from "@/action/supplier";
 import { supplierSchema } from "@/inventorySchema";
+import { useRouter } from "next/navigation";
+
 interface SupplierFormProps {
   onCancel: () => void;
 }
@@ -14,6 +16,8 @@ interface SupplierData {
   address: string;
 }
 const SupplierForm = ({ onCancel }: SupplierFormProps) => {
+    const router = useRouter();
+  
   const {
     register,
     handleSubmit,
@@ -35,6 +39,7 @@ const SupplierForm = ({ onCancel }: SupplierFormProps) => {
         console.log("Saved supplier:", result.data);
 
         reset();
+        router.push("/dashboard/supplier")
         onCancel();
       } else {
         console.error("Validation errors:", result.errors);
