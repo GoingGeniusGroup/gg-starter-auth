@@ -53,8 +53,8 @@ export default async function RootLayout({
                   <UserProvider>
                     {/* Theme switcher */}
                     {/* <div className="absolute top-[8px] right-[73px] z-50">
-                        <ThemeSwitcher />
-                      </div> */}
+                      <ThemeSwitcher />
+                    </div> */}
 
                     {/* Dock section */}
                     {/* <div className="w-full z-40">
@@ -64,7 +64,7 @@ export default async function RootLayout({
                       </div> */}
 
                     {/* Content section */}
-                    <div className="flex-1 px-8 py-4 w-full overflow-auto">
+                    <div className="flex-1 w-full overflow-auto">
                       {children}
                     </div>
                   </UserProvider>
@@ -96,20 +96,18 @@ export default async function RootLayout({
               <UserProvider>
                 {/* Theme switcher */}
                 {/* <div className="absolute top-[8px] right-[73px] z-50">
-                    <ThemeSwitcher />
-                  </div> */}
+                  <ThemeSwitcher />
+                </div> */}
 
                 {/* Dock section */}
-                <div className="w-full z-40">
-                  {/* <div className="p-4 text-black dark:text-white">
+                {/* <div className="w-full z-40"> */}
+                {/* <div className="p-4 text-black dark:text-white">
                       <FloatingDockInvertedComponent />
                     </div> */}
-                </div>
+                {/* </div> */}
 
                 {/* Content section */}
-                <div className="flex-1 px-8 py-4 w-full overflow-auto">
-                  {children}
-                </div>
+                <div className="flex-1 w-full overflow-auto">{children}</div>
               </UserProvider>
               <ToastProvider />
               {/* </AuroraBackground> */}

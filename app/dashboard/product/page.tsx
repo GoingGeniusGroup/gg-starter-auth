@@ -21,18 +21,15 @@ const Product = () => {
     }
     fetchProducts()
   },[])
-
-  
-
   return (
-    <div className='bg-gray-100'>
+    <div className=' '>
   
     {/* <header className="bg-gray-800 text-white p-4 shadow-md">
       <h2 className="text-3xl font-semibold text-center">Inventory Product</h2>
     </header> */}
     <main className='flex-1 p-2 mt-2'>
     <section className="grid grid-cols-4 gap-4 mb-4">
-            <div className="bg-white p-4 rounded shadow">Total Products: {products.length}</div>
+            <div className="bg-white p-4 rounded shadow dark:text-gray-800  dark:bg-gray-300">Total Products: {products.length}</div>
             {/* <div className="bg-white p-4 rounded shadow">Total quantity: 400</div>
             <div className="bg-white p-4 rounded shadow">Low Stock Alerts: 5</div>
             <div className="bg-white p-4 rounded shadow">Total Value: $10,000</div> */}

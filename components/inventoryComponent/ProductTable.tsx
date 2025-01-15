@@ -85,8 +85,8 @@ const ProductTable = () => {
     }
   return (
     <div className="p-2 ">
-        <div className="flex justify-between items-center h-[55px] px-4 bg-white my-2 mb-3 rounded">
-        <div className="flex items-center py-4 w-1/4 gap-2">
+        <div className="flex justify-between items-center dark:bg-black/40 h-[55px] px-4 bg-white my-2 mb-3 rounded">
+        <div className="flex items-center py-4 w-1/4 gap-2 ">
             <Input type="text" placeholder="search"  />
         {/* <input type="text" placeholder="search" className="px-3 py-2 w-80 bg-slate-50 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 " /> */}
         <button type="button" className="flex items-center justify-center  p-2 rounded hover:bg-gray-300">
@@ -104,7 +104,7 @@ const ProductTable = () => {
        </div>
 
     
-    <Table className="w-full border-collapse border  shadow rounded  bg-white" >
+    <Table className="w-full border-collapse border dark:bg-black shadow rounded  bg-white" >
         {/* <TableCaption>A list of your products in inventory.</TableCaption> */}
         <TableHeader>
           <TableRow>

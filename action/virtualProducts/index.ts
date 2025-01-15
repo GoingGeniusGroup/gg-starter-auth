@@ -101,4 +101,21 @@ export const getVirtualCategories = cache(
     }
 }
 
-  
+  export async function deleteVirtual(virtualId:string){
+    try{
+      const product=await db.virtualProduct.findUnique({
+        where:{id:virtualId}
+      })
+      if(!product){
+        return{success:false,message:"product not found"}
+      }
+      await db.virtualProduct.delete({
+        where:{id:virtualId}
+      });
+      return { success: true, data: product };
+
+    } catch(error){
+      console.error("Error",error);
+      return {success:false,message:"An unexpected error occured"}
+    }
+  }
