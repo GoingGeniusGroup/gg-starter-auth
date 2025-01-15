@@ -3,6 +3,7 @@ import { db } from "@/lib/db";
 import { z } from "zod";
 import { virtualCategorySchema } from "@/inventorySchema";
 import { validate } from "uuid";
+import { revalidatePath } from "next/cache";
 
 export async function saveVirtualCategory(formData:FormData){
     const data={
@@ -11,7 +12,7 @@ export async function saveVirtualCategory(formData:FormData){
     try{
         const validDate=virtualCategorySchema.parse(data)
         const existCategory=await db.virtualCategory.findFirst({
-            where:{name:validate.name}
+            where:{name:validDate.name}
         })
         if (existCategory) {
             return { success: false, message: "Category must be unique" };
@@ -22,6 +23,8 @@ export async function saveVirtualCategory(formData:FormData){
             }
 
           })
+                 revalidatePath("/dashboard/virtualProduct/category")
+          
           return { success: true, data: newCategory };
 
     }
@@ -108,6 +111,7 @@ export async function updateVirtualCategory(formData: FormData, categoryId: stri
         name: validData.name,
       },
     });
+    revalidatePath("/dashboard/virtualProduct/category")
 
     return { success: true, data: updatedCategory };
   } catch (error) {
@@ -140,6 +144,7 @@ export async function deleteVirtualCategory(categoryId:string){
     await db.virtualCategory.delete({
       where: { id: categoryId },
     });
+    revalidatePath("/dashboard/virtualProduct/category")
     return { success: true, message: "Category deleted successfully" };
 
     }

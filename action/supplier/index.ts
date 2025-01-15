@@ -1,6 +1,7 @@
 "use server"
 import { supplierSchema } from "@/inventorySchema"
 import { db } from "@/lib/db";
+import { revalidatePath } from "next/cache";
 import { z } from "zod";
 
 export async function saveSupplier(formData: FormData) {
@@ -26,6 +27,8 @@ export async function saveSupplier(formData: FormData) {
                 address: validData.address,
             },
         });
+            revalidatePath("/dashboard/supplier")
+        
         return { success: true, data: newSupplier };
     } catch (error) {
         if (error instanceof z.ZodError) {
@@ -89,6 +92,7 @@ export async function updateSupplier(formData: FormData, supplierId: string) {
                 address:validData.address
             }
         })
+        revalidatePath("/dashboard/supplier")
         return {success:true,data:updatedSupplier}
     }
     catch(error){
@@ -117,6 +121,8 @@ export async function deleteSupplier(supplierId: string) {
         await db.supplier.delete({
             where: { id: supplierId },
         });
+        revalidatePath("/dashboard/supplier")
+
         return { success: true, data: supplier };
     } catch (error) {
         console.error("Error:", error);

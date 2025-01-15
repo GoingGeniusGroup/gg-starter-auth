@@ -87,6 +87,8 @@ try{
     } else {
       console.error("Unexpected error has occured:", error);
     }
+    revalidatePath("/dashboard/product")
+
     return { success: false, message: "An unexpected error has occurred" };
     }
 }
@@ -150,6 +152,7 @@ export async function updateProduct(formData:FormData,productId:string){
         status:validData.status
       }
     })
+    revalidatePath("/dashboard/product")
     return {success:true,data:updatedProduct}
   }catch(error){
     if (error instanceof z.ZodError) {
@@ -203,6 +206,8 @@ export async function deleteProduct(productId:string){
     await db.product.delete({
       where:{id:productId}
     })
+    revalidatePath("/dashboard/product")
+
     return {success:true,message:"Product deleted successfully"}
   }
   catch(error){

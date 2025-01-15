@@ -39,6 +39,7 @@ export async function saveVirtualProd(formData: FormData) {
         src: validData.source,
       },
     });
+    revalidatePath("/dashboard/virtualProduct")
 
     return { success: true, data: newProduct };
   } catch (error) {
