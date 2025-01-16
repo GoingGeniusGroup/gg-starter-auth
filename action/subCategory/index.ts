@@ -12,20 +12,20 @@ export async function saveSubCategory(formData:FormData){
     }
     try{
         const validDate=subCatSchema.parse(data)
-        const existCategory=await db.virtualCategory.findFirst({
+        const existCategory=await db.subcategory.findFirst({
             where:{name:validDate.name}
         })
         if (existCategory) {
             return { success: false, message: "Category must be unique" };
           }
-          const newCategory=await db.subCategory.create({
+          const newCategory=await db.subcategory.create({
             data:{
                 name:validDate.name,
                 imageUrl:validDate.imageUrl
             }
 
           })
-                 revalidatePath("/dashboard/virtualProduct/category")
+                 revalidatePath("/dashboard/subcategory")
           
           return { success: true, data: newCategory };
 
@@ -45,4 +45,15 @@ export async function saveSubCategory(formData:FormData){
         return { success: false, message: "An unexpected error occurred" };
       }
 
+}
+
+export async function getSubCategory() {
+  try {
+    const subCategories = await db.subcategory.findMany();
+
+    return { success: true, data: subCategories };
+  } catch (error) {
+    console.error("Unexpected error:", error);
+    return { success: false, message: "An unexpected error occurred" };
+  }
 }
