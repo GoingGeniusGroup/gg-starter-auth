@@ -117,8 +117,8 @@ export default function PaymentGateway() {
         purchase_order_id: "test12",
         purchase_order_name: "test",
         customer_info: {
-          name: "Khalti Bahadur",
-          email: "example@gmail.com",
+          name: session.user.username,
+          email: session.user.email,
           phone: "9800000123",
         },
       };
