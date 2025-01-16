@@ -10,8 +10,12 @@ import {
   CardDescription,
 } from "../ui/card";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 
 export function KhaltiSuccess() {
+const searchparams = useSearchParams();
+
+
   return (
     <Card className="w-full max-w-md relative">
       <CardHeader>
