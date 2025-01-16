@@ -78,3 +78,8 @@ export const virtualProdSchema=z.object({
 export const virtualCategorySchema=z.object({
   name: z.string().min(3, "At least 3 characters are needed"),
 })
+
+export const subCatSchema=z.object({
+  name: z.string().min(3, "At least 3 characters are needed"),
+  imageUrl:z.string()
+})

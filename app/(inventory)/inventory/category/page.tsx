@@ -106,7 +106,7 @@ const updateCategoryState=(updatedCategory:any)=>{
           <div className="bg-white p-4 rounded shadow">Least Product:virtual(20)</div>
         </section>
       </main>
-      <CategoryTable updatedValue={category} onAddClick={viewForm} onEditClick={editCategory} onDeleteClick={removeCategory} />
+      <CategoryTable updatedValue={category} onAddClick={viewForm} onEditClick={editCategory} />
       {(showForm || updateMode) && (
         <div className="fixed inset-0 backdrop-blur-sm flex justify-center items-center z-50">
           <div className="rounded-lg shadow-lg relative w-full max-w-lg">

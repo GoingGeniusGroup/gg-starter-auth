@@ -7,6 +7,8 @@ import { useRouter } from "next/navigation";
 import { FileUploaderRegular } from "@uploadcare/react-uploader";
 import "@uploadcare/react-uploader/core.css";
 import { useTheme } from "next-themes";
+import { subCatSchema } from '@/inventorySchema';
+import { saveSubCategory } from "@/action/subCategory";
 
 interface SubCat{
     name:string;
@@ -15,13 +17,50 @@ interface SubCat{
 const SubCategoryForm = () => {
     const uploadkey = process.env.NEXT_PUBLIC_UPLOADCARE_PUBLIC_KEY;
   const [uploadedUrl, setUploadedUrl] = useState<string>('');
+    const router = useRouter();
+  
   const { theme } = useTheme();
+ const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm<SubCat>({
+    resolver: zodResolver(subCatSchema),
+  });
+ const onSubmit = async (data: SubCat) => {
+    console.log(data);
+  
+    const formData = new FormData();
+    formData.append("name", data.name);
+
+    if (uploadedUrl) {
+      formData.append("source", uploadedUrl);
+    }
+    
+    try {
+      const result = await saveSubCategory(formData);
+      console.log(result);
+      if (result.success && result.data) {
+        toast.success("Virtual product has been saved successfully!");
+        reset();
+        router.push("/dashboard/virtualProduct");
+      } else {
+        console.error("Validation errors:", result.errors);
+        toast.warning("Validation errors occurred. Check console for details.");
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      toast.error("Failed to save virtual product");
+    }
+  };
+
 
   return (
     <div>
          <div className="flex  py-10 justify-center items-center">
         <form
-          
+          onSubmit={handleSubmit(onSubmit)}
           className="w-full max-w-4xl border shadow-lg rounded-lg p-6 space-y-6"
         >
           <fieldset className="my-1 border border-blue-500 rounded-lg p-4">
