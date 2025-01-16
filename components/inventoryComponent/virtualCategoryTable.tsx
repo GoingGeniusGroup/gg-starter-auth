@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import React, { useState, useEffect } from "react";
 import {
   Table,
@@ -11,9 +11,12 @@ import {
 import Link from "next/link";
 import { Input } from "@/components/ui/input1";
 import { LuListFilter } from "react-icons/lu";
-import { BiShow } from 'react-icons/bi';
-import { FaEdit, FaTrash, FaPlus } from "react-icons/fa"; 
-import { deleteVirtualCategory, getVirtualCategory } from "@/action/virtualCategory";
+import { BiShow } from "react-icons/bi";
+import { FaEdit, FaTrash, FaPlus } from "react-icons/fa";
+import {
+  deleteVirtualCategory,
+  getVirtualCategory,
+} from "@/action/virtualCategory";
 import { toast } from "sonner";
 
 interface VCategory {
@@ -39,47 +42,50 @@ const VirtualCategoryTable = () => {
     }
     fetchInventory();
   }, []);
-  const removeCategory=async(categoryId:string)=>{
-    const confirmed=window.confirm("Are you sure you want to delete this category?");
-    if(confirmed){
-      try{
-        const response=await deleteVirtualCategory(categoryId);
-        if(response.success){
-          setCategories((prev)=>prev.filter((cat)=>cat.id!==categoryId))
-          toast.success("category deleted successfully")
+  const removeCategory = async (categoryId: string) => {
+    const confirmed = window.confirm(
+      "Are you sure you want to delete this category?"
+    );
+    if (confirmed) {
+      try {
+        const response = await deleteVirtualCategory(categoryId);
+        if (response.success) {
+          setCategories((prev) => prev.filter((cat) => cat.id !== categoryId));
+          toast.success("category deleted successfully");
+        } else {
+          console.error("Failed to delete category");
+          toast.error("Failed to delete category");
         }
-        else{
-          console.error("Failed to delete category")
-          toast.error("Failed to delete category")
-        }
-      }
-      catch(error){
-        console.error("Failed to delete category")
-        toast.error("Failed to delete category")
+      } catch (error) {
+        console.error("Failed to delete category");
+        toast.error("Failed to delete category");
       }
     }
-   }
+  };
 
   return (
     <div>
       <div className="p-2">
-        <div className="flex justify-between items-center h-[55px] px-4 bg-white my-2 mb-3 rounded">
+        <div className="flex justify-between items-center h-[55px] px-4 my-2 mb-3 rounded">
           <div className="flex items-center py-4 w-1/4 gap-2">
             <Input type="text" placeholder="Search" />
-            <button type="button" className="flex items-center justify-center p-2 rounded hover:bg-gray-300">
+            <button
+              type="button"
+              className="flex items-center justify-center p-2 rounded hover:bg-gray-300 dark:hover:bg-gray-600"
+            >
               <LuListFilter className="w-5 h-5" />
             </button>
           </div>
-          
+
           <Link href="/dashboard/virtualProduct/category/add">
             <button className="flex items-center gap-2 justify-end bg-blue-500 text-white px-4 py-2 rounded-md shadow hover:bg-blue-600 active:bg-blue-700">
-              <FaPlus className="w-4 h-4" /> 
+              <FaPlus className="w-4 h-4" />
               Add
             </button>
-          </Link> 
+          </Link>
         </div>
 
-        <Table className="w-full border-collapse border shadow rounded bg-white">
+        <Table className="w-full border-collapse border shadow rounded">
           <TableHeader>
             <TableRow>
               <TableHead>S.N</TableHead>
@@ -94,18 +100,28 @@ const VirtualCategoryTable = () => {
                 <TableCell className="text-blue-500">{category.name}</TableCell>
                 <TableCell>
                   <div className="flex space-x-2">
-                    <button className="text-green-500 hover:text-green-700 text-xl" aria-label="View">
+                    <button
+                      className="text-green-500 hover:text-green-700 text-xl"
+                      aria-label="View"
+                    >
                       <BiShow />
                     </button>
-                    <Link href={`/dashboard/virtualProduct/category/update/${category.id}`}>
-                    <button className="text-blue-500 hover:text-blue-700 text-xl" aria-label="Edit">
-                      <FaEdit />
-                    </button>
+                    <Link
+                      href={`/dashboard/virtualProduct/category/update/${category.id}`}
+                    >
+                      <button
+                        className="text-blue-500 hover:text-blue-700 text-xl"
+                        aria-label="Edit"
+                      >
+                        <FaEdit />
+                      </button>
                     </Link>
-                  
+
                     <button
-                    onClick={()=>removeCategory(category.id)}
-                    className="text-red-500 hover:text-red-700 text-xl" aria-label="Delete">
+                      onClick={() => removeCategory(category.id)}
+                      className="text-red-500 hover:text-red-700 text-xl"
+                      aria-label="Delete"
+                    >
                       <FaTrash />
                     </button>
                   </div>
@@ -120,4 +136,3 @@ const VirtualCategoryTable = () => {
 };
 
 export default VirtualCategoryTable;
-

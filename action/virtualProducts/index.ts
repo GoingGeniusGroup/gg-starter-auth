@@ -4,6 +4,7 @@ import { z } from "zod";
 import { virtualSchema } from "@/inventorySchema";
 import { cache } from "@/lib/cache";
 import { db } from "@/lib/db";
+import { revalidatePath } from "next/cache";
 
 export const getVirtualProducts = cache(
   async () => {
@@ -112,6 +113,8 @@ export const getVirtualCategories = cache(
       await db.virtualProduct.delete({
         where:{id:virtualId}
       });
+       revalidatePath("/dashboard/virtualProduct")
+      
       return { success: true, data: product };
 
     } catch(error){
