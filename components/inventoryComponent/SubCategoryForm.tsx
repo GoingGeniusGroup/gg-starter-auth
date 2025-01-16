@@ -35,23 +35,23 @@ const SubCategoryForm = () => {
     formData.append("name", data.name);
 
     if (uploadedUrl) {
-      formData.append("source", uploadedUrl);
+      formData.append("imageUrl", uploadedUrl);
     }
     
     try {
       const result = await saveSubCategory(formData);
       console.log(result);
       if (result.success && result.data) {
-        toast.success("Virtual product has been saved successfully!");
+        toast.success("Sub category has been saved successfully!");
         reset();
-        router.push("/dashboard/virtualProduct");
+        router.push("/dashboard/subCategory");
       } else {
         console.error("Validation errors:", result.errors);
         toast.warning("Validation errors occurred. Check console for details.");
       }
     } catch (error) {
       console.error("Error:", error);
-      toast.error("Failed to save virtual product");
+      toast.error("Failed to save category");
     }
   };
 
@@ -77,7 +77,7 @@ const SubCategoryForm = () => {
               <input
                 type="text"
                 id="name"
-                // {...register("name")}
+                {...register("name")}
                 className="w-full mt-1 p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
               {/* {errors.name && (
@@ -97,10 +97,12 @@ const SubCategoryForm = () => {
                               sourceList="local, url, gdrive"
                               classNameUploader={theme === "dark" ? "uc-dark" : "uc-light"}
                               pubkey={`${uploadkey}`}
+                              imgOnly={true}
                               onChange={(event) => {
                                 const file = event.successEntries[0];
                                 if (file) {
                                   setUploadedUrl(file.cdnUrl);
+                                  register('imageUrl', { value: file.cdnUrl })
                                 }
                               }}
                             />
