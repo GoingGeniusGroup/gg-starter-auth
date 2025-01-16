@@ -222,7 +222,9 @@ export default function ShopComponent() {
                         />
                       </div>
                       <div className="mt-2 p-2">
-                        <h2 className="text-md font-medium">{product.name}</h2>
+                        <h2 className="text-md font-medium text-gray-700">
+                          {product.name}
+                        </h2>
                         <h1 className="text-sm text-gray-500 ">
                           ${product.price}
                         </h1>
