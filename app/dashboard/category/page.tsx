@@ -55,7 +55,7 @@ const Category = () => {
   const updateCategoryState = (updatedCategory: any) => {
     setCategory((prevCategories) =>
       prevCategories.map((category) =>
-        category.CategoryId === updatedCategory.CategoryId
+        category.id === updatedCategory.id
           ? updatedCategory
           : category
       )
@@ -127,7 +127,7 @@ const Category = () => {
                 onCancel={hideForm}
                 category={selectedCategory}
                 onCategoryUpdate={updateCategoryState}
-                CategoryId={selectedCategory.CategoryId}
+                CategoryId={selectedCategory.id}
               />
             )}
           </div>

@@ -118,7 +118,7 @@ const CategoryTable = ({
                     <FaEdit />
                   </button>
                   <button
-                    onClick={() => onDeleteClick(category.CategoryId)}
+                    onClick={() => onDeleteClick(category.id)}
                     className="text-red-500 hover:text-red-700 text-2xl"
                     aria-label="Delete"
                   >
