@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { FormEvent, ReactElement, ReactNode, useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -14,6 +14,8 @@ import { esewaTopup } from "@/actions/esewa/index";
 import { useSession } from "next-auth/react";
 import { khaltiTopup } from "@/app/actions/khalti";
 import { useRouter, useSearchParams } from "next/navigation";
+import { Input } from "../ui/input";
+import axios from "axios";
 
 export default function PaymentGateway() {
   const { data: session } = useSession();
@@ -68,33 +70,55 @@ export default function PaymentGateway() {
   };
 
   //method to handle khalti payment
-  const handleKhaltiPayment = async () => {
-    setIsLoading(true);
-    setError(null);
+  // const handleKhaltiPayment = async () => {
+  //   setIsLoading(true);
+  //   setError(null);
 
-    const userId = session.user.id;
+  //   const userId = session.user.id;
 
-    try {
-      const response = await khaltiTopup({
-        amount: 1000,
-        productName: "wallet",
-        transactionId: `${Date.now()}`,
-        userId,
-      });
+  //   try {
+  //     const response = await khaltiTopup({
+  //       amount: 1000,
+  //       productName: "wallet",
+  //       transactionId: `${Date.now()}`,
+  //       userId,
+  //     });
 
-      if (response.success && response.paymentUrl) {
-        toast.success("Khalti payment initiated successfully");
-        router.push(response.paymentUrl);
-      } else {
-        setError(
-          response.error || "Failed to initiate payment. Please try again."
-        );
-      }
-    } catch (error) {
-      setError("An error occurred. Please try again.");
-    } finally {
-      setIsLoading(false);
-    }
+  //     if (response.success && response.paymentUrl) {
+  //       toast.success("Khalti payment initiated successfully");
+  //       router.push(response.paymentUrl);
+  //     } else {
+  //       setError(
+  //         response.error || "Failed to initiate payment. Please try again."
+  //       );
+  //     }
+  //   } catch (error) {
+  //     setError("An error occurred. Please try again.");
+  //   } finally {
+  //     setIsLoading(false);
+  //   }
+  // };
+
+  const handleKhaltiPayment = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const payload = {
+      return_url: `${process.env.NEXT_PUBLIC_APP_URL}/khalti/success`,
+      website_url: `${process.env.NEXT_PUBLIC_APP_URL}`,
+      amount: Math.round(1000) * 100,
+      purchase_order_id: "test12",
+      purchase_order_name: "test",
+      customer_info: {
+        name: "Khalti Bahadur",
+        email: "example@gmail.com",
+        phone: "9800000123",
+      },
+    };
+
+    const response = await axios.post(
+      `${process.env.NEXT_PUBLIC_APP_URL}/api/khalti`,
+      payload
+    );
+    console.log(response);
   };
 
   return (
@@ -107,26 +131,25 @@ export default function PaymentGateway() {
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
-          {error && (
-            <div className="text-red-500 text-sm bg-red-50 p-2 rounded">
-              {error}
-            </div>
-          )}
-          <Button
+          <form action="" onSubmit={handleKhaltiPayment} className="space-y-4">
+            {error && (
+              <div className="text-red-500 text-sm bg-red-50 p-2 rounded">
+                {error}
+              </div>
+            )}
+            {/* <Button
             onClick={handleEsewaPayment}
             className="w-full"
             disabled={isLoading}
           >
             {isLoading ? "Processing..." : "Pay with eSewa"}
-          </Button>
+          </Button> */}
+            <Input type="number" min={10} />
 
-          <Button
-            onClick={handleKhaltiPayment}
-            className="w-full"
-            disabled={isLoading}
-          >
-            {isLoading ? "Processing..." : "Pay with Khalti"}
-          </Button>
+            <Button type="submit" className="w-full" disabled={isLoading}>
+              {isLoading ? "Processing..." : "Pay with Khalti"}
+            </Button>
+          </form>
         </CardContent>
       </Card>
     </div>
