@@ -14,9 +14,7 @@ interface CategoryFormProps {
 }
 
 const CategoryForm = ({ onCancel }: CategoryFormProps) => {
-
       const router = useRouter();
-  
   const {
     control,
     register,
@@ -54,6 +52,7 @@ const CategoryForm = ({ onCancel }: CategoryFormProps) => {
         reset();
         router.push("/dashboard/category")
         onCancel();
+
       } else {
         console.error("Validation errors:", result.errors);
         // alert("Validation errors occurred. Check console for details.");

@@ -11,7 +11,11 @@ import {
 import { categorySchema, categoryData } from "@/inventorySchema";
 import { toast } from "sonner";
 import { set } from "zod";
+import { useRouter } from "next/navigation";
+
 const Category = () => {
+        const router = useRouter();
+  
   const [showForm, setShowForm] = useState<boolean>(false);
   const [updateMode, setUpdateMode] = useState<boolean>(false);
   const [selectedCategory, setSelectedCategory] = useState<any>(null);
@@ -84,9 +88,13 @@ const Category = () => {
       const response = await deleteCategory(categoryId);
       if (response.success) {
         toast.success("category deleted successfully");
+        router.push("/dashboard/category")
+
         setCategory((prev) =>
           prev.filter((category) => category.CategoryId !== categoryId)
         );
+
+
       } else {
         toast.error("Failed to delete category");
         console.error("Failed to delete category");
@@ -116,7 +124,7 @@ const Category = () => {
         updatedValue={category}
         onAddClick={viewForm}
         onEditClick={editCategory}
-        onDeleteClick={removeCategory}
+      
       />
       {(showForm || updateMode) && (
         <div className="fixed inset-0 backdrop-blur-sm flex justify-center items-center z-50">
