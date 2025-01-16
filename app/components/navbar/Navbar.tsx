@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 import logo from "@/public/card/GGReal Icon.svg";
+import shop from "@/public/assets/shop.svg";
 import { Layout } from "../dom/Layout";
 import ProfileHudTop from "../Huds/ProfileHudTop";
 import { signOut } from "@/app/auth";
@@ -30,6 +31,16 @@ const Navbar = async () => {
           width={150}
           height={150}
           className="w-full h-16"
+        />
+      </Link>
+
+      <Link href={"/shop"} className="flex items-center">
+        <Image
+          src={shop}
+          alt="GGLogo"
+          width={50}
+          height={50}
+          className="w-full h-12"
         />
       </Link>
 
