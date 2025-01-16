@@ -9,7 +9,8 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table1";
-import { getAllCategories } from "@/action/category";
+import { toast } from "sonner";
+import { getAllCategories,deleteCategory } from "@/action/category";
 import { Input } from "@/components/ui/input1";
 import { LuListFilter } from "react-icons/lu";
 import { BiShow } from "react-icons/bi";
@@ -25,13 +26,12 @@ interface CategoryTableProps {
   updatedValue: Category[];
   onAddClick: () => void;
   onEditClick: (category: any) => void;
-  onDeleteClick: (categoryId: any) => void;
 }
 const CategoryTable = ({
   onAddClick,
   onEditClick,
   updatedValue,
-  onDeleteClick,
+  
 }: CategoryTableProps) => {
   const [category, setCategory] = useState<any[]>([]);
 
@@ -53,7 +53,31 @@ const CategoryTable = ({
   useEffect(() => {
     setCategory(updatedValue);
   }, [updatedValue]);
+  const removeCategory = async (categoryId: any): Promise<void> => {
+    const confirmed = window.confirm(
+      "Are you sure you want to delete this category?"
+    );
+    if (!confirmed) return;
+    try {
+      const response = await deleteCategory(categoryId);
+      if (response.success) {
+        toast.success("category deleted successfully");
+        // router.push("/dashboard/category")
 
+        setCategory((prev) =>
+          prev.filter((category) => category.id !== categoryId)
+        );
+
+
+      } else {
+        toast.error("Failed to delete category");
+        console.error("Failed to delete category");
+      }
+    } catch (error) {
+      console.error("Error deleting category:", error);
+      toast.error("An unexpected error occurred while deleting the category");
+    }
+  };
   return (
     <div className="p-2">
       <div className="flex justify-between items-center h-[55px] px-4 my-2 mb-3 rounded">
@@ -118,7 +142,7 @@ const CategoryTable = ({
                     <FaEdit />
                   </button>
                   <button
-                    onClick={() => onDeleteClick(category.CategoryId)}
+                    onClick={() => removeCategory(category.id)}
                     className="text-red-500 hover:text-red-700 text-2xl"
                     aria-label="Delete"
                   >

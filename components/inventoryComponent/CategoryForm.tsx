@@ -6,6 +6,7 @@ import { categorySchema, categoryData } from "@/inventorySchema";
 import { savecategory } from "@/action/category";
 import { revalidatePath } from "next/cache";
 import { Toaster, toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 interface CategoryFormProps {
   onCancel: () => void;
@@ -13,6 +14,7 @@ interface CategoryFormProps {
 }
 
 const CategoryForm = ({ onCancel }: CategoryFormProps) => {
+      const router = useRouter();
   const {
     control,
     register,
@@ -48,7 +50,9 @@ const CategoryForm = ({ onCancel }: CategoryFormProps) => {
         // };
         // onCategoryAdd(newCategory); // Add to parent state
         reset();
+        router.push("/dashboard/category")
         onCancel();
+
       } else {
         console.error("Validation errors:", result.errors);
         // alert("Validation errors occurred. Check console for details.");

@@ -6,6 +6,7 @@ import { categorySchema, categoryData } from "@/inventorySchema";
 import { updateCategory } from "@/action/category"; // Make sure this is imported
 import { toast } from "sonner";
 import { on } from "events";
+import { useRouter } from "next/navigation";
 
 interface CategoryFormProps {
   onCancel: () => void;
@@ -20,6 +21,9 @@ const CategoryUpdateForm = ({
   CategoryId,
   onCategoryUpdate,
 }: CategoryFormProps) => {
+
+        const router = useRouter();
+  
   const {
     control,
     register,
@@ -59,6 +63,7 @@ const CategoryUpdateForm = ({
         };
         toast.success("Category updated successfully");
         console.log("Category updated successfully");
+        router.push("/dashboard/category")
         onCancel(); // Close the form after success
         onCategoryUpdate(updatedCategory);
       } else {
