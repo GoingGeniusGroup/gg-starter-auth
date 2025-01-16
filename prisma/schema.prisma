@@ -321,6 +321,14 @@ model VirtualProductOnOrder {
   @@id([orderId, virtualProductId])
 }
 
+
+model Subcategory{
+    id                  String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+    name  String
+    imageUrl String
+}
+
+
 enum UserRole {
   Admin
   User
