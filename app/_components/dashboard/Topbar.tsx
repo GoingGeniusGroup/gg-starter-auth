@@ -3,6 +3,7 @@ import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import ProfileCard from "./ProfileCard"; // ProfileCard component
+import { ThemeSwitcher } from "@/app/components/ThemeToggler/ThemeSwitcher";
 
 // Custom hook to detect clicks outside a given element
 const useClickOutside = (
@@ -45,7 +46,7 @@ const Topbar = ({ isCollapsed }: { isCollapsed: boolean }) => {
         isCollapsed ? "pl-[105px]" : "pl-64"
       }`}
     >
-      <div className="container flex h-14 items-center">
+      <div className="container flex h-10 items-center">
         {/* Search Bar */}
         <div className="flex flex-1 items-center gap-2">
           <div className="relative w-[300px] lg:w-[400px]">
@@ -65,7 +66,7 @@ const Topbar = ({ isCollapsed }: { isCollapsed: boolean }) => {
         </div>
 
         {/* Notifications and user Avatar */}
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-3">
           <Button variant="ghost" size="icon" className="relative">
             <Image
               src="/assets/notificationIcon.svg"
@@ -75,7 +76,6 @@ const Topbar = ({ isCollapsed }: { isCollapsed: boolean }) => {
               height={20}
             />
           </Button>
-
           {/* Avatar with Dropdown */}
           <div className="relative" ref={dropdownRef}>
             <Image
@@ -132,6 +132,10 @@ const Topbar = ({ isCollapsed }: { isCollapsed: boolean }) => {
               </div>
             )}
           </div>
+          <div className=" z-55">
+                 <ThemeSwitcher />
+           </div>
+          
         </div>
       </div>
     </header>

@@ -2,9 +2,9 @@
 import { usePathname } from "next/navigation";
 import { useEffect } from "react";
 import Image from "next/image";
-import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
+import { FiChevronsLeft, FiChevronsRight } from "react-icons/fi";
 import Link from "next/link";
-
+// import { motion } from "framer-motion";
 const menuItems = [
   {
     name: "Dashboard",
@@ -16,6 +16,7 @@ const menuItems = [
     iconPath: "/assets/productIcon.svg",
     path: "/dashboard/product",
   },
+
   {
     name: "Inventory",
     iconPath: "/assets/inventoryIcon.svg",
@@ -24,7 +25,12 @@ const menuItems = [
   {
     name: "Order",
     iconPath: "/assets/orderIcon.svg",
-    path: "/dashboard/order",
+    path: "/dashboard/virtualOrder",
+  },
+  {
+    name: "Virtual",
+    iconPath: "/assets/productIcon.svg",
+    path: "/dashboard/virtualProduct",
   },
   {
     name: "Account",
@@ -56,7 +62,7 @@ const Sidebar: React.FC<{
 
   return (
     <aside
-      className={`bg-white text-gray-900 h-full fixed flex-shrink-0 top-0 z-40 flex flex-col shadow-lg transition-all duration-300 ${
+      className={`bg-white dark:bg-black/40 dark:border-white/20 hover:dark:border-white text-gray-900 h-full left-0 fixed flex-shrink-0 top-0 z-10 flex flex-col shadow-lg transition-all duration-300 ${
         isCollapsed ? "w-30" : "w-64"
       }`}
     >
@@ -65,18 +71,20 @@ const Sidebar: React.FC<{
         className={`${
           isCollapsed
             ? "  "
-            : "flex items-center px-4 py-4 border-b border-gray-200"
-        }  ${isCollapsed ? "justify-center" : ""} transition-all`}
+            : "flex items-center px-4 py-4 border-b border-gray-200 dark:bg-black/40 dark:border-white/20 dark:text-white"
+        }  ${
+          isCollapsed ? "justify-center" : ""
+        } transition-all sticky top-0 bg-white dark:bg-black/40 dark:border-white/20 z-50`}
       >
         <div
           className={`${
             isCollapsed
               ? "  shadow-md flex flex-col items-center p-3"
-              : "w-12 h-12 rounded-full border border-gray-900 shadow-sm bg-gray-200 flex items-center justify-center"
+              : "w-12 h-12 rounded-full border border-gray-900 dark:bg-gray-300 shadow-sm bg-gray-200 flex items-center justify-center"
           }`}
         >
           {isCollapsed && (
-            <span className="text-sm uppercase font-bold text-gray-700">
+            <span className="text-sm uppercase font-bold text-gray-600 dark:bg-black/40  dark:border-white/20">
               GG Shop
             </span>
           )}
@@ -88,12 +96,14 @@ const Sidebar: React.FC<{
           />
         </div>
         {!isCollapsed && (
-          <span className="text-xl font-bold ml-4 text-gray-900">GG SHOP</span>
+          <span className="text-xl font-bold ml-4 text-gray-900 dark:text-white/40">
+            GG SHOP
+          </span>
         )}
       </div>
 
       {/* Menu Container */}
-      <div className="mt-3 flex-grow px-3">
+      <div className="mt-3 flex-grow px-3 overflow-y-auto">
         {menuItems.map((item, index) => (
           <Link href={item.path} key={index}>
             <div
@@ -103,7 +113,7 @@ const Sidebar: React.FC<{
                   : "flex-row items-center px-4 py-4"
               } ${
                 pathName === item.path && "shadow-[#3a3737]"
-              } bg-white rounded-lg shadow-lg hover:shadow-[#3a3737] transition mt-2`}
+              } bg-white rounded-lg shadow-lg hover:shadow-[#3a3737] transition mt-2 dark:bg-gray-300`}
             >
               {isCollapsed && (
                 <span className="text-xs font-medium mb-2 text-gray-700">
@@ -113,8 +123,8 @@ const Sidebar: React.FC<{
               <Image
                 src={item.iconPath}
                 alt={`${item.name} Icon`}
-                width={20}
-                height={20}
+                width={18}
+                height={18}
               />
               {!isCollapsed && (
                 <span className="ml-6 font-medium text-gray-900">
@@ -128,7 +138,7 @@ const Sidebar: React.FC<{
 
       {/* Collapse Button */}
       <button
-        className="p-2 mt-auto text-gray-500 hover:text-gray-900 absolute bottom-5 left-1/2 transform -translate-x-1/2"
+        className="p-2 mt-auto text-gray-500 hover:text-gray-900 absolute bottom-5 left-1/2 transform -translate-x-1/2 dark:hover:text-white"
         onClick={() => onToggle(!isCollapsed)}
         aria-label="Toggle Sidebar"
       >
@@ -138,9 +148,9 @@ const Sidebar: React.FC<{
           }`}
         >
           {isCollapsed ? (
-            <FiChevronRight size={30} />
+            <FiChevronsRight size={30} />
           ) : (
-            <FiChevronLeft size={30} />
+            <FiChevronsLeft size={30} />
           )}
         </span>
       </button>

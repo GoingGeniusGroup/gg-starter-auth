@@ -1,265 +1,215 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { getAllproducts } from "@/action/product";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { inventorySchema } from "@/inventorySchema";
+import { saveInventory } from "@/action/inventory";
 
-const InventoryForm= () => {
-  const [quantity, setQuantity] = useState<number>(0);
-  const [price, setPrice] = useState<number>(0);
-  const [totalPrice, setTotalPrice] = useState<string>("0.00");
-  const [orderType, setOrderType] = useState<string>(""); // Track order type
+interface Products {
+  id: string;
+  name: string;
+  stockQuantity: number;
+}
 
-  const calculateTotalPrice = (quantity: number, price: number) => {
-    setTotalPrice((quantity * price).toFixed(2));
+interface Inventory {
+  product: string;
+  quantityAvailable: number;
+  thresholdValue: number;
+  address?: string;
+}
+
+const InventoryForm = () => {
+  const router = useRouter();
+  const [products, setProducts] = useState<Products[]>([]);
+  const [selectedProduct, setSelectedProduct] = useState<Products | null>(null);
+
+  const {
+    register,
+    handleSubmit,
+    reset,
+    setValue,
+    formState: { errors },
+  } = useForm<Inventory>({
+    resolver: zodResolver(inventorySchema),
+  });
+
+  useEffect(() => {
+    async function fetchProduct() {
+      try {
+        const result = await getAllproducts();
+        if (result.success && result.data) {
+          setProducts(result.data);
+        } else {
+          console.error("Failed to fetch product");
+        }
+      } catch (error) {
+        console.error("Failed to fetch data");
+      }
+    }
+    fetchProduct();
+  }, []);
+
+  const handleProductChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    const selectedProductId = event.target.value;
+    const product = products.find((p) => p.id === selectedProductId) || null;
+    setSelectedProduct(product);
+
+    if (product) {
+      setValue("quantityAvailable", product.stockQuantity);
+    } else {
+      setValue("quantityAvailable", 0); // Reset if no product is selected
+    }
+  };
+
+  const onSubmit = async (data: Inventory) => {
+    console.log("Form data:", data); // Debugging statement
+    const formData = new FormData();
+    formData.append("product", data.product);
+    formData.append("quantityAvailable", data.quantityAvailable.toString());
+    formData.append("thresholdValue", data.thresholdValue.toString());
+
+    if (data.address) {
+      formData.append("address", data.address);
+    }
+
+    try {
+      const result = await saveInventory(formData);
+      console.log("Save result:", result); // Debugging statement
+      if (result.success && result.data) {
+        toast.success("Inventory has been saved successfully!");
+        console.log("Saved Inventory:", result.data);
+        reset();
+        router.push("/dashboard/inventory");
+      } else {
+        console.error("Validation errors:", result.errors);
+        toast.warning("Validation errors occurred. Check console for details.");
+      }
+    } catch (error) {
+      console.error("Failed to submit form", error);
+      toast.error("Failed to save inventory");
+    }
   };
 
   return (
-    <div className="p-6 bg-gray-100 min-h-screen flex justify-center items-center">
-      <form className="w-full max-w-5xl bg-white shadow-lg rounded-lg p-6 space-y-6">
+    <div className="p-6 min-h-screen flex justify-center items-center">
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        className="w-full max-w-5xl shadow-lg border rounded-lg p-6 space-y-6"
+      >
         <fieldset className="my-1 border border-blue-500 rounded-lg p-4">
-            <legend className="text-xl font-bold text-blue-500 px-2">Inventory Form</legend>
-            <fieldset className=" my-4 border rounded-lg p-4">
-          <legend className="text-lg  text-blue-500 px-2">Item Information</legend>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-           
-            <div className="mb-4">
-              <label htmlFor="itemName" className="block text-sm font-semibold text-gray-700">Item Name:</label>
-              <input
-                type="text"
-                id="itemName"
-                name="itemName"
-                required
-                className="w-full mt-1 p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-              />
-            </div>
-
-            <div className="mb-4">
-              <label htmlFor="itemId" className="block text-sm font-semibold text-gray-700">Item ID:</label>
-              <input
-                type="text"
-                id="itemId"
-                name="itemId"
-                required
-                className="w-full mt-1 p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-              />
-            </div>
-            <div className="mb-4">
-              <label htmlFor="unit" className="block text-sm font-semibold text-gray-700">Unit:</label>
-              <input
-                type="text"
-                id="unit"
-                name="unit"
-                required
-                className="w-full mt-1 p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-              />
-            </div>
-
-            <div className="mb-4">
-              <label htmlFor="quantity" className="block text-sm font-semibold text-gray-700">Quantity:</label>
-              <input
-                type="number"
-                id="quantity"
-                name="quantity"
-                min="0"
-                required
-                value={quantity}
-                onChange={(e) => {
-                  const val = parseFloat(e.target.value) || 0;
-                  setQuantity(val);
-                  calculateTotalPrice(val, price);
-                }}
-                className="w-full mt-1 p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-              />
-            </div>
-
-            <div className="mb-4">
-              <label htmlFor="price" className="block text-sm font-semibold text-gray-700">Price per Unit:</label>
-              <input
-                type="number"
-                id="price"
-                name="price"
-                min="0"
-                step="0.01"
-                required
-                value={price}
-                onChange={(e) => {
-                  const val = parseFloat(e.target.value) || 0;
-                  setPrice(val);
-                  calculateTotalPrice(quantity, val);
-                }}
-                className="w-full mt-1 p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-              />
-            </div>
-
-            <div className="mb-4">
-              <label htmlFor="totalPrice" className="block text-sm font-semibold text-gray-700">Total Price:</label>
-              <input
-                type="text"
-                id="totalPrice"
-                name="totalPrice"
-                value={totalPrice}
-                readOnly
-                className="w-full mt-1 p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-              />
-            </div>
-          </div>
-        </fieldset>
-
-        
-        <fieldset className="my-4 border rounded-lg p-4" >
-          <legend className="text-lg  text-blue-500 px-2">Order Information</legend>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="mb-4">
-              <label htmlFor="orderId" className="block text-sm font-semibold text-gray-700">Order ID:</label>
-              <input
-                type="text"
-                id="orderId"
-                name="orderId"
-                className="w-full mt-1 p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-              />
-            </div>
-
-            <div className="mb-4">
-              <label htmlFor="orderType" className="block text-sm font-semibold text-gray-700">Order Type:</label>
-              <select
-                id="orderType"
-                name="orderType"
-                required
-                value={orderType}
-                onChange={(e) => setOrderType(e.target.value)}
-                className="w-full mt-1 p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-              >
-                <option value="" disabled>Select Order Type</option>
-                <option value="Inbound">Inbound (Procurement)</option>
-                <option value="Outbound">Outbound (Sales)</option>
-              </select>
-            </div>
-
-            <div className="mb-4">
-              <label htmlFor="orderStatus" className="block text-sm font-semibold text-gray-700">Order Status:</label>
-              <select
-                id="orderStatus"
-                name="orderStatus"
-                className="w-full mt-1 p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-              >
-                <option value="" disabled>Select Order Status</option>
-                <option value="Pending">Pending</option>
-                <option value="Shipped">Shipped</option>
-                <option value="Delivered">Delivered</option>
-              </select>
-            </div>
-
-            <div className="mb-4">
-              <label htmlFor="orderDate" className="block text-sm font-semibold text-gray-700">Order Date:</label>
-              <input
-                type="date"
-                id="orderDate"
-                name="orderDate"
-                className="w-full mt-1 p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-              />
-            </div>
-          </div>
-        </fieldset>
-
-        {/* Conditional Section for Supplier or Customer Information */}
-        {orderType === "Inbound" && (
-          <fieldset className=" my-4 border  rounded-lg p-4">
-            <legend className="text-lg  text-blue-500 px-2">Supplier Information</legend>
+          <legend className="text-xl font-bold text-blue-500 px-2">
+            Inventory Form
+          </legend>
+          <fieldset className="my-4 border rounded-lg p-4">
+            <legend className="text-lg text-blue-500 px-2">
+              Item Information
+            </legend>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="mb-4">
-                <label htmlFor="supplier" className="block text-sm font-semibold text-gray-700">Supplier Name:</label>
-                <input
-                  type="text"
-                  id="supplier"
-                  name="supplier"
+                <label
+                  htmlFor="product"
+                  className="block text-sm font-semibold text-gray-700 dark:text-gray-300"
+                >
+                  Product:
+                </label>
+                <select
+                  id="product"
+                  {...register("product")}
+                  onChange={handleProductChange}
+                  required
                   className="w-full mt-1 p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
+                >
+                  <option value="" disabled>
+                    Select a product
+                  </option>
+                  {products.map((product) => (
+                    <option key={product.id} value={product.id}>
+                      {product.name}
+                    </option>
+                  ))}
+                </select>
+                {errors.product && (
+                  <span className="text-red-500 text-sm">
+                    {errors.product.message}
+                  </span>
+                )}
               </div>
 
               <div className="mb-4">
-                <label htmlFor="supplierContact" className="block text-sm font-semibold text-gray-700">Supplier Contact:</label>
+                <label
+                  htmlFor="quantityAvailable"
+                  className="block text-sm font-semibold text-gray-700 dark:text-gray-300"
+                >
+                  Quantity Available:
+                </label>
                 <input
-                  type="text"
-                  id="supplierContact"
-                  name="supplierContact"
+                  type="number"
+                  id="quantityAvailable"
+                  {...register("quantityAvailable", { valueAsNumber: true })}
+                  readOnly
                   className="w-full mt-1 p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
+                {errors.quantityAvailable && (
+                  <span className="text-red-500 text-sm">
+                    {errors.quantityAvailable.message}
+                  </span>
+                )}
+              </div>
+
+              <div className="mb-4">
+                <label
+                  htmlFor="thresholdValue"
+                  className="block text-sm font-semibold text-gray-700 dark:text-gray-300"
+                >
+                  Threshold Value:
+                </label>
+                <input
+                  type="number"
+                  id="thresholdValue"
+                  {...register("thresholdValue", { valueAsNumber: true })}
+                  min="0"
+                  required
+                  className="w-full mt-1 p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+                {errors.thresholdValue && (
+                  <span className="text-red-500 text-sm">
+                    {errors.thresholdValue.message}
+                  </span>
+                )}
+              </div>
+
+              <div className="mb-4">
+                <label
+                  htmlFor="address"
+                  className="block text-sm font-semibold text-gray-700 dark:text-gray-300"
+                >
+                  Address:
+                </label>
+                <input
+                  type="text"
+                  id="address"
+                  {...register("address")}
+                  className="w-full mt-1 p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+                {errors.address && (
+                  <span className="text-red-500 text-sm">
+                    {errors.address.message}
+                  </span>
+                )}
               </div>
             </div>
           </fieldset>
-        )}
 
-        {orderType === "Outbound" && (
-          <fieldset className="border my-4 rounded-lg p-4">
-            <legend className="text-lg  text-blue-500 px-2">Customer Information</legend>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="mb-4">
-                <label htmlFor="customerName" className="block text-sm font-semibold text-gray-700">Customer Name:</label>
-                <input
-                  type="text"
-                  id="customerName"
-                  name="customerName"
-                  className="w-full mt-1 p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
-              </div>
-
-              <div className="mb-4">
-                <label htmlFor="customerContact" className="block text-sm font-semibold text-gray-700">Customer Contact:</label>
-                <input
-                  type="text"
-                  id="customerContact"
-                  name="customerContact"
-                  className="w-full mt-1 p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
-              </div>
-            </div>
-          </fieldset>
-        )}
-        
-         <fieldset className="my-4  border rounded-lg p-4">
-          <legend className="text-lg  text-blue-500 px-2">Warehouse Information</legend>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="mb-4">
-              <label htmlFor="warehouse" className="block text-sm font-semibold text-gray-700">Warehouse:</label>
-              <input
-                type="text"
-                id="warehouse"
-                name="warehouse"
-                required
-                className="w-full mt-1 p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-              />
-            </div>
-
-            <div className="mb-4">
-              <label htmlFor="warehouseid" className="block text-sm font-semibold text-gray-700">Warehouse ID:</label>
-              <input
-                type="text"
-                id="warehouseid"
-                name="warehouseid"
-                required
-                className="w-full mt-1 p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-              />
-            </div>
-
-            <div className="mb-4">
-              <label htmlFor="warehouseLocation" className="block text-sm font-semibold text-gray-700">Warehouse Location:</label>
-              <textarea
-                id="warehouseLocation"
-                name="warehouseLocation"
-                rows={3}
-                className="w-full mt-1 p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-              />
-            </div>
-          </div>
+          <button
+            type="submit"
+            className="w-full p-2 my-3 bg-blue-500 text-white rounded hover:bg-blue-600 transition"
+          >
+            Submit
+          </button>
         </fieldset>
-
-        <button
-          type="submit"
-          className="w-full p-2 my-3 bg-blue-500 text-white rounded hover:bg-blue-600 transition"
-        >
-          Submit
-        </button>
-        </fieldset>
-        
-
       </form>
     </div>
   );

@@ -8,7 +8,7 @@ const DashboardLayout = ({ children }: { children: ReactNode }) => {
   const [isCollapsed, setIsCollapsed] = useState(false); // Sidebar state
 
   return (
-    <div className="flex flex-col h-screen relative">
+    <div className="flex flex-col h-screen relative py-4">
       {/* Topbar */}
       <Topbar isCollapsed={isCollapsed} />
 
