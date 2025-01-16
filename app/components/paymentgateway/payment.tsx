@@ -29,46 +29,46 @@ export default function PaymentGateway() {
   }
 
   //method to handle esewa payment
-  const handleEsewaPayment = async () => {
-    setIsLoading(true);
-    setError(null);
+  // const handleEsewaPayment = async () => {
+  //   setIsLoading(true);
+  //   setError(null);
 
-    try {
-      const response = await esewaTopup({
-        userId: session.user.id,
-        amount: 100,
-      });
+  //   try {
+  //     const response = await esewaTopup({
+  //       userId: session.user.id,
+  //       amount: 100,
+  //     });
 
-      if (response.success && response.data?.esewaConfig) {
-        toast.success("eSewa payment initiated successfully");
+  //     if (response.success && response.data?.esewaConfig) {
+  //       toast.success("eSewa payment initiated successfully");
 
-        // Create and submit the form
-        const form = document.createElement("form");
-        form.method = "POST";
-        form.action = "https://rc-epay.esewa.com.np/api/epay/main/v2/form";
+  //       // Create and submit the form
+  //       const form = document.createElement("form");
+  //       form.method = "POST";
+  //       form.action = "https://rc-epay.esewa.com.np/api/epay/main/v2/form";
 
-        Object.entries(response.data.esewaConfig).forEach(([key, value]) => {
-          const input = document.createElement("input");
-          input.type = "hidden";
-          input.name = key;
-          input.value = value as string;
-          form.appendChild(input);
-        });
+  //       Object.entries(response.data.esewaConfig).forEach(([key, value]) => {
+  //         const input = document.createElement("input");
+  //         input.type = "hidden";
+  //         input.name = key;
+  //         input.value = value as string;
+  //         form.appendChild(input);
+  //       });
 
-        document.body.appendChild(form);
-        form.submit();
-      } else {
-        setError(
-          response.error ||
-            "Failed to initiate eSewa payment. Please try again."
-        );
-      }
-    } catch (error) {
-      setError("An error occurred. Please try again.");
-    } finally {
-      setIsLoading(false);
-    }
-  };
+  //       document.body.appendChild(form);
+  //       form.submit();
+  //     } else {
+  //       setError(
+  //         response.error ||
+  //           "Failed to initiate eSewa payment. Please try again."
+  //       );
+  //     }
+  //   } catch (error) {
+  //     setError("An error occurred. Please try again.");
+  //   } finally {
+  //     setIsLoading(false);
+  //   }
+  // };
 
   //method to handle khalti payment
   // const handleKhaltiPayment = async () => {
@@ -146,10 +146,8 @@ export default function PaymentGateway() {
     <div className="flex justify-center items-center relative">
       <Card className="w-full max-w-md mx-4">
         <CardHeader className="space-y-2">
-          <CardTitle>Choose Payment Method</CardTitle>
-          <CardDescription>
-            Click the button below to pay with eSewa or Khalti
-          </CardDescription>
+          <CardTitle>Khalti Payment</CardTitle>
+          <CardDescription>Please enter the amount for payment</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           <form action="" onSubmit={handleKhaltiPayment} className="space-y-4">
@@ -168,7 +166,7 @@ export default function PaymentGateway() {
             <Input
               type="number"
               min={10}
-              placeholder="1000"
+              placeholder="eg: 1000"
               value={amount}
               onChange={(e) => setAmount(Number(e.target.value))}
             />
