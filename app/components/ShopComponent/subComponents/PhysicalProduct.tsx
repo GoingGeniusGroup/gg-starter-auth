@@ -89,13 +89,15 @@ export default function PhysicalProduct() {
             </svg>
           </div>
           {isDropdownOpen && (
-            <div className="absolute z-10 mt-1 w-full rounded-md bg-white shadow-md">
+            <div className="absolute z-10 mt-1 w-full rounded-md bg-white dark:bg-[#020b24] shadow-md">
               <ul className="p-2">
                 {categories.map((category) => (
                   <li
                     key={category}
-                    className={`cursor-pointer py-1 ${
-                      selectedCategory === category ? "bg-gray-100" : ""
+                    className={`cursor-pointer py-1 px-2 ${
+                      selectedCategory === category
+                        ? "bg-gray-100 dark:bg-gray-900 dark:text-gray-300"
+                        : ""
                     }`}
                     onClick={() => handleCategoryClick(category)}
                   >
@@ -125,13 +127,15 @@ export default function PhysicalProduct() {
                       />
                     </div>
                     <div className="mt-2 p-2">
-                      <h2 className="text-md font-medium">{product.name}</h2>
+                      <h2 className="text-md font-medium text-gray-700">
+                        {product.name}
+                      </h2>
                       <h1 className="text-sm text-gray-500 ">
                         ${product.price}
                       </h1>
                     </div>
                     <div className="p-2 w-full flex justify-center">
-                      <Button className="w-full text-md font-normal flex items-center justify-center">
+                      <Button className="w-full text-md font-normal flex items-center justify-center border">
                         <span>Buy Now</span>
                       </Button>
                     </div>
@@ -139,8 +143,6 @@ export default function PhysicalProduct() {
                 </CarouselItem>
               ))}
             </CarouselContent>
-            <CarouselPrevious />
-            <CarouselNext />
           </Carousel>
         </div>
       </div>
