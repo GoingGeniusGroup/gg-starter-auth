@@ -119,7 +119,7 @@ export default function PaymentGateway() {
         customer_info: {
           name: session.user.username,
           email: session.user.email,
-          phone: "9800000123",
+          phone: session.user.phone,
         },
       };
 
