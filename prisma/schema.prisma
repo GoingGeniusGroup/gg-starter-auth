@@ -97,7 +97,7 @@ model Product {
   stockQuantity  Int
   brand          String?
   rating         Int
-  categoryId     String          @unique @db.Uuid
+  categoryId     String          @db.Uuid
   reviews        String[]
   isFeatured     Boolean?        @default(false)
   taxId          String?         @unique @db.Uuid
@@ -244,11 +244,11 @@ model VariantOption {
 }
 
 model Category {
-  id                  String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  id                  String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   categoryName        String
   categoryDescription String?
   categoryImage       String[]
-  products            Product?
+  products            Product[]
 }
 
 model visitprofile {
