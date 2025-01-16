@@ -22,6 +22,7 @@ export default function PaymentGateway() {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
+  const [amount, setAmount] = useState<number | undefined>(undefined);
 
   if (!session) {
     return <div>Please login to proceed with the payment.</div>;
@@ -101,24 +102,44 @@ export default function PaymentGateway() {
 
   const handleKhaltiPayment = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const payload = {
-      return_url: `${process.env.NEXT_PUBLIC_APP_URL}/khalti/success`,
-      website_url: `${process.env.NEXT_PUBLIC_APP_URL}`,
-      amount: Math.round(1000) * 100,
-      purchase_order_id: "test12",
-      purchase_order_name: "test",
-      customer_info: {
-        name: "Khalti Bahadur",
-        email: "example@gmail.com",
-        phone: "9800000123",
-      },
-    };
+    if (!amount || amount < 10) {
+      setError("Amount must be atleast 10");
+      return;
+    }
+    setError(null);
+    setIsLoading(true);
 
-    const response = await axios.post(
-      `${process.env.NEXT_PUBLIC_APP_URL}/api/khalti`,
-      payload
-    );
-    console.log(response);
+    try {
+      const payload = {
+        return_url: `${process.env.NEXT_PUBLIC_APP_URL}/khalti/success`,
+        website_url: `${process.env.NEXT_PUBLIC_APP_URL}`,
+        amount: Math.round(amount) * 100,
+        purchase_order_id: "test12",
+        purchase_order_name: "test",
+        customer_info: {
+          name: "Khalti Bahadur",
+          email: "example@gmail.com",
+          phone: "9800000123",
+        },
+      };
+
+      const response = await axios.post(
+        `${process.env.NEXT_PUBLIC_APP_URL}/api/khalti`,
+        payload
+      );
+
+      if (response.data.success) {
+        toast.success("Khalti payment initiated successfully");
+        router.push(response.data?.data?.payment_url);
+      } else {
+        setError("Something went wrong");
+      }
+    } catch (error) {
+      console.log(error);
+      setError("An error occured Please Try again");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -144,7 +165,13 @@ export default function PaymentGateway() {
           >
             {isLoading ? "Processing..." : "Pay with eSewa"}
           </Button> */}
-            <Input type="number" min={10} />
+            <Input
+              type="number"
+              min={10}
+              placeholder="1000"
+              value={amount}
+              onChange={(e) => setAmount(Number(e.target.value))}
+            />
 
             <Button type="submit" className="w-full" disabled={isLoading}>
               {isLoading ? "Processing..." : "Pay with Khalti"}
