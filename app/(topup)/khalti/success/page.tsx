@@ -3,7 +3,7 @@ import React from "react";
 
 const KhaltiSuccessPage = async () => {
   return (
-    <div>
+    <div className="flex items-center justify-center mt-20">
       <KhaltiSuccess />
     </div>
   );
