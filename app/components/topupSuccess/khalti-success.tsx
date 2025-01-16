@@ -11,28 +11,7 @@ import {
 } from "../ui/card";
 import Link from "next/link";
 
-interface khaltiSuccessProps {
-  topup?: {
-    amount: number;
-    topupStatus: string;
-    createdAt: Date;
-    topupType: string;
-  };
-}
-
-export function KhaltiSuccess({ topup }: khaltiSuccessProps) {
-  if (!topup) {
-    return (
-      <Card className="w-full max-w-md">
-        <CardHeader className="text-center">
-          <CardTitle>Payment Processing</CardTitle>
-          <CardDescription>
-            We`re confirming your payment. Please wait...
-          </CardDescription>
-        </CardHeader>
-      </Card>
-    );
-  }
+export function KhaltiSuccess() {
   return (
     <Card className="w-full max-w-md relative">
       <CardHeader>
@@ -44,7 +23,7 @@ export function KhaltiSuccess({ topup }: khaltiSuccessProps) {
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <dl className="grid grid-cols-2 gap-4">
+        {/* <dl className="grid grid-cols-2 gap-4">
           <div>
             <dt className="font-medium text-gray-500">
               {topup.amount.toFixed(2)}
@@ -63,7 +42,7 @@ export function KhaltiSuccess({ topup }: khaltiSuccessProps) {
             <dt className="font-medium text-gray-500">Type</dt>
             <dd className="mt-1">{topup.topupType}</dd>
           </div>
-        </dl>
+        </dl> */}
         <Link href={"/"}>
           <Button variant={"outline"} className="w-full mt-6">
             Go to home
