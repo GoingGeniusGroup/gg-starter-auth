@@ -100,6 +100,12 @@ const InventoryManagement: React.FC = () => {
       path: "/dashboard/virtualOrder",
       icon: <FaClipboardList className="text-4xl text-green-600" />,
     },
+    {
+      name: " Sub Categories",
+      num: 10,
+      path: "/dashboard/subCategory",
+      icon: <MdCategory className="text-4xl text-amber-500" />,
+    },
  
 
     // {
