@@ -121,6 +121,7 @@ export default function PaymentGateway() {
           email: session.user.email,
           phone: session.user.phone,
         },
+        user_id: session.user.id,
       };
 
       const response = await axios.post(

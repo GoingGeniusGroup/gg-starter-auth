@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import axios from "axios";
+import { db } from "@/app/lib/db";
 
 export async function POST(req: NextRequest) {
   try {
@@ -16,6 +17,21 @@ export async function POST(req: NextRequest) {
     );
 
     if (khaltiResponse) {
+      //find the user by id
+      const userExists = await db.user.findUnique({
+        where: { id: payload.user_id },
+      });
+
+      //check if user exists
+      if (!userExists) {
+        return NextResponse.json(
+          {
+            success: false,
+            message: "User not found",
+          },
+          { status: 404 }
+        );
+      }
       return NextResponse.json({
         success: true,
         data: khaltiResponse?.data,
