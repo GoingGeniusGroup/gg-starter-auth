@@ -99,3 +99,88 @@ export async function getAllInventory(){
         return { success: false, message: "An unexpected error has occurred" };
       }
 }
+
+export async function getInventoryDetail(inventoryId:string){
+  try{
+    const stock=await db.inventory.findUnique({
+      where:{id:inventoryId},
+      include:{
+        product:true
+      }
+    })
+    return {success:true,data:stock}
+  } catch(error){
+    console.error("Unexpected error has occured:", error);
+    return { success: false, message: "An unexpected error has occurred" };
+}
+}
+
+// export async function updateInventoryQuantity(inventoryId: string, quantity: number) {
+//   try {
+//     const updatedInventory = await db.inventory.update({
+//       where: { id: inventoryId },
+//       data: { quantityAvailable: { increment: quantity } },
+//     });
+
+//     const product = await db.product.findUnique({ where: { id: updatedInventory.productId } });
+  
+//     if (product) {
+//       await db.product.update({
+//         where: { id: product.id },
+//         data: { stockQuantity: updatedInventory.quantityAvailable },
+//       });
+//     } else {
+//       console.error('Product not found for the given inventory ID:', inventoryId);
+//       throw new Error('Product not found');
+//     }
+
+//     return updatedInventory;
+//   } catch (error) {
+//     console.error('Error updating inventory quantity:', error);
+//     throw error;
+//   }
+// }
+export async function updateInventoryQuantity(inventoryId: string, quantity: number) {
+  try {
+    const inventory = await db.inventory.findUnique({ where: { id: inventoryId } });
+    if (!inventory) {
+      console.error('Inventory not found for the given ID:', inventoryId);
+      throw new Error('Inventory not found');
+    }
+
+    const newQuantity = inventory.quantityAvailable + quantity;
+    let stockStatus: "AVAILABLE" | "LOWSTOCK" | "NOTAVAILABLE";
+
+    if (newQuantity === 0) {
+      stockStatus = 'NOTAVAILABLE';
+    } else if (newQuantity < inventory.thresholdValue) {
+      stockStatus = 'LOWSTOCK';
+    } else {
+      stockStatus = 'AVAILABLE';
+    }
+
+    const updatedInventory = await db.inventory.update({
+      where: { id: inventoryId },
+      data: {
+        quantityAvailable: { increment: quantity },
+        stockStatus,
+      },
+    });
+
+    const product = await db.product.findUnique({ where: { id: updatedInventory.productId } });
+    if (product) {
+      await db.product.update({
+        where: { id: product.id },
+        data: { stockQuantity: updatedInventory.quantityAvailable },
+      });
+    } else {
+      console.error('Product not found for the given inventory ID:', inventoryId);
+      throw new Error('Product not found');
+    }
+
+    return updatedInventory;
+  } catch (error) {
+    console.error('Error updating inventory quantity:', error);
+    throw error;
+  }
+}

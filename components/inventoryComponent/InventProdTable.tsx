@@ -88,7 +88,7 @@ const InventProdTable = () => {
             <TableHead>Status</TableHead>
             <TableHead>Address</TableHead>
             
-            {/* <TableHead>Actions</TableHead> */}
+             <TableHead>Actions</TableHead> 
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -101,33 +101,21 @@ const InventProdTable = () => {
               <TableCell>{inventory.stockStatus}</TableCell>
               <TableCell>{inventory.address}</TableCell>
 
-              {/* <TableCell>
+               <TableCell>
                 <div className="flex space-x-2">
-                <button
-                    
-                    className="text-green-500 hover:text-green-700 text-xl"
-                    aria-label="view"
-                  >
-                    <BiShow />
-                  </button>
-        
-                  <button
-                    
-                    className="text-blue-500 hover:text-blue-700 text-xl"
+                  <Link href={`/dashboard/inventory/update/${inventory.id}`}>
+                  <button 
+                    className=" rounded-md shadow p-2 text-white bg-green-500 hover:bg-green-600 "
                     aria-label="Edit"
                   >
-                    <FaEdit />
+                    Update Stock
                   </button>
+                  </Link>
                 
-                  <button
-                    
-                    className="text-red-500 hover:text-red-700 text-xl"
-                    aria-label="Delete"
-                  >
-                    <FaTrash />
-                  </button>
+                
+                
                 </div>
-              </TableCell> */}
+              </TableCell> 
             </TableRow>
           ))}
         </TableBody>
