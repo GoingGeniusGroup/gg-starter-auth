@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import axios from "axios";
+import { db } from "@/app/lib/db";
+import { TopupStatus } from "@prisma/client";
 
 export async function POST(req: NextRequest) {
   const { pidx } = await req.json();
@@ -22,9 +24,43 @@ export async function POST(req: NextRequest) {
     );
 
     if (KhaltiResponseLookup) {
+      const paymentStatus = KhaltiResponseLookup.data.status;
+      const amount = KhaltiResponseLookup.data.total_amount / 100;
+
+      const newTopup = await db.topup.findFirst({
+        where: {
+          amount: amount,
+          topupStatus: "PENDING",
+        },
+        orderBy: {
+          createdAt: "desc",
+        },
+      });
+
+      if (!newTopup) {
+        return NextResponse.json({
+          success: false,
+          message: "Topup record not found",
+        });
+      }
+
+      //update the stored topup
+      let updatedTopupStatus: TopupStatus;
+      if (paymentStatus === "Completed") {
+        updatedTopupStatus = "SUCCESS";
+      } else {
+        updatedTopupStatus = "FAILED";
+      }
+
+      const updateTopup = await db.topup.update({
+        where: { id: newTopup.id },
+        data: { topupStatus: updatedTopupStatus },
+      });
+
       return NextResponse.json({
         success: true,
         message: "Payment Successful",
+        topup: updateTopup,
       });
     } else {
       return NextResponse.json({
@@ -32,8 +68,37 @@ export async function POST(req: NextRequest) {
         message: "Payment not complete",
       });
     }
-  } catch (error) {
-    console.log(`khalti error: ${error}`);
-    throw new Error("Something went wrong");
+  } catch (error: any) {
+    if (error.response?.status === 400) {
+      const errorMessage =
+        error.response?.data?.status || "Payment cancelled or expired";
+      console.log(errorMessage);
+
+      const newTopup = await db.topup.findFirst({
+        where: {
+          topupStatus: "PENDING",
+        },
+        orderBy: {
+          createdAt: "desc",
+        },
+      });
+
+      if (newTopup) {
+        await db.topup.update({
+          where: { id: newTopup.id },
+          data: { topupStatus: "FAILED" },
+        });
+      }
+
+      return NextResponse.json({
+        success: false,
+        message: errorMessage,
+      });
+    }
+    console.log(`Khalti error: ${error}`);
+    return NextResponse.json({
+      success: false,
+      message: "An error occurred. Please try again.",
+    });
   }
 }
