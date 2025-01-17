@@ -27,6 +27,7 @@ export async function POST(req: NextRequest) {
       const paymentStatus = KhaltiResponseLookup.data.status;
       const amount = KhaltiResponseLookup.data.total_amount / 100;
 
+      //finding the topup by created date and status
       const newTopup = await db.topup.findFirst({
         where: {
           amount: amount,
@@ -37,6 +38,7 @@ export async function POST(req: NextRequest) {
         },
       });
 
+      //if there is no topup record
       if (!newTopup) {
         return NextResponse.json({
           success: false,
@@ -52,6 +54,7 @@ export async function POST(req: NextRequest) {
         updatedTopupStatus = "FAILED";
       }
 
+      //update the stored topup status
       const updateTopup = await db.topup.update({
         where: { id: newTopup.id },
         data: { topupStatus: updatedTopupStatus },
@@ -69,11 +72,13 @@ export async function POST(req: NextRequest) {
       });
     }
   } catch (error: any) {
+    //if user cancels or expires payment
     if (error.response?.status === 400) {
       const errorMessage =
         error.response?.data?.status || "Payment cancelled or expired";
       console.log(errorMessage);
 
+      //find the topup by created date and status
       const newTopup = await db.topup.findFirst({
         where: {
           topupStatus: "PENDING",
@@ -83,6 +88,7 @@ export async function POST(req: NextRequest) {
         },
       });
 
+      //update the topup status to failed
       if (newTopup) {
         await db.topup.update({
           where: { id: newTopup.id },

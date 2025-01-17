@@ -33,6 +33,7 @@ export async function POST(req: NextRequest) {
         );
       }
 
+      //store new topup record
       const topup = await db.topup.create({
         data: {
           amount: payload.amount / 100,
