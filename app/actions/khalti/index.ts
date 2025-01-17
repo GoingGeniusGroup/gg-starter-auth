@@ -1,7 +1,6 @@
 "use server";
 
 import { db } from "@/app/lib/db";
-import { userAgent } from "next/server";
 
 interface KhaltiTopupParams {
   amount: number;
@@ -26,9 +25,18 @@ export async function khaltiTopup({
       throw new Error(`User with ID ${userId} does not exist.`);
     }
 
-    const transactionuuid = `${Date.now()}`;
+    // Create new topup data
+    const newTopup = await db.topup.create({
+      data: {
+        amount,
+        userId,
+        topupStatus: "PENDING",
+        topupType: "CREDIT",
+      },
+    });
+
     const khaltiConfig = {
-      return_url: `${process.env.NEXT_PUBLIC_APP_URL}/api/khalti/success?transactionuuid=${transactionuuid}`,
+      return_url: `${process.env.NEXT_PUBLIC_APP_URL}/khalti/success?transactionid=${newTopup.id}`,
       website_url: `${process.env.NEXT_PUBLIC_APP_URL}`,
       amount: Math.round(amount * 100),
       purchase_order_id: transactionId,
@@ -49,15 +57,20 @@ export async function khaltiTopup({
     );
 
     if (!khaltiResponse.ok) {
-      throw new Error("Failed to initiate Khalti payment");
+      await db.topup.update({
+        where: {
+          id: newTopup.id,
+        },
+        data: {
+          topupStatus: "FAILED",
+        },
+      });
     }
 
     const khaltiData = await khaltiResponse.json();
-  
 
     return {
       success: true,
-      transactionuuid,
       paymentUrl: khaltiData.payment_url,
     };
   } catch (error) {
@@ -69,49 +82,55 @@ export async function khaltiTopup({
   }
 }
 
-//handle khalti payment status
-export async function handleKhaltiStatus(
-  transactionuuid: string,
-  status: "success" | "failed"
+// handle khalti topup success
+export async function handleKhaltiSuccess(
+  transactionId: string,
+  pidx: string,
+  amount: number,
+  mobile: string,
+  status: string,
+  purchase_order_name: string
 ) {
   try {
-    console.log("Handling Khalti Status:", { transactionuuid, status });
-
-    // Query for the pending topup
-    const pendingTopup = await db.topup.findFirst({
-      where: {
-        topupStatus: "PENDING",
-        createdAt: new Date(parseInt(transactionuuid)),
-      },
+    //Find the pending topup
+    const pendingTopup = await db.topup.findUnique({
+      where: { id: transactionId },
+      include: { user: true },
     });
 
     if (!pendingTopup) {
-      console.error(
-        `No pending topup found for transactionuuid: ${transactionuuid}`
-      );
-      return {
-        success: false,
-        error: "No pending topup found for this transaction.",
-      };
+      throw new Error("Topup not found");
     }
 
-    // Update the status
-    const newStatus = status === "success" ? "SUCCESS" : "FAILED";
-
+    //update the topup with khalti transaction details
     const updatedTopup = await db.topup.update({
-      where: { id: pendingTopup.id },
-      data: { topupStatus: newStatus },
+      where: { id: transactionId },
+      data: {
+        topupStatus: status === "Completed" ? "SUCCESS" : "FAILED",
+      },
     });
-
-    console.log("Topup status updated successfully:", updatedTopup);
 
     return {
       success: true,
-      message: `Topup Status updated to ${newStatus} successfully`,
-      status: newStatus,
+      topup: {
+        amount: updatedTopup.amount,
+        topupStatus: updatedTopup.topupStatus,
+        createdAt: updatedTopup.createdAt,
+        topupType: updatedTopup.topupType,
+      },
+      message:
+        status === "Completed"
+          ? "Payment Processed Successfully"
+          : "Payment Failed",
     };
   } catch (error) {
-    console.error("Error updating Khalti topup status:", error);
-    return { success: false, error: "Failed to update topup status" };
+    console.error("Error handling Khalti Topup", error);
+    return {
+      success: false,
+      error: "Failed to process Khalti payment",
+      message:
+        error instanceof Error ? error.message : "Unknown error occurred",
+    };
   }
 }
+ 
