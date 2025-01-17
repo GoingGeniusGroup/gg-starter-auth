@@ -32,9 +32,19 @@ export async function POST(req: NextRequest) {
           { status: 404 }
         );
       }
+
+      const topup = await db.topup.create({
+        data: {
+          amount: payload.amount / 100,
+          topupType: "CREDIT",
+          topupStatus: "PENDING",
+          userId: userExists.id,
+        },
+      });
       return NextResponse.json({
         success: true,
         data: khaltiResponse?.data,
+        topup: topup.id,
       });
     } else {
       return NextResponse.json({
