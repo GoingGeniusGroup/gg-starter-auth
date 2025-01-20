@@ -112,7 +112,7 @@ const OrderDetailCard = ({user}:OrderProps) => {
           <div className="flex items-center gap-3">
             <MapPin className="w-5 h-5 text-gray-400 dark:text-slate-200" />
             <div>
-              <div className="text-sm text-gray-500">Delivery Address</div>
+              <div className="text-sm text-gray-500 dark:text-slate-200">Delivery Address</div>
               <div className="font-medium">
                 {order.streetAddress}, {order.city}, {order.state}
               </div>
@@ -122,23 +122,23 @@ const OrderDetailCard = ({user}:OrderProps) => {
         {/* Products List */}
         <div className="space-y-4">
           <div className="font-medium flex items-center gap-2">
-            <Package className="w-5 h-5 text-gray-400" />
+            <Package className="w-5 h-5 text-gray-400 dark:text-slate-200" />
             Order Items
           </div>
           <div className="overflow-x-auto">
             <table className="min-w-full divide-y divide-gray-200">
               <thead className="bg-gray-50 dark:bg-black">
                 <tr>
-                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-slate-200 uppercase">
                     Product
                   </th>
-                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-slate-200 uppercase">
                     Quantity
                   </th>
-                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-slate-200 uppercase">
                     Price
                   </th>
-                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-slate-200 uppercase">
                     Total
                   </th>
                 </tr>
@@ -182,7 +182,7 @@ const OrderDetailCard = ({user}:OrderProps) => {
         </div> */}
         <div className="border-t pt-4 flex justify-between">
   <div className="text-left">
-    <div className="text-sm text-gray-500">Total Amount</div>
+    <div className="text-sm text-gray-500 dark:text-slate-200">Total Amount</div>
     <div className="text-xl font-semibold">${order.orderAmount.toFixed(2)}</div>
   </div>
   <Link  href={`/dashboard/userAccount/orders/${order.id}`}
