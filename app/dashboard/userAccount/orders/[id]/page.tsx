@@ -61,14 +61,14 @@ const OrderReceipt: React.FC<OrderProps> = ({params}) => {
   return (
     <div>
 
-<div className="w-full min-h-screen bg-white">
-      <div className="sticky top-0 z-60 bg-white border-b border-gray-200 p-4 shadow-sm">
+<div className="w-full min-h-screen ">
+      <div className="sticky top-0 z-60  border-b border-gray-200 p-4 shadow-sm">
         <div className="max-w-3xl mx-auto flex flex-col sm:flex-row gap-2">
         
           <button
             onClick={downloadAsPDF}
             disabled={isDownloading}
-            className="flex items-center justify-center gap-2 w-full sm:w-auto px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded text-sm font-medium disabled:opacity-50"
+            className="flex items-center justify-center gap-2 w-full sm:w-auto px-4 py-2 bg-gray-100 dark:text-black hover:bg-gray-200 rounded text-sm font-medium disabled:opacity-50"
           >
             {isDownloading ? (
               <Loader2 className="w-4 h-4 animate-spin" />
@@ -82,8 +82,8 @@ const OrderReceipt: React.FC<OrderProps> = ({params}) => {
       <div className="p-8" ref={invoiceRef}>
         <div className="max-w-3xl mx-auto">
           <div className="text-center mb-4">
-            <h1 className="text-2xl font-medium text-gray-800">Aryal SuperMarket</h1>
-            <h1 className="text-lg font-medium text-gray-500">Satdobato,Lalitpur</h1>
+            <h1 className="text-2xl font-medium text-gray-800 dark:text-slate-100">Aryal SuperMarket</h1>
+            <h1 className="text-lg font-medium text-gray-500 dark:text-slate-200">Satdobato,Lalitpur</h1>
 
           </div>
           <div className="border-b border-gray-300 mb-6"></div>
@@ -170,7 +170,7 @@ const OrderReceipt: React.FC<OrderProps> = ({params}) => {
               <p className="text-lg font-semibold mb-2">
                 Thank You for Your Purchase!
               </p>
-              <p className="text-sm text-gray-600">
+              <p className="text-sm text-gray-600 dark:text-slate-200">
                 If you have any questions, feel free to contact us at:{" "}
                 <span className="font-medium">980000000</span>
               </p>
