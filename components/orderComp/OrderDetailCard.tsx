@@ -2,7 +2,7 @@
 import React ,{useState,useEffect} from 'react'
 import { Package, MapPin, Calendar, CreditCard } from "lucide-react";
 import { getUserOrderDetail } from '@/action/userOrder';
-
+import Link from 'next/link';                  
 interface Product {
   name: string;
   quantity: number;
@@ -65,15 +65,15 @@ const OrderDetailCard = ({user}:OrderProps) => {
   return (
     <div>
      {orders.map((order,index)=>(
-        <div key={index} className="w-full max-w-3xl my-4 bg-white rounded-lg shadow p-6 space-y-6">
+        <div key={index} className="w-full max-w-3xl my-4 bg-white dark:bg-black rounded-lg shadow p-6 space-y-6">
         {/* Order Header */}
         <div className="flex flex-wrap gap-4 justify-between items-start border-b pb-4">
           <div className="space-y-1">
-            <div className="text-sm text-gray-500">Order by</div>
+            <div className="text-sm text-gray-500 dark:text-slate-200">Order by</div>
             <div className="font-medium">{user?.username}</div>
           </div>
           <div className="space-y-1">
-            <div className="text-sm text-gray-500">Order Status</div>
+            <div className="text-sm text-gray-500 dark:text-slate-200">Order Status</div>
             <span
               className={`px-3 py-1 rounded-full text-sm font-medium `}
             >
@@ -84,24 +84,24 @@ const OrderDetailCard = ({user}:OrderProps) => {
         {/* Order Details */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="flex items-center gap-3">
-            <Calendar className="w-5 h-5 text-gray-400" />
+            <Calendar className="w-5 h-5 text-gray-400 dark:text-slate-200" />
             <div>
-              <div className="text-sm text-gray-500">Order Date</div>
+              <div className="text-sm text-gray-500 dark:text-slate-200">Order Date</div>
               <div className="font-medium">{new Date(order.orderDate).toLocaleDateString()}</div>
 
             </div>
           </div>
           <div className="flex items-center gap-3">
-            <Calendar className="w-5 h-5 text-gray-400" />
+            <Calendar className="w-5 h-5 text-gray-400 dark:text-slate-200" />
             <div>
-              <div className="text-sm text-gray-500">Delivery Date</div>
+              <div className="text-sm text-gray-500 dark:text-slate-200">Delivery Date</div>
               <div className="font-medium">{order.deliveryDate ? new Date(order.deliveryDate).toLocaleDateString() : 'N/A'}</div>
             </div>
           </div>
           <div className="flex items-center gap-3">
             <CreditCard className="w-5 h-5 text-gray-400" />
             <div>
-              <div className="text-sm text-gray-500">Payment Status</div>
+              <div className="text-sm text-gray-500 dark:text-slate-200">Payment Status</div>
               <span
                 className={`px-3 py-1 rounded-full text-sm font-medium`}
               >
@@ -110,7 +110,7 @@ const OrderDetailCard = ({user}:OrderProps) => {
             </div>
           </div>
           <div className="flex items-center gap-3">
-            <MapPin className="w-5 h-5 text-gray-400" />
+            <MapPin className="w-5 h-5 text-gray-400 dark:text-slate-200" />
             <div>
               <div className="text-sm text-gray-500">Delivery Address</div>
               <div className="font-medium">
@@ -127,7 +127,7 @@ const OrderDetailCard = ({user}:OrderProps) => {
           </div>
           <div className="overflow-x-auto">
             <table className="min-w-full divide-y divide-gray-200">
-              <thead className="bg-gray-50">
+              <thead className="bg-gray-50 dark:bg-black">
                 <tr>
                   <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">
                     Product
@@ -143,7 +143,7 @@ const OrderDetailCard = ({user}:OrderProps) => {
                   </th>
                 </tr>
               </thead>
-              <tbody className="bg-white divide-y divide-gray-200">
+              <tbody className="bg-white dark:bg-black divide-y divide-gray-200">
                    { order && order.product.map((product:any, index:number) => (
                   <tr key={index}>
                     <td className="px-4 py-3 text-sm">{product.name}</td>
@@ -153,7 +153,7 @@ const OrderDetailCard = ({user}:OrderProps) => {
                       ${product.sellPrice.toFixed(2)}
                     </td>
                     <td className="px-4 py-3 text-sm">
-                      ${(order.orderQuantity * product.price).toFixed(2)}
+                      ${(order.orderQuantity * product.sellPrice).toFixed(2)}
                     </td>
                   </tr>
                 ))}
@@ -185,9 +185,13 @@ const OrderDetailCard = ({user}:OrderProps) => {
     <div className="text-sm text-gray-500">Total Amount</div>
     <div className="text-xl font-semibold">${order.orderAmount.toFixed(2)}</div>
   </div>
-  <button className="bg-blue-500 hover:bg-blue-700 text-white  py-2 px-4 rounded-md">
+  <Link  href={`/dashboard/userAccount/orders/${order.id}`}
+  >
+    <button className="bg-blue-500 hover:bg-blue-700 text-white  py-2 px-4 rounded-md">
     View Receipt
   </button>
+  </Link>
+ 
 </div>
 
       </div>
