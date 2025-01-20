@@ -8,9 +8,10 @@ import {
     TabsList,
     TabsTrigger,
   } from "@/components/ui/tabs"
+import OrderDetailCard from '@/components/orderComp/OrderDetailCard';
 const page = async() => {
     const user = await currentUser();
-console.log(user)
+
   return (
     <div className='m-2'>
         <Tabs defaultValue="account"   >
@@ -48,7 +49,14 @@ console.log(user)
       </div>
     </div>
   </TabsContent>
-  <TabsContent value="password">Change your password here.</TabsContent>
+
+
+  <TabsContent value="password">
+  <div className="w-full min-h-screen p-6 flex justify-center items-start">
+  {user && <OrderDetailCard user={user} />}
+
+    </div>
+  </TabsContent>
 </Tabs>
 
     </div>
