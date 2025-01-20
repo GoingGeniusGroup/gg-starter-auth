@@ -31,7 +31,7 @@ const InventoryManagement: React.FC = () => {
     {
       name: "User Account",
       num: 10,
-      path: "/dashboard",
+      path: "/dashboard/userAccount",
       icon: <FaUserCircle className="text-4xl text-blue-600" />,
     },
     {
