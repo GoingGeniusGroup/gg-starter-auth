@@ -48,7 +48,7 @@ export default function PhysicalProduct() {
 
   return (
     <div>
-      <div className="mb-4 flex items-center gap-2">
+      <div className="mb-3 flex items-center gap-2">
         <input
           type="text"
           placeholder="Search products..."
@@ -59,7 +59,7 @@ export default function PhysicalProduct() {
       </div>
 
       {/* Category Carousel */}
-      <div className="relative mb-4">
+      <div className="relative">
         <h1 className="font-medium mb-2">Categories:</h1>
         <Carousel className="w-full">
           <CarouselContent>
@@ -123,7 +123,7 @@ export default function PhysicalProduct() {
       </div>
 
       {/* Products Slider */}
-      <div className="relative mb-4">
+      <div className="relative mb-2">
         <Carousel className="w-full">
           <CarouselContent>
             {searchedProducts.map((product) => (
