@@ -28,3 +28,32 @@ export async function getUserOrderDetail(userId:string){
     }
 
 }
+
+export async function getOrderDetail(orderId:string){
+  try{
+      const orders = await db.order.findMany({
+          where: {id: orderId },
+          include: {
+            product: true,
+            VirtualProductOnOrder: {
+              include: {
+                VirtualProduct: true,
+              },
+            },
+            user:true,
+            
+          },
+        });
+        if(!orders){
+          return { success: false, message: 'NO order found for this user' }
+        }
+        return { success: true, data: orders }
+
+  }
+  catch(error){
+      console.error("unexpected error occured",error)
+      return { success: false, message: 'An unexpected error occurred' }
+
+  }
+
+}
