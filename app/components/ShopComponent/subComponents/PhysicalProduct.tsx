@@ -7,8 +7,6 @@ import {
   Carousel,
   CarouselContent,
   CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
 } from "@/components/ui/carousel";
 
 import "swiper/css";
@@ -19,20 +17,15 @@ import "swiper/css/pagination";
 import physicalProducts from "../data/physicalProducts";
 
 export default function PhysicalProduct() {
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState("");
 
   const products = physicalProducts;
 
-  const categories = [
-    "All",
-    ...new Set(products.map((product) => product.category)),
-  ];
+  const categories = [...new Set(products.map((product) => product.category))];
 
   const handleCategoryClick = (category: string | null) => {
     setSelectedCategory(category === "All" ? null : category);
-    setIsDropdownOpen(false);
   };
 
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -54,98 +47,115 @@ export default function PhysicalProduct() {
   });
 
   return (
-    <>
-      <div>
-        <div className="mb-4 flex items-center gap-2">
-          <input
-            type="text"
-            placeholder="Search products..."
-            value={searchTerm}
-            onChange={handleSearchChange}
-            className="w-full rounded-md border px-2 py-2"
-          />
-        </div>
+    <div>
+      <div className="mb-4 flex items-center gap-2">
+        <input
+          type="text"
+          placeholder="Search products..."
+          value={searchTerm}
+          onChange={handleSearchChange}
+          className="w-full rounded-md border px-2 py-2"
+        />
+      </div>
 
-        {/* Category Dropdown */}
-        <div className="relative mb-4">
-          <div
-            className={`w-1/2 flex cursor-pointer items-center gap-2 rounded-md border px-3 py-2 ${
-              isDropdownOpen ? "border-blue-500" : ""
-            }`}
-            onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-          >
-            <span>{selectedCategory || "Categories"}</span>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="size-5"
-              viewBox="0 0 20 20"
-              fill="currentColor"
-            >
-              <path
-                fillRule="evenodd"
-                d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 011.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                clipRule="evenodd"
-              />
-            </svg>
-          </div>
-          {isDropdownOpen && (
-            <div className="absolute z-10 mt-1 w-full rounded-md bg-white dark:bg-[#020b24] shadow-md">
-              <ul className="p-2">
-                {categories.map((category) => (
-                  <li
-                    key={category}
-                    className={`cursor-pointer py-1 px-2 ${
-                      selectedCategory === category
-                        ? "bg-gray-100 dark:bg-gray-900 dark:text-gray-300"
-                        : ""
-                    }`}
-                    onClick={() => handleCategoryClick(category)}
-                  >
-                    {category}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )}
-        </div>
-
-        {/* Products Slider */}
-        <div className="relative mb-4">
-          <Carousel className="w-full">
-            <CarouselContent>
-              {searchedProducts.map((product) => (
-                <CarouselItem key={product.id} className="shrink-0 pb-4">
-                  <div className="relative overflow-hidden rounded-md bg-white/40 border border-gray-300 shadow-md dark:bg-white">
-                    <div className="h-50 w-full overflow-hidden rounded-md bg-gray-100 flex justify-center">
-                      <Image
-                        src={product.images[0]}
-                        alt={product.name}
-                        width={230}
-                        height={300}
-                        className="object-cover"
-                        unoptimized
-                      />
-                    </div>
-                    <div className="mt-2 p-2">
-                      <h2 className="text-md font-medium text-gray-700">
-                        {product.name}
-                      </h2>
-                      <h1 className="text-sm text-gray-500 ">
-                        ${product.price}
-                      </h1>
-                    </div>
-                    <div className="p-2 w-full flex justify-center">
-                      <Button className="w-full text-md font-normal flex items-center justify-center border">
-                        <span>Buy Now</span>
-                      </Button>
-                    </div>
+      {/* Category Carousel */}
+      <div className="relative mb-4">
+        <h1 className="font-medium mb-2">Categories:</h1>
+        <Carousel className="w-full">
+          <CarouselContent>
+            {[{ id: "all", name: "All" }, ...categories]
+              .reduce(
+                (
+                  result: (string | { id: string; name: string })[][],
+                  _,
+                  index,
+                  array
+                ) => {
+                  if (index % 2 === 0) {
+                    result.push(array.slice(index, index + 2));
+                  }
+                  return result;
+                },
+                []
+              )
+              .map((pair, index) => (
+                <CarouselItem key={index} className="shrink-0 pb-4">
+                  <div className="flex justify-between gap-2">
+                    {pair.map((category) => (
+                      <button
+                        key={
+                          typeof category === "string" ? category : category.id
+                        }
+                        className={`w-1/2 h-10 rounded-md text-md font-normal flex items-center justify-center border ${
+                          selectedCategory ===
+                            (typeof category === "string"
+                              ? category
+                              : category.name) ||
+                          ((typeof category === "string"
+                            ? category
+                            : category.name) === "All" &&
+                            selectedCategory === null)
+                            ? "bg-black text-white"
+                            : "bg-white text-black"
+                        }`}
+                        onClick={() =>
+                          handleCategoryClick(
+                            (typeof category === "string"
+                              ? category
+                              : category.name) === "All"
+                              ? null
+                              : typeof category === "string"
+                              ? category
+                              : category.name
+                          )
+                        }
+                      >
+                        {typeof category === "string"
+                          ? category
+                          : category.name}
+                      </button>
+                    ))}
                   </div>
                 </CarouselItem>
               ))}
-            </CarouselContent>
-          </Carousel>
-        </div>
+          </CarouselContent>
+        </Carousel>
       </div>
-    </>
+
+      {/* Products Slider */}
+      <div className="relative mb-4">
+        <Carousel className="w-full">
+          <CarouselContent>
+            {searchedProducts.map((product) => (
+              <CarouselItem key={product.id} className="shrink-0 pb-4">
+                <div className="relative overflow-hidden rounded-md bg-white/40 border border-gray-300 shadow-md dark:bg-white">
+                  <div className="h-50 w-full overflow-hidden rounded-md bg-gray-100 flex justify-center">
+                    <Image
+                      src={product.images[0]}
+                      alt={product.name}
+                      width={230}
+                      height={300}
+                      className="object-cover"
+                      unoptimized
+                    />
+                  </div>
+                  <div className="mt-2 p-2">
+                    <h2 className="text-md font-medium text-gray-700">
+                      {product.name}
+                    </h2>
+                    <h1 className="text-sm text-gray-500 ">{`$${product.price}`}</h1>
+                  </div>
+                  <div className="p-2 w-full flex justify-center">
+                    <Button className="w-full text-md font-normal flex items-center justify-center border">
+                      <span>Buy Now</span>
+                    </Button>
+                  </div>
+                </div>
+              </CarouselItem>
+            ))}
+          </CarouselContent>
+        </Carousel>
+      </div>
+    </div>
   );
 }
