@@ -25,6 +25,7 @@ import { VirtualCategory } from "./subComponents/types";
 import ToggleButton from "./subComponents/ToggleButton";
 import PhysicalProduct from "./subComponents/PhysicalProduct";
 import { Card } from "../ui/card";
+import { IoIosArrowDown } from "react-icons/io";
 
 export default function ShopComponent() {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
@@ -128,9 +129,11 @@ export default function ShopComponent() {
   return (
     <>
       <Card className="h-full p-4 overflow-auto pt-6">
-        <div className="flex items-center justify-between mb-4">
+        <div className="flex items-center justify-between mb-3">
           <div>
-            <h1 className="font-semibold text-2xl">Shop</h1>
+            <h1 className="font-semibold text-2xl">
+              {isToggleActive ? "Virtual Shop" : "Shop"}
+            </h1>
           </div>
           <div className="relative flex flex-row items-center gap-4">
             <ToggleButton setActiveState={setIsToggleActive} />
@@ -147,7 +150,7 @@ export default function ShopComponent() {
         </div>
         {isToggleActive ? (
           <div>
-            <div className="mb-4 flex items-center gap-2">
+            <div className="mb-3 flex items-center gap-2">
               <input
                 type="text"
                 placeholder="Search products..."
@@ -157,57 +160,62 @@ export default function ShopComponent() {
               />
             </div>
 
-            {/* Category Dropdown */}
-            <div className="relative mb-4">
-              <div
-                className={`w-1/2 flex cursor-pointer items-center gap-2 rounded-md border px-3 py-2 ${
-                  isDropdownOpen ? "border-blue-500" : ""
-                }`}
-                onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-              >
-                <span>{selectedCategory || "Categories"}</span>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="size-5"
-                  viewBox="0 0 20 20"
-                  fill="currentColor"
-                >
-                  <path
-                    fillRule="evenodd"
-                    d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 011.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                    clipRule="evenodd"
-                  />
-                </svg>
-              </div>
-              {isDropdownOpen && (
-                <div className="absolute z-10 mt-1 w-full rounded-md bg-white dark:bg-[#020b24] shadow-md dark:text-gray-300">
-                  <ul className="p-2">
-                    <li
-                      className={`cursor-pointer py-1 ${
-                        selectedCategory === null
-                          ? "bg-gray-100 dark:bg-gray-900 dark:text-gray-300"
-                          : ""
-                      }`}
-                      onClick={() => handleCategoryClick(null)}
-                    >
-                      All
-                    </li>
-                    {categories.map((category) => (
-                      <li
-                        key={category.id}
-                        className={`cursor-pointer py-1  dark:text-gray-300 ${
-                          selectedCategory === category.name
-                            ? "bg-gray-100 dark:bg-gray-900 dark:text-gray-300"
-                            : ""
-                        }`}
-                        onClick={() => handleCategoryClick(category.name)}
-                      >
-                        {category.name}
-                      </li>
+            {/* Category Slider */}
+            <div className="relative">
+              <h1 className="font-medium mb-2 flex flex-row items-center gap-2">
+                Categories:
+              </h1>
+              <Carousel className="w-full">
+                <CarouselContent>
+                  {[{ id: "all", name: "All" }, ...categories]
+                    .reduce((result: VirtualCategory[][], _, index, array) => {
+                      if (index % 2 === 0) {
+                        result.push(array.slice(index, index + 2));
+                      }
+                      return result;
+                    }, [])
+                    .map((pair, index) => (
+                      <CarouselItem key={index} className="shrink-0 pb-4">
+                        <div className="flex justify-between gap-2">
+                          <button
+                            className={`w-1/2 h-10 rounded-md text-md font-normal flex items-center justify-center border ${
+                              selectedCategory === pair[0]?.name ||
+                              (pair[0]?.name === "All" &&
+                                selectedCategory === null)
+                                ? "bg-black text-white"
+                                : "bg-white text-black"
+                            }`}
+                            onClick={() =>
+                              handleCategoryClick(
+                                pair[0]?.name === "All" ? null : pair[0]?.name
+                              )
+                            }
+                          >
+                            {pair[0]?.name || "N/A"}
+                          </button>
+                          {pair[1] && (
+                            <button
+                              className={`w-1/2 h-10 rounded-md text-md font-normal flex items-center justify-center border ${
+                                selectedCategory === pair[1]?.name ||
+                                (pair[1]?.name === "All" &&
+                                  selectedCategory === null)
+                                  ? "bg-black text-white"
+                                  : "bg-white text-black"
+                              }`}
+                              onClick={() =>
+                                handleCategoryClick(
+                                  pair[1]?.name === "All" ? null : pair[1]?.name
+                                )
+                              }
+                            >
+                              {pair[1]?.name || "N/A"}
+                            </button>
+                          )}
+                        </div>
+                      </CarouselItem>
                     ))}
-                  </ul>
-                </div>
-              )}
+                </CarouselContent>
+              </Carousel>
             </div>
 
             {/* Products Slider */}
