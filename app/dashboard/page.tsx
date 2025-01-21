@@ -29,12 +29,6 @@ const InventoryManagement: React.FC = () => {
     path: string;
   }[] = [
     {
-      name: "User Account",
-      num: 10,
-      path: "/dashboard/userAccount",
-      icon: <FaUserCircle className="text-4xl text-blue-600" />,
-    },
-    {
       name: "Product",
       num: 10,
       path: "/dashboard/product",
