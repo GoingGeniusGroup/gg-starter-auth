@@ -9,6 +9,7 @@ import { toast } from "sonner";
 import { useSession } from "next-auth/react";
 import axios from "axios";
 import { useRouter, useSearchParams } from "next/navigation";
+import BusinessCard from "@/app/components/card/businessCard";
 interface Transaction {
   id: number;
   type: string;
@@ -201,6 +202,8 @@ export default function WalletComponent() {
             Redeem
           </Button>
         </div>
+
+        <BusinessCard />
 
         {activeSection === "topup" && (
           <div className="space-y-2">
