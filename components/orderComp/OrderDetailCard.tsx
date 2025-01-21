@@ -3,6 +3,7 @@ import React ,{useState,useEffect} from 'react'
 import { Package, MapPin, Calendar, CreditCard } from "lucide-react";
 import { getUserOrderDetail } from '@/action/userOrder';
 import Link from 'next/link';                  
+import { virtualCategorySchema } from '@/inventorySchema';
 interface Product {
   name: string;
   quantity: number;
@@ -162,9 +163,9 @@ const OrderDetailCard = ({user}:OrderProps) => {
   return (
     <tr key={index}>
       <td className="px-4 py-3 text-sm">{product.name}</td>
-      <td className="px-4 py-3 text-sm">{order.orderQuantity}</td>
+      <td className="px-4 py-3 text-sm">{order.VirtualProductOnOrder.quantity}</td>
       <td className="px-4 py-3 text-sm">${product.price.toFixed(2)}</td>
-      <td className="px-4 py-3 text-sm">${(order.orderQuantity * product.price).toFixed(2)}</td>
+      <td className="px-4 py-3 text-sm">${(order.VirtualProductOnOrder.quantity * product.price).toFixed(2)}</td>
     </tr>
   );
 })}

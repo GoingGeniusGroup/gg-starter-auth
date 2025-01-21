@@ -142,9 +142,9 @@ const OrderReceipt: React.FC<OrderProps> = ({params}) => {
   return (
     <tr key={index} className='border-b' >
       <td className="py-2">{product.name}</td>
-      <td className="text-right py-2">{order.orderQuantity}</td>
+      <td className="text-right py-2">{order.VirtualProductOnOrder.quantity}</td>
       <td className="text-right py-2">${product.price.toFixed(2)}</td>
-      <td className="text-right py-2">${(order.orderQuantity * product.price).toFixed(2)}</td>
+      <td className="text-right py-2">${(order.VirtulProductOnOrder.quantity* product.price).toFixed(2)}</td>
     </tr>
   );
 })}
