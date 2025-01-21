@@ -98,11 +98,11 @@ export default function ProfileComponent() {
 
         <div className="text-center space-y-2">
           <h1 className="text-xl dark:text-muted-foreground font-bold dark:text-gray-500">
-            {user.name}
+            {user?.name}
           </h1>
-          <p className="dark:text-muted-foreground text-sm">{user.email}</p>
+          <p className="dark:text-muted-foreground text-sm">{user?.email}</p>
           <span className="inline-block px-2 py-1 mt-2 text-xs font-semibold text-blue-400 bg-blue-400/20 rounded-full">
-            {user.role}
+            {user?.role}
           </span>
         </div>
 

@@ -5,8 +5,6 @@ import {
   Carousel,
   CarouselContent,
   CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
 } from "@/components/ui/carousel";
 
 import "swiper/css";
@@ -25,13 +23,11 @@ import { VirtualCategory } from "./subComponents/types";
 import ToggleButton from "./subComponents/ToggleButton";
 import PhysicalProduct from "./subComponents/PhysicalProduct";
 import { Card } from "../ui/card";
-import { IoIosArrowDown } from "react-icons/io";
 
 export default function ShopComponent() {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [categories, setCategories] = useState<VirtualCategory[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [products, setProducts] = useState<VirtualProduct[]>([]);
   const [isToggleActive, setIsToggleActive] = useState(false);
 
@@ -58,7 +54,6 @@ export default function ShopComponent() {
   // Category and Product Filtering
   const handleCategoryClick = (category: string | null) => {
     setSelectedCategory(category);
-    setIsDropdownOpen(false);
   };
 
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -242,11 +237,6 @@ export default function ShopComponent() {
                           <h1 className="text-sm text-gray-500 ">
                             ${product.price}
                           </h1>
-                        </div>
-                        <div className="absolute left-2 top-2 rounded-full p-1 border border-gray-200 shadow-md">
-                          <span className="text-sm font-bold text-yellow-400">
-                            {product.rating}
-                          </span>
                         </div>
                         <div className="p-2 w-full flex justify-center">
                           <Button

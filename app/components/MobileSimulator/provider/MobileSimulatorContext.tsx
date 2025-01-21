@@ -31,6 +31,7 @@ import SimulatorToggleButton from "../SimulatorToggleButton";
 import NotificationComponent from "@/components/Notification/NotificationComponent";
 import ShopComponent from "../../ShopComponent/ShopComponent";
 import UserInventoryComponent from "../../UserInventory/UserInventoryComponent";
+import { Card, CardContent } from "../../ui/card";
 import ProfileComponent from "@/components/profile/subComponents/ProfileComponent";
 import WalletComponent from "@/components/profile/subComponents/WalletComponent";
 // import { getColorsbyUserId } from "@/services/color";
@@ -183,23 +184,31 @@ export const MobileSimulatorProvider = ({
               title: showLogin ? "Login" : "Register",
               icon: showLogin ? <FaSignInAlt /> : <FaUserPlus />,
               content: showLogin ? (
-                <div className="flex flex-col gap-4 h-full overflow-auto">
+                <Card className="flex flex-col gap-4 h-full overflow-auto">
                   <LoginForm isMobile={true} />
-                  <div className="flex w-full justify-center">
-                    <Button variant="black" onClick={handleToggleAuth}>
+                  <CardContent className="text-sm flex items-center text-center">
+                    Don`t have an Account?
+                    <div
+                      className="cursor-pointer hover:border-b-2 hover:text-gray-700 dark:hover:text-gray-300 ml-2"
+                      onClick={handleToggleAuth}
+                    >
                       Register Here
-                    </Button>
-                  </div>
-                </div>
+                    </div>
+                  </CardContent>
+                </Card>
               ) : (
-                <div className="flex flex-col gap-4 h-full overflow-auto">
+                <Card className="flex flex-col gap-4 h-full overflow-auto">
                   <RegisterForm isMobile={true} />
-                  <div className="flex w-full justify-center">
-                    <Button variant="black" onClick={handleToggleAuth}>
+                  <CardContent className="text-sm flex items-center text-center">
+                    Already have an Account?
+                    <div
+                      className="cursor-pointer hover:border-b-2 hover:text-gray-700 dark:hover:text-gray-300 ml-2"
+                      onClick={handleToggleAuth}
+                    >
                       Login Here
-                    </Button>
-                  </div>
-                </div>
+                    </div>
+                  </CardContent>
+                </Card>
               ),
             },
           ]),

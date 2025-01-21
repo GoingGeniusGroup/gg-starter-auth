@@ -15,6 +15,7 @@ import {
   FaCloud,
   FaCube,
   FaUnity,
+  FaUserCircle,
   FaNetworkWired,
 } from "react-icons/fa";
 
