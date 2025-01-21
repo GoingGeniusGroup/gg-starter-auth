@@ -18,7 +18,7 @@ const data = {
 const BusinessCardBack = () => {
   const qrCodeData = "https://ggrelativity.xyz/";
   return (
-    <Card className="grid grid-cols-2 w-[336px] h-[192px] bg-black overflow-hidden relative border-none">
+    <Card className="grid grid-cols-2 w-[280px] h-[178px] bg-black overflow-hidden relative border-none">
       {/*Left Side*/}
       <div className="relative">
         <svg
@@ -36,7 +36,7 @@ const BusinessCardBack = () => {
           />
         </svg>
 
-        <div className="absolute top-[54px] right-[70px]">
+        <div className="absolute top-[54px] right-[50px]">
           <QRCodeSVG
             className="p-[2px] bg-white"
             value={qrCodeData}
