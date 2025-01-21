@@ -27,6 +27,11 @@ export async function POST(request: Request) {
     })
   );
 
+  // Calculate total amount
+  const totalAmount = lineItems.reduce((sum: number, item: { price_data: { unit_amount: number; }; quantity: number; }) => {
+    return sum + item.price_data.unit_amount * item.quantity;
+  }, 0);
+
   // Extract only necessary fields for metadata
   const simplifiedCartItems = cartItems.map(
     (item: { id: number; quantity: number }) => ({
@@ -36,7 +41,7 @@ export async function POST(request: Request) {
   );
 
   const session = await stripe.checkout.sessions.create({
-    success_url: `${process.env.NEXT_PUBLIC_APP_URL}/success?session_id={CHECKOUT_SESSION_ID}`,
+    success_url: `${process.env.NEXT_PUBLIC_APP_URL}/success?session_id={CHECKOUT_SESSION_ID}&amount=${totalAmount}&transaction_id={CHECKOUT_SESSION_ID}`,
     cancel_url: "https://example.com/cancel",
     line_items: lineItems,
     mode: "payment",
