@@ -189,14 +189,18 @@ export const MobileSimulatorProvider = ({
                   </CardContent>
                 </Card>
               ) : (
-                <div className="flex flex-col gap-4 h-full overflow-auto">
+                <Card className="flex flex-col gap-4 h-full overflow-auto">
                   <RegisterForm isMobile={true} />
-                  <div className="flex w-full justify-center">
-                    <Button variant="black" onClick={handleToggleAuth}>
+                  <CardContent className="text-sm flex items-center text-center">
+                    Already have an Account?
+                    <div
+                      className="cursor-pointer hover:border-b-2 hover:text-gray-300 ml-2"
+                      onClick={handleToggleAuth}
+                    >
                       Login Here
-                    </Button>
-                  </div>
-                </div>
+                    </div>
+                  </CardContent>
+                </Card>
               ),
             },
           ]),
