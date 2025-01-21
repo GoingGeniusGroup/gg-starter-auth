@@ -315,6 +315,7 @@ model VirtualProduct {
 model VirtualProductOnOrder {
   orderId          String         @db.Uuid
   virtualProductId String         @db.Uuid
+  quantity         Int
   Order            Order          @relation(fields: [orderId], references: [id], onDelete: Cascade)
   VirtualProduct   VirtualProduct @relation(fields: [virtualProductId], references: [id], onDelete: Cascade)
 

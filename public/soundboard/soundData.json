@@ -1,0 +1,57 @@
+[
+  {
+    "id": 1,
+    "name": "Dry Fart",
+    "src": "dry-fart.mp3",
+    "category": "Farts"
+  },
+  {
+    "id": 2,
+    "name": "Anime Wow",
+    "src": "anime-wow.mp3",
+    "category": "Anime"
+  },
+  {
+    "id": 3,
+    "name": "Rizz Sounds",
+    "src": "rizz-sounds.mp3",
+    "category": "Rizz"
+  },
+  {
+    "id": 4,
+    "name": "Pedro Pedro Pedro",
+    "src": "pedro-song.mp3",
+    "category": "Song"
+  },
+  {
+    "id": 5,
+    "name": "Spiderman Meme Song",
+    "src": "spiderman-meme-song.mp3",
+    "category": "Song, Meme"
+  },
+  {
+    "id": 6,
+    "name": "Anime Song",
+    "src": "tmpdbnm_5a3.mp3",
+    "category": "Anime, Song"
+  },
+  {
+    "id": 7,
+    "name": "Oh Hell Nouaa",
+    "src": "oh-hell-nouaa.mp3",
+    "category": "Meme"
+  },
+  {
+    "id": 8,
+    "name": "Mii Channel Music",
+    "src": "mii-channel-music.mp3",
+    "category": "Music"
+  },
+  {
+    "id": 9,
+    "name": "Bruh",
+    "src": "bruh.mp3",
+    "category": "Meme"
+  }
+
+]
