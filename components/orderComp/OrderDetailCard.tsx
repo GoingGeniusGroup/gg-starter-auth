@@ -185,7 +185,7 @@ const OrderDetailCard = ({user}:OrderProps) => {
     <div className="text-sm text-gray-500 dark:text-slate-200">Total Amount</div>
     <div className="text-xl font-semibold">${order.orderAmount.toFixed(2)}</div>
   </div>
-  <Link  href={`/dashboard/userAccount/orders/${order.id}`}
+  <Link  href={`/profile/${user.username}/order/${order.id}`}
   >
     <button className="bg-blue-500 hover:bg-blue-700 text-white  py-2 px-4 rounded-md">
     View Receipt
