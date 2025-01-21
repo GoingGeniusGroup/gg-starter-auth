@@ -9,6 +9,7 @@ import { toast } from "sonner";
 import { useSession } from "next-auth/react";
 import axios from "axios";
 import { useRouter, useSearchParams } from "next/navigation";
+import BusinessCard from "@/app/components/card/businessCard";
 interface Transaction {
   id: number;
   type: string;
@@ -345,7 +346,7 @@ export default function WalletComponent() {
                   key={card.id}
                   className=" border rounded-lg overflow-hidden bg-gradient-to-r from-gray-900 to-red-900 p-4 text-white"
                 >
-                  <div className="flex gap-10">
+                  <div className="flex gap-20">
                     <div className="mr-[95px]">
                       <p className="font-medium mb-4">{card.type}</p>
                     </div>
@@ -353,55 +354,58 @@ export default function WalletComponent() {
                       <CreditCard className="h-8 w-8" />
                     </div>
                   </div>
-                  <p className="mb-4">{card.number}</p>
+                  <p className="mb-6">{card.number}</p>
                   <p className="text-sm text-gray-500">
                     Expiry: {card.expiry} | {card.name}
                   </p>
                 </div>
               ))}
-              {/* {addingCard ? (
-                  <div className="space-y-2">
-                    <Input
-                      placeholder="Cardholder Name"
-                      value={newCard.name}
-                      onChange={(e) =>
-                        setNewCard({ ...newCard, name: e.target.value })
-                      }
-                    />
-                    <Input
-                      placeholder="Card Number"
-                      value={newCard.number}
-                      onChange={(e) =>
-                        setNewCard({ ...newCard, number: e.target.value })
-                      }
-                    />
-                    <Input
-                      placeholder="Expiry Date (MM/YY)"
-                      value={newCard.expiry}
-                      onChange={(e) =>
-                        setNewCard({ ...newCard, expiry: e.target.value })
-                      }
-                    />
-                    <Input
-                      placeholder="Card Type (e.g., VISA)"
-                      value={newCard.type}
-                      onChange={(e) =>
-                        setNewCard({ ...newCard, type: e.target.value })
-                      }
-                    />
-                    <Button onClick={handleAddCard} className="w-full">
-                      Add Card
-                    </Button>
-                  </div>
-                ) : ( */}
-              <Button
-                onClick={() => setAddingCard(true)}
-                className="w-full flex items-center gap-2 "
-              >
-                <Plus /> Add New Card
-              </Button>
-              {/* )} */}
+              {addingCard ? (
+                <div className="space-y-2">
+                  <Input
+                    placeholder="Cardholder Name"
+                    value={newCard.name}
+                    onChange={(e) =>
+                      setNewCard({ ...newCard, name: e.target.value })
+                    }
+                  />
+                  <Input
+                    placeholder="Card Number"
+                    value={newCard.number}
+                    onChange={(e) =>
+                      setNewCard({ ...newCard, number: e.target.value })
+                    }
+                  />
+                  <Input
+                    placeholder="Expiry Date (MM/YY)"
+                    value={newCard.expiry}
+                    onChange={(e) =>
+                      setNewCard({ ...newCard, expiry: e.target.value })
+                    }
+                  />
+                  <Input
+                    placeholder="Card Type (e.g., VISA)"
+                    value={newCard.type}
+                    onChange={(e) =>
+                      setNewCard({ ...newCard, type: e.target.value })
+                    }
+                  />
+                  <Button onClick={handleAddCard} className="w-full">
+                    Add Card
+                  </Button>
+                </div>
+              ) : (
+                <Button
+                  onClick={() => setAddingCard(true)}
+                  className="w-full flex items-center gap-2 "
+                >
+                  <Plus /> Add New Card
+                </Button>
+              )}
+               {/* <BusinessCard /> */}
+
             </div>
+           
           </div>
         )}
       </CardContent>
