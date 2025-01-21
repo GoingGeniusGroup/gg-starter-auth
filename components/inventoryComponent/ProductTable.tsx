@@ -29,7 +29,7 @@ interface Product {
   isFeatured: boolean;
   status: boolean;
   description?: string;
-  image?: string; // Add image property if you have it
+  image?: string;
 }
 
 interface ProductTableProps {
