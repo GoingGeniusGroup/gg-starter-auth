@@ -90,10 +90,10 @@ export default function UserInventoryComponent() {
   });
 
   return (
-    <Card className="h-full p-4 overflow-auto pt-6">
-      <h1 className="font-semibold text-2xl mb-6">User Inventory</h1>
+    <div className="h-full p-4 overflow-auto pt-6">
+      <h1 className="font-semibold text-2xl mb-6 dark:text-gray-300">User Inventory</h1>
       {inventoryItems.length === 0 ? (
-        <p className="text-center text-gray-600">No items in the inventory.</p>
+        <p className="text-center dark:text-gray-600">No items in the inventory.</p>
       ) : (
         <div className="flex flex-col space-y-4 max-w-md mx-auto">
           <div className="mb-4 flex items-center gap-2">
@@ -115,6 +115,6 @@ export default function UserInventoryComponent() {
           ))}
         </div>
       )}
-    </Card>
+    </div>
   );
 }
