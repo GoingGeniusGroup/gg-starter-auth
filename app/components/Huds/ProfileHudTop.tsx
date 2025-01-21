@@ -105,7 +105,7 @@ export default function ProfileHudTop({
 
         <DropdownMenuContent align="end" className="w-48">
           {user && (
-            <Link href={`/genius-profile/${username}`}>
+            <Link href={`/profile/${username}`}>
               <DropdownMenuItem className="cursor-pointer">
                 <CgProfile className="mr-2 size-4" />
                 Profile
