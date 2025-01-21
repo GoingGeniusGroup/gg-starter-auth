@@ -8,10 +8,11 @@ import { Form } from "@/components/ui/form";
 import { loginSchema } from "@/schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
-import { useTransition } from "react";
+import { useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
+import { FaEyeSlash, FaEye } from "react-icons/fa6";
 
 interface LoginFormProps {
   isMobile: boolean;
@@ -20,6 +21,7 @@ interface LoginFormProps {
 export const LoginForm = ({ isMobile }: LoginFormProps) => {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
+  const [showPassword, setShowPassword] = useState(false);
   const form = useForm<z.infer<typeof loginSchema>>({
     resolver: zodResolver(loginSchema),
     mode: "onChange",
@@ -59,14 +61,7 @@ export const LoginForm = ({ isMobile }: LoginFormProps) => {
   });
 
   return (
-    <CardWrapper
-      headerTitle="Login"
-      headerDescription="Welcome back! Please fill out the form below before logging in to the website."
-      backButtonLabel="Don't have an account? Register"
-      backButtonHref="/register"
-      isMobile={isMobile}
-      showSocial
-    >
+    <div className="h-full overflow-y-auto">
       <Form {...form}>
         <form onSubmit={handleSubmit} className="space-y-6">
           <div className="space-y-4">
@@ -78,30 +73,42 @@ export const LoginForm = ({ isMobile }: LoginFormProps) => {
               placeholder="e.g. johndoe@example.com or @johndoe"
               isPending={isPending}
             />
+
             <div>
-              <FormInput
-                control={form.control}
-                name="password"
-                label="Password"
-                type="password"
-                placeholder="******"
-                isPending={isPending}
-              />
-              {/* <Button
-                size="sm"
-                variant="anylink"
-                className={`-mt-6 p-0 text-xs w-full justify-end`}
-                asChild
-              >
-                <Link href="/reset">Forgot password?</Link>
-              </Button> */}
+              <div className="relative">
+                <FormInput
+                  control={form.control}
+                  name="password"
+                  label="Password"
+                  type={showPassword ? "text" : "password"}
+                  placeholder="******"
+                  isPending={isPending}
+                />
+                <button
+                  className="absolute inset-0 right-3 flex items-center"
+                  onClick={() => setShowPassword(!showPassword)}
+                  type="button"
+                  aria-label={showPassword ? "Hide password" : "Show password"}
+                >
+                  {showPassword ? <FaEye /> : <FaEyeSlash />}
+                </button>
+              </div>
             </div>
           </div>
-          <Button type="submit" disabled={isPending} className="w-full">
-            Login
+
+          <Button
+            type="submit"
+            disabled={isPending}
+            className="w-full flex items-center justify-center"
+          >
+            {isPending ? (
+              <span className="loader" aria-hidden="true" />
+            ) : (
+              "Login"
+            )}
           </Button>
         </form>
       </Form>
-    </CardWrapper>
+    </div>
   );
 };
