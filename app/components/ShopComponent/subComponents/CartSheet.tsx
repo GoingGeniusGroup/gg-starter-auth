@@ -42,7 +42,7 @@ const CartSheet: React.FC<CartSheetProps> = ({
 
   return (
     <Sheet open={isOpen} onOpenChange={onClose}>
-      <SheetContent className={"w-full sm:max-w-[100vw]"}>
+      <SheetContent className={"w-full sm:max-w-lg"}>
         <SheetHeader>
           <SheetTitle>Your Cart</SheetTitle>
           <SheetDescription>
