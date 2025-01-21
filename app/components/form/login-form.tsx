@@ -13,6 +13,16 @@ import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
 import { FaEyeSlash, FaEye } from "react-icons/fa6";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "../ui/card";
+import Link from "next/link";
+import { useMobileSimulator } from "../MobileSimulator/provider/MobileSimulatorContext";
 
 interface LoginFormProps {
   isMobile: boolean;
@@ -61,54 +71,50 @@ export const LoginForm = ({ isMobile }: LoginFormProps) => {
   });
 
   return (
-    <div className="h-full overflow-y-auto">
-      <Form {...form}>
-        <form onSubmit={handleSubmit} className="space-y-6">
-          <div className="space-y-4">
-            <FormInput
-              control={form.control}
-              name="login"
-              label="Email, Phone, or Username"
-              type="text"
-              placeholder="e.g. johndoe@example.com or @johndoe"
-              isPending={isPending}
-            />
+    <div>
+      <CardHeader className="text-center">
+        <CardTitle>Login Form</CardTitle>
+        <CardDescription>
+          Welcome back! Login to your account by filling out the form below.
+        </CardDescription>
+      </CardHeader>
+      <CardContent>
+        <Form {...form}>
+          <form onSubmit={handleSubmit} className="space-y-6">
+            <div className="space-y-4">
+              <FormInput
+                control={form.control}
+                name="login"
+                label="Email, Phone, or Username"
+                type="text"
+                placeholder="e.g. johndoe@example.com or @johndoe"
+                isPending={isPending}
+              />
 
-            <div>
-              <div className="relative">
-                <FormInput
-                  control={form.control}
-                  name="password"
-                  label="Password"
-                  type={showPassword ? "text" : "password"}
-                  placeholder="******"
-                  isPending={isPending}
-                />
-                <button
-                  className="absolute inset-0 right-3 flex items-center"
-                  onClick={() => setShowPassword(!showPassword)}
-                  type="button"
-                  aria-label={showPassword ? "Hide password" : "Show password"}
-                >
-                  {showPassword ? <FaEye /> : <FaEyeSlash />}
-                </button>
-              </div>
+              <FormInput
+                control={form.control}
+                name="password"
+                label="Password"
+                type={showPassword ? "text" : "password"}
+                placeholder="******"
+                isPending={isPending}
+              />
             </div>
-          </div>
 
-          <Button
-            type="submit"
-            disabled={isPending}
-            className="w-full flex items-center justify-center"
-          >
-            {isPending ? (
-              <span className="loader" aria-hidden="true" />
-            ) : (
-              "Login"
-            )}
-          </Button>
-        </form>
-      </Form>
+            <Button
+              type="submit"
+              disabled={isPending}
+              className="w-full flex items-center justify-center"
+            >
+              {isPending ? (
+                <span className="loader" aria-hidden="true" />
+              ) : (
+                "Login"
+              )}
+            </Button>
+          </form>
+        </Form>
+      </CardContent>
     </div>
   );
 };
