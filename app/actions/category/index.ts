@@ -27,5 +27,5 @@ export const getCategories = cache(
     }
   },
   ["admin/categories", "getCategories"],
-  { revalidate: 60 * 60 * 24 }
+  { revalidate: 60 }
 );
