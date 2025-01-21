@@ -106,7 +106,7 @@ export const RegisterForm = ({ isMobile }: { isMobile: boolean }) => {
       <CardContent>
         <Form {...form}>
           <form onSubmit={handleSubmit} className="space-y-6">
-            <div className="space-y-4 text-black dark:text-white">
+            <div className="space-y-4">
               <FormInput
                 control={form.control}
                 name="username"

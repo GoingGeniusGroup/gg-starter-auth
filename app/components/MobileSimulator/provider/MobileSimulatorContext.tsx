@@ -15,8 +15,11 @@ import {
   FaBell,
   FaShoppingCart,
   FaSignInAlt,
+  FaBriefcase,
+  FaUserCircle,
   FaUserPlus,
 } from "react-icons/fa";
+
 import { MdInventory } from "react-icons/md";
 import ShopSection from "../../shop/ShopSection";
 import { LoginForm } from "@/components/form/login-form";
@@ -29,6 +32,8 @@ import NotificationComponent from "@/components/Notification/NotificationCompone
 import ShopComponent from "../../ShopComponent/ShopComponent";
 import UserInventoryComponent from "../../UserInventory/UserInventoryComponent";
 import { Card, CardContent } from "../../ui/card";
+import ProfileComponent from "@/components/profile/subComponents/ProfileComponent";
+import WalletComponent from "@/components/profile/subComponents/WalletComponent";
 // import { getColorsbyUserId } from "@/services/color";
 // import { ThemeType } from "@prisma/client";
 
@@ -55,18 +60,21 @@ interface MobileSimulatorContextType {
 const backgrounds = [
   {
     name: "Cosmic Nebula",
-    class:
-      "bg-gradient-to-b from-indigo-600 to-purple-600 via-pink-500 text-white",
+    class: "bg-gradient-to-b from-indigo-600 to-white-600  text-white",
   },
+  // {
+  //   name: "Cyberpunk City",
+  //   class:
+  //     "bg-gradient-to-b from-blue-900 to-purple-800  text-white",
+  // },
   {
     name: "Cyberpunk City",
-    class:
-      "bg-gradient-to-b from-blue-900 to-purple-800 via-pink-700 text-white",
+    class: "bg-gradient-to-b from-yellow-300 to-white-800  text-white",
   },
   {
     name: "Glimmering Stars",
     class:
-      "bg-gradient-to-b from-blue-900 to-purple-800 via-pink-700 text-white",
+      "bg-gradient-to-b from-pink-900 to-purple-800 via-red-700 text-white",
   },
   {
     name: "Dark Matter",
@@ -181,7 +189,7 @@ export const MobileSimulatorProvider = ({
                   <CardContent className="text-sm flex items-center text-center">
                     Don`t have an Account?
                     <div
-                      className="cursor-pointer hover:border-b-2 hover:text-gray-300 ml-2"
+                      className="cursor-pointer hover:border-b-2 hover:text-gray-700 dark:hover:text-gray-300 ml-2"
                       onClick={handleToggleAuth}
                     >
                       Register Here
@@ -194,7 +202,7 @@ export const MobileSimulatorProvider = ({
                   <CardContent className="text-sm flex items-center text-center">
                     Already have an Account?
                     <div
-                      className="cursor-pointer hover:border-b-2 hover:text-gray-300 ml-2"
+                      className="cursor-pointer hover:border-b-2 hover:text-gray-700 dark:hover:text-gray-300 ml-2"
                       onClick={handleToggleAuth}
                     >
                       Login Here
@@ -219,6 +227,18 @@ export const MobileSimulatorProvider = ({
       },
       {
         id: 4,
+        title: "UserProfile",
+        icon: <FaUserCircle />,
+        content: <ProfileComponent />,
+      },
+      {
+        id: 5,
+        title: "Wallet",
+        icon: <FaBriefcase />,
+        content: <WalletComponent />,
+      },
+      {
+        id: 6,
         title: "Notifications",
         icon: <FaBell />,
         content: <NotificationComponent />,

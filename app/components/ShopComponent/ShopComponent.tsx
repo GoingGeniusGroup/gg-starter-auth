@@ -123,10 +123,10 @@ export default function ShopComponent() {
 
   return (
     <>
-      <Card className="h-full p-4 overflow-auto pt-6">
+      <div className="h-full p-4 overflow-auto pt-6">
         <div className="flex items-center justify-between mb-3">
           <div>
-            <h1 className="font-semibold text-2xl">
+            <h1 className="font-semibold dark:text-gray-300 text-2xl">
               {isToggleActive ? "Virtual Shop" : "Shop"}
             </h1>
           </div>
@@ -276,7 +276,7 @@ export default function ShopComponent() {
           onRemoveFromCart={removeFromCart}
           totalPrice={totalPrice}
         />
-      </Card>
+      </div>
     </>
   );
 }

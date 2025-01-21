@@ -58,14 +58,14 @@ export default function NotificationComponent() {
   );
 
   return (
-    <Card className="size-full max-w-3xl mx-auto overflow-auto">
+    <div className="size-full max-w-3xl mx-auto overflow-auto">
       <CardHeader>
-        <CardTitle>Notifications</CardTitle>
+        <CardTitle className="dark:text-gray-300">Notifications</CardTitle>
       </CardHeader>
       <CardContent>
         <div className="flex flex-col sm:flex-row justify-between mb-4 space-y-2 sm:space-y-0">
           <Select value={filter} onValueChange={setFilter}>
-            <SelectTrigger className="w-full sm:w-[100px]">
+            <SelectTrigger className="w-full dark:text-white sm:w-[100px]">
               <SelectValue placeholder="Filter by type" />
             </SelectTrigger>
             <SelectContent>
@@ -76,7 +76,7 @@ export default function NotificationComponent() {
             </SelectContent>
           </Select>
           <Select value={sort} onValueChange={setSort}>
-            <SelectTrigger className="w-full sm:w-[100px]">
+            <SelectTrigger className="w-full dark:text-white sm:w-[100px]">
               <SelectValue placeholder="Sort by" />
             </SelectTrigger>
             <SelectContent>
@@ -87,9 +87,12 @@ export default function NotificationComponent() {
         </div>
         <div className="space-y-4">
           {currentNotifications.map((notification) => (
-            <div key={notification.id} className="p-4 border rounded-lg">
+            <div
+              key={notification.id}
+              className="p-4 border dark:text-gray-300 rounded-lg"
+            >
               <h3 className="font-semibold">{notification.title}</h3>
-              <p className="text-sm text-gray-500">{notification.message}</p>
+              <p className="text-sm dark:text-gray-500">{notification.message}</p>
               <div className="flex justify-between items-center mt-2">
                 <span
                   className={`text-xs px-2 py-1 rounded-full ${
@@ -102,7 +105,7 @@ export default function NotificationComponent() {
                 >
                   {notification.type}
                 </span>
-                <span className="text-xs text-gray-400">
+                <span className="text-xs dark:text-gray-400">
                   {new Date(notification.date).toLocaleString()}
                 </span>
               </div>
@@ -134,6 +137,6 @@ export default function NotificationComponent() {
           </Button>
         </div>
       </CardContent>
-    </Card>
+    </div>
   );
 }
