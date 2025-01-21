@@ -181,7 +181,7 @@ export const MobileSimulatorProvider = ({
                   <CardContent className="text-sm flex items-center text-center">
                     Don`t have an Account?
                     <div
-                      className="cursor-pointer hover:border-b-2 hover:text-gray-300 ml-2"
+                      className="cursor-pointer hover:border-b-2 hover:text-gray-700 dark:hover:text-gray-300 ml-2"
                       onClick={handleToggleAuth}
                     >
                       Register Here
@@ -194,7 +194,7 @@ export const MobileSimulatorProvider = ({
                   <CardContent className="text-sm flex items-center text-center">
                     Already have an Account?
                     <div
-                      className="cursor-pointer hover:border-b-2 hover:text-gray-300 ml-2"
+                      className="cursor-pointer hover:border-b-2 hover:text-gray-700 dark:hover:text-gray-300 ml-2"
                       onClick={handleToggleAuth}
                     >
                       Login Here
