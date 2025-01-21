@@ -81,6 +81,7 @@ export async function POST(req: Request) {
             VirtualProductOnOrder: {
               create: cartItems.map((item: any) => ({
                 virtualProductId: item.id,
+                quantity: item.quantity,
               }))
             }
           }

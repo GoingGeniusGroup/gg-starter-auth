@@ -8,10 +8,21 @@ import { Form } from "@/components/ui/form";
 import { loginSchema } from "@/schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
-import { useTransition } from "react";
+import { useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
+import { FaEyeSlash, FaEye } from "react-icons/fa6";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "../ui/card";
+import Link from "next/link";
+import { useMobileSimulator } from "../MobileSimulator/provider/MobileSimulatorContext";
 
 interface LoginFormProps {
   isMobile: boolean;
@@ -20,6 +31,7 @@ interface LoginFormProps {
 export const LoginForm = ({ isMobile }: LoginFormProps) => {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
+  const [showPassword, setShowPassword] = useState(false);
   const form = useForm<z.infer<typeof loginSchema>>({
     resolver: zodResolver(loginSchema),
     mode: "onChange",
@@ -59,49 +71,50 @@ export const LoginForm = ({ isMobile }: LoginFormProps) => {
   });
 
   return (
-    <CardWrapper
-      headerTitle="Login"
-      headerDescription="Welcome back! Please fill out the form below before logging in to the website."
-      backButtonLabel="Don't have an account? Register"
-      backButtonHref="/register"
-      isMobile={isMobile}
-      showSocial
-    >
-      <Form {...form}>
-        <form onSubmit={handleSubmit} className="space-y-6">
-          <div className="space-y-4">
-            <FormInput
-              control={form.control}
-              name="login"
-              label="Email, Phone, or Username"
-              type="text"
-              placeholder="e.g. johndoe@example.com or @johndoe"
-              isPending={isPending}
-            />
-            <div>
+    <div>
+      <CardHeader className="text-center">
+        <CardTitle>Login Form</CardTitle>
+        <CardDescription>
+          Welcome back! Login to your account by filling out the form below.
+        </CardDescription>
+      </CardHeader>
+      <CardContent>
+        <Form {...form}>
+          <form onSubmit={handleSubmit} className="space-y-6">
+            <div className="space-y-4">
+              <FormInput
+                control={form.control}
+                name="login"
+                label="Email, Phone, or Username"
+                type="text"
+                placeholder="e.g. johndoe@example.com or @johndoe"
+                isPending={isPending}
+              />
+
               <FormInput
                 control={form.control}
                 name="password"
                 label="Password"
-                type="password"
+                type={showPassword ? "text" : "password"}
                 placeholder="******"
                 isPending={isPending}
               />
-              {/* <Button
-                size="sm"
-                variant="anylink"
-                className={`-mt-6 p-0 text-xs w-full justify-end`}
-                asChild
-              >
-                <Link href="/reset">Forgot password?</Link>
-              </Button> */}
             </div>
-          </div>
-          <Button type="submit" disabled={isPending} className="w-full">
-            Login
-          </Button>
-        </form>
-      </Form>
-    </CardWrapper>
+
+            <Button
+              type="submit"
+              disabled={isPending}
+              className="w-full flex items-center justify-center"
+            >
+              {isPending ? (
+                <span className="loader" aria-hidden="true" />
+              ) : (
+                "Login"
+              )}
+            </Button>
+          </form>
+        </Form>
+      </CardContent>
+    </div>
   );
 };

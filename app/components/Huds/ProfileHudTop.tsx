@@ -29,7 +29,8 @@ export default function ProfileHudTop({
   const { data: session, status } = useSession();
   const usernameContext = useUser();
   const [isLoggingOut, setIsLoggingOut] = useState(false);
-  const { toggleScreen, setShowMobile } = useMobileSimulator();
+  const { toggleScreen, setShowMobile, sections, closeAllScreens } =
+    useMobileSimulator();
 
   const username = Array.isArray(usernameContext.username)
     ? usernameContext.username[0]
@@ -42,7 +43,17 @@ export default function ProfileHudTop({
   const admin = user?.role === "Admin";
 
   const handleMobileButtonClick = () => {
-    setShowMobile((prev) => !prev);
+    setShowMobile(true);
+
+    closeAllScreens();
+    const loginSection = sections.find(
+      (section) => section.title === "Login" || section.title === "Register"
+    );
+    if (loginSection) {
+      toggleScreen(loginSection);
+    } else {
+      console.error("Login section not found");
+    }
   };
 
   const delay = (ms: number) =>
@@ -127,7 +138,7 @@ export default function ProfileHudTop({
               onClick={handleMobileButtonClick}
             >
               <CgProfile className="mr-2 size-4" />
-              Open Mobile
+              Open Mobile Login
             </DropdownMenuItem>
           ) : (
             <DropdownMenuItem
