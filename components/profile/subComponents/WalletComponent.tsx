@@ -29,16 +29,11 @@ export default function WalletComponent() {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const [amount, setAmount] = useState<number | undefined>(undefined);
-
-  if (!session) {
-    return <div>Please login to proceed with the payment.</div>;
-  }
   const [transactions, setTransactions] = useState<Transaction[]>([
     { id: 1, type: "Top Up", amount: 500, date: "2024-06-10" },
     { id: 2, type: "Coffee purchase", amount: -50, date: "2024-06-09" },
     { id: 3, type: "bag purchase", amount: -50, date: "2024-06-19" },
   ]);
-
   const [cards, setCards] = useState([
     {
       id: 1,
@@ -48,7 +43,6 @@ export default function WalletComponent() {
       type: "VISA",
     },
   ]);
-
   const [activeTab, setActiveTab] = useState<"cards" | "transactions">(
     "transactions"
   );
@@ -59,6 +53,10 @@ export default function WalletComponent() {
     expiry: "",
     type: "",
   });
+
+  if (!session) {
+    return <div>Please login to proceed with the payment.</div>;
+  }
 
   const handleTopUp = () => {
     const amount = parseFloat(topUpAmount);
@@ -239,6 +237,7 @@ export default function WalletComponent() {
             {isLoading ? "Processing..." : "Pay with eSewa"}
           </Button> */}
               <Input
+                className="dark:text-white"
                 type="number"
                 min={10}
                 placeholder="eg: 1000"
@@ -246,7 +245,12 @@ export default function WalletComponent() {
                 onChange={(e) => setAmount(Number(e.target.value))}
               />
 
-              <Button type="submit" onClick={handleTopUp} className="w-full" disabled={isLoading}>
+              <Button
+                type="submit"
+                onClick={handleTopUp}
+                className="w-full"
+                disabled={isLoading}
+              >
                 {isLoading ? "Processing..." : "Pay with Khalti"}
               </Button>
             </form>
