@@ -42,9 +42,11 @@ const PaymentDetails = () => {
           >
             <div className="flex flex-col items-center space-y-3">
               {typeof method.image === "string" ? (
-                <img
+                <Image
                   src={method.image}
                   alt={method.name}
+                  width={120}
+                  height={80}
                   className="w-[120px] h-[80px] object-contain"
                 />
               ) : (
@@ -74,7 +76,8 @@ const PaymentDetails = () => {
             </span>
           </p>
           <p className="text-sm text-gray-500 mt-1">
-            Click "Complete Checkout" to proceed with this payment method
+            Click &quot;Complete Checkout&quot; to proceed with this payment
+            method
           </p>
         </div>
       )}

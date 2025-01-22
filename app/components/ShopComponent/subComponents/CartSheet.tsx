@@ -1,4 +1,5 @@
 import { useState } from "react";
+import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Plus, Minus, ArrowRight, ArrowLeft } from "lucide-react";
 import {
@@ -18,7 +19,7 @@ interface CartItem {
   price: number;
   quantity: number;
   images: string[];
-  productType: "physical" | "virtual";
+  productType: string;
 }
 
 interface CartSheetProps {
@@ -79,11 +80,13 @@ const CartSheet: React.FC<CartSheetProps> = ({
               <div className="space-y-4">
                 {cartItems.map((item, idx) => (
                   <div key={idx} className="flex items-center space-x-4">
-                    <img
+                    <Image
                       src={item.images[0]}
                       alt={item.name}
                       className="w-16 h-16 object-cover rounded"
                       loading="lazy"
+                      width={64}
+                      height={64}
                     />
                     <div className="flex-grow">
                       <h4 className="font-semibold">{item.name}</h4>
@@ -95,10 +98,7 @@ const CartSheet: React.FC<CartSheetProps> = ({
                         {(Number(item.price) * item.quantity).toFixed(2)}
                       </p>
                       <p className="text-xs text-gray-400">
-                        Type:{" "}
-                        {item.productType === "physical"
-                          ? "Physical"
-                          : "Virtual"}
+                        Type: {item.productType === "virtual"}
                       </p>
                     </div>
                     <div className="flex items-center space-x-2">
