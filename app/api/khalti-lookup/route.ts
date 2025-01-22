@@ -40,10 +40,7 @@ export async function POST(req: NextRequest) {
 
       //if there is no topup record
       if (!newTopup) {
-        return NextResponse.json({
-          success: false,
-          message: "Topup record not found",
-        });
+        throw new Error("Topup record not found");
       }
 
       //update the stored topup
@@ -60,17 +57,35 @@ export async function POST(req: NextRequest) {
         data: { topupStatus: updatedTopupStatus },
       });
 
-      //update the user balance
       if (updatedTopupStatus === "SUCCESS") {
-        await db.user.update({
+        //find the user
+        const user = await db.user.findUnique({
+          where: { id: newTopup.userId },
+          select: { balance: true },
+        });
+
+        console.log(`Current user balance: ${user?.balance}`);
+
+        //check the user
+        if (user === null) {
+          throw new Error(`User with id ${newTopup.userId} not found`);
+        }
+
+        const currentBalance = user.balance || 0;
+        const newBalance = currentBalance + amount;
+
+        //update the balance of user
+        const updatedUser = await db.user.update({
           where: { id: newTopup.userId },
           data: {
-            balance: {
-              increment: amount,
-            },
+            balance: newBalance,
           },
         });
+        console.log(
+          `User balance updated. New balance: ${updatedUser.balance}`
+        );
       }
+
       return NextResponse.json({
         success: true,
         message: "Payment Successful",
