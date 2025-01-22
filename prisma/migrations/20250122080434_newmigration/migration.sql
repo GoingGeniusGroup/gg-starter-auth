@@ -67,6 +67,7 @@ CREATE TABLE "User" (
     "emergencyContactName" VARCHAR(50),
     "enrollDate" TIMESTAMP(3),
     "expireDate" TIMESTAMP(3),
+    "balance" DOUBLE PRECISION,
 
     CONSTRAINT "User_pkey" PRIMARY KEY ("id")
 );
@@ -313,27 +314,88 @@ CREATE TABLE "cards" (
 );
 
 -- CreateTable
+CREATE TABLE "UserInventory" (
+    "id" SERIAL NOT NULL,
+    "userId" UUID NOT NULL,
+    "productId" UUID NOT NULL,
+    "quantity" INTEGER NOT NULL DEFAULT 1,
+
+    CONSTRAINT "UserInventory_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "VirtualCategory" (
+    "id" UUID NOT NULL DEFAULT gen_random_uuid(),
+    "name" TEXT NOT NULL,
+
+    CONSTRAINT "VirtualCategory_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "VirtualProduct" (
+    "id" UUID NOT NULL DEFAULT gen_random_uuid(),
+    "name" TEXT NOT NULL,
+    "price" DOUBLE PRECISION NOT NULL,
+    "type" TEXT NOT NULL,
+    "images" TEXT[],
+    "rating" DOUBLE PRECISION NOT NULL,
+    "categoryId" UUID NOT NULL,
+    "description" TEXT NOT NULL,
+    "src" TEXT,
+    "animation" TEXT,
+    "stockQuantity" INTEGER NOT NULL,
+
+    CONSTRAINT "VirtualProduct_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "VirtualProductOnOrder" (
+    "orderId" UUID NOT NULL,
+    "virtualProductId" UUID NOT NULL,
+    "quantity" INTEGER NOT NULL,
+
+    CONSTRAINT "VirtualProductOnOrder_pkey" PRIMARY KEY ("orderId","virtualProductId")
+);
+
+-- CreateTable
+CREATE TABLE "Subcategory" (
+    "id" UUID NOT NULL DEFAULT gen_random_uuid(),
+    "name" TEXT NOT NULL,
+    "imageUrl" TEXT NOT NULL,
+
+    CONSTRAINT "Subcategory_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
 CREATE TABLE "_ProductToSupplier" (
     "A" UUID NOT NULL,
-    "B" UUID NOT NULL
+    "B" UUID NOT NULL,
+
+    CONSTRAINT "_ProductToSupplier_AB_pkey" PRIMARY KEY ("A","B")
 );
 
 -- CreateTable
 CREATE TABLE "_CartToProductVariant" (
     "A" UUID NOT NULL,
-    "B" UUID NOT NULL
+    "B" UUID NOT NULL,
+
+    CONSTRAINT "_CartToProductVariant_AB_pkey" PRIMARY KEY ("A","B")
 );
 
 -- CreateTable
 CREATE TABLE "_ProductOrders" (
     "A" UUID NOT NULL,
-    "B" UUID NOT NULL
+    "B" UUID NOT NULL,
+
+    CONSTRAINT "_ProductOrders_AB_pkey" PRIMARY KEY ("A","B")
 );
 
 -- CreateTable
 CREATE TABLE "_SalesInvoiceToTax" (
     "A" UUID NOT NULL,
-    "B" UUID NOT NULL
+    "B" UUID NOT NULL,
+
+    CONSTRAINT "_SalesInvoiceToTax_AB_pkey" PRIMARY KEY ("A","B")
 );
 
 -- CreateIndex
@@ -367,9 +429,6 @@ CREATE UNIQUE INDEX "TwoFactorToken_email_token_key" ON "TwoFactorToken"("email"
 CREATE UNIQUE INDEX "TwoFactorConfirmation_userId_key" ON "TwoFactorConfirmation"("userId");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "Product_categoryId_key" ON "Product"("categoryId");
-
--- CreateIndex
 CREATE UNIQUE INDEX "Product_taxId_key" ON "Product"("taxId");
 
 -- CreateIndex
@@ -388,9 +447,6 @@ CREATE UNIQUE INDEX "Inventory_productId_key" ON "Inventory"("productId");
 CREATE UNIQUE INDEX "Order_paymentId_key" ON "Order"("paymentId");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "Order_userId_key" ON "Order"("userId");
-
--- CreateIndex
 CREATE UNIQUE INDEX "ProductVariant_var_id_key" ON "ProductVariant"("var_id");
 
 -- CreateIndex
@@ -406,43 +462,13 @@ CREATE UNIQUE INDEX "SalesInvoice_InvoiceId_key" ON "SalesInvoice"("InvoiceId");
 CREATE UNIQUE INDEX "SalesInvoice_orderId_key" ON "SalesInvoice"("orderId");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "UserPaymentMethod_userId_key" ON "UserPaymentMethod"("userId");
-
--- CreateIndex
-CREATE UNIQUE INDEX "UserPaymentMethod_typeId_key" ON "UserPaymentMethod"("typeId");
-
--- CreateIndex
-CREATE UNIQUE INDEX "VariantOption_var_id_key" ON "VariantOption"("var_id");
-
--- CreateIndex
-CREATE UNIQUE INDEX "visitprofile_userId_key" ON "visitprofile"("userId");
-
--- CreateIndex
-CREATE UNIQUE INDEX "Topup_userId_key" ON "Topup"("userId");
-
--- CreateIndex
-CREATE UNIQUE INDEX "cards_userId_key" ON "cards"("userId");
-
--- CreateIndex
-CREATE UNIQUE INDEX "_ProductToSupplier_AB_unique" ON "_ProductToSupplier"("A", "B");
-
--- CreateIndex
 CREATE INDEX "_ProductToSupplier_B_index" ON "_ProductToSupplier"("B");
-
--- CreateIndex
-CREATE UNIQUE INDEX "_CartToProductVariant_AB_unique" ON "_CartToProductVariant"("A", "B");
 
 -- CreateIndex
 CREATE INDEX "_CartToProductVariant_B_index" ON "_CartToProductVariant"("B");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "_ProductOrders_AB_unique" ON "_ProductOrders"("A", "B");
-
--- CreateIndex
 CREATE INDEX "_ProductOrders_B_index" ON "_ProductOrders"("B");
-
--- CreateIndex
-CREATE UNIQUE INDEX "_SalesInvoiceToTax_AB_unique" ON "_SalesInvoiceToTax"("A", "B");
 
 -- CreateIndex
 CREATE INDEX "_SalesInvoiceToTax_B_index" ON "_SalesInvoiceToTax"("B");
@@ -506,6 +532,21 @@ ALTER TABLE "Topup" ADD CONSTRAINT "Topup_userId_fkey" FOREIGN KEY ("userId") RE
 
 -- AddForeignKey
 ALTER TABLE "cards" ADD CONSTRAINT "cards_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "UserInventory" ADD CONSTRAINT "UserInventory_productId_fkey" FOREIGN KEY ("productId") REFERENCES "VirtualProduct"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "UserInventory" ADD CONSTRAINT "UserInventory_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "VirtualProduct" ADD CONSTRAINT "VirtualProduct_categoryId_fkey" FOREIGN KEY ("categoryId") REFERENCES "VirtualCategory"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "VirtualProductOnOrder" ADD CONSTRAINT "VirtualProductOnOrder_orderId_fkey" FOREIGN KEY ("orderId") REFERENCES "Order"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "VirtualProductOnOrder" ADD CONSTRAINT "VirtualProductOnOrder_virtualProductId_fkey" FOREIGN KEY ("virtualProductId") REFERENCES "VirtualProduct"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "_ProductToSupplier" ADD CONSTRAINT "_ProductToSupplier_A_fkey" FOREIGN KEY ("A") REFERENCES "Product"("id") ON DELETE CASCADE ON UPDATE CASCADE;

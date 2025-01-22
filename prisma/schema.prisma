@@ -42,6 +42,7 @@ model User {
   emergencyContactName   String?                @db.VarChar(50)
   enrollDate             DateTime?
   expireDate             DateTime?
+  balance                Float?
   accounts               Account?
   Cart                   Cart?
   Order                  Order[]
