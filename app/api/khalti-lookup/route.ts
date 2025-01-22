@@ -60,6 +60,17 @@ export async function POST(req: NextRequest) {
         data: { topupStatus: updatedTopupStatus },
       });
 
+      //update the user balance
+      if (updatedTopupStatus === "SUCCESS") {
+        await db.user.update({
+          where: { id: newTopup.userId },
+          data: {
+            balance: {
+              increment: amount,
+            },
+          },
+        });
+      }
       return NextResponse.json({
         success: true,
         message: "Payment Successful",
