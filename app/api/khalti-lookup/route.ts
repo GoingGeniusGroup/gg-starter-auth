@@ -64,26 +64,22 @@ export async function POST(req: NextRequest) {
           select: { balance: true },
         });
 
-        console.log(`Current user balance: ${user?.balance}`);
-
         //check the user
         if (user === null) {
           throw new Error(`User with id ${newTopup.userId} not found`);
         }
 
+        // Check New balance
         const currentBalance = user.balance || 0;
         const newBalance = currentBalance + amount;
 
         //update the balance of user
-        const updatedUser = await db.user.update({
+        await db.user.update({
           where: { id: newTopup.userId },
           data: {
             balance: newBalance,
           },
         });
-        console.log(
-          `User balance updated. New balance: ${updatedUser.balance}`
-        );
       }
 
       return NextResponse.json({
