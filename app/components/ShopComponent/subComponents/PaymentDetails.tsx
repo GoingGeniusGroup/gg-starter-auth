@@ -3,14 +3,14 @@
 import { useState } from "react";
 import Image from "next/image";
 import stripeLogo from "@/public/assets/stripe_logo.png";
-import khaltiLogo from "@/public/assets/khalti_logo.png";
+import cardLogo from "@/public/assets/card_logo.png";
 
 const paymentMethods = [
   {
-    id: "khalti",
-    name: "Khalti",
-    image: khaltiLogo,
-    description: "Pay easily using Khalti.",
+    id: "card",
+    name: "Wallet Card",
+    image: cardLogo,
+    description: "Pay easily using card.",
   },
   {
     id: "stripe",
@@ -20,9 +20,15 @@ const paymentMethods = [
   },
 ];
 
-const PaymentDetails = () => {
-  const [selectedMethod, setSelectedMethod] = useState<string | null>(null);
+interface PaymentDetailsProps {
+  selectedMethod: string | null;
+  setSelectedMethod: React.Dispatch<React.SetStateAction<string | null>>;
+}
 
+const PaymentDetails: React.FC<PaymentDetailsProps> = ({
+  selectedMethod,
+  setSelectedMethod,
+}) => {
   return (
     <div className="space-y-4">
       <h3 className="font-medium text-lg mb-4">Select Payment Method</h3>
@@ -55,7 +61,7 @@ const PaymentDetails = () => {
                   alt={method.name}
                   width={120}
                   height={80}
-                  objectFit="contain"
+                  className="w-[120px] h-[80px] object-contain"
                 />
               )}
               <div className="text-center">
