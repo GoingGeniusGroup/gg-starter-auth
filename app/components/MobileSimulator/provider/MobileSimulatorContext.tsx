@@ -59,6 +59,10 @@ interface MobileSimulatorContextType {
 
 const backgrounds = [
   {
+    name: "Snowfall",
+    class: "bg-gradient-to-b from-white to-gray-100 text-black",
+  },
+  {
     name: "Cosmic Nebula",
     class: "bg-gradient-to-b from-indigo-600 to-white-600  text-white",
   },
@@ -79,10 +83,6 @@ const backgrounds = [
   {
     name: "Dark Matter",
     class: "bg-gradient-to-b from-gray-900 to-black text-white",
-  },
-  {
-    name: "Snowfall",
-    class: "bg-gradient-to-b from-white to-gray-100 text-black",
   },
 ];
 

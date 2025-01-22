@@ -40,8 +40,14 @@ const CartSheet: React.FC<CartSheetProps> = ({
   totalPrice = 0,
 }) => {
   const [activeStep, setActiveStep] = useState("cart");
+  const [selectedMethod, setSelectedMethod] = useState<string | null>(null);
 
   const handleCheckout = async () => {
+    if (selectedMethod !== "stripe") {
+      console.log("Please select Stripe as your payment method.");
+      return;
+    }
+
     try {
       const response = await fetch("/api/stripe-checkout", {
         method: "POST",
@@ -125,7 +131,10 @@ const CartSheet: React.FC<CartSheetProps> = ({
               </div>
             )
           ) : (
-            <PaymentDetails />
+            <PaymentDetails
+              selectedMethod={selectedMethod}
+              setSelectedMethod={setSelectedMethod}
+            />
           )}
         </ScrollArea>
         <SheetFooter className="mt-4">
@@ -159,7 +168,11 @@ const CartSheet: React.FC<CartSheetProps> = ({
                   <ArrowRight className="ml-2 h-4 w-4" />
                 </Button>
               ) : (
-                <Button className="flex-1" onClick={handleCheckout}>
+                <Button
+                  className="flex-1"
+                  disabled={!selectedMethod}
+                  onClick={handleCheckout}
+                >
                   Complete Checkout
                   <ArrowRight className="ml-2 h-4 w-4" />
                 </Button>
