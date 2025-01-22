@@ -1,5 +1,6 @@
 "use client";
 import { useState } from "react";
+import Image from "next/image";
 
 interface ToggleButtonProps {
   setActiveState: (state: boolean) => void;
@@ -22,7 +23,7 @@ export default function ToggleButton({ setActiveState }: ToggleButtonProps) {
       transition-colors duration-200 ease-in-out
       ${isActive ? "bg-gray-400" : "bg-gray-100"}
     `}
-      aria-pressed={isActive}
+      aria-checked={isActive}
       role="switch"
     >
       <div
@@ -35,15 +36,19 @@ export default function ToggleButton({ setActiveState }: ToggleButtonProps) {
       `}
       >
         {isActive ? (
-          <img
+          <Image
             src="/assets/virtual.svg"
             alt="VR Avatar"
+            width={16}
+            height={16}
             className="w-4 h-4 rounded-full"
           />
         ) : (
-          <img
+          <Image
             src="/assets/earth.svg"
             alt="Earth Avatar"
+            width={16}
+            height={16}
             className="w-4 h-4 rounded-full"
           />
         )}
