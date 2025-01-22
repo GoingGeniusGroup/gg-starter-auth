@@ -71,7 +71,9 @@ export const virtualProdSchema=z.object({
   stockQuantity:z.number().int().nonnegative(),
   type:z.string(),
   categoryId:z.string(),
-  source: z.string().optional()
+  source: z.string().optional(),
+  images: z.array(z.string()).optional() 
+
 })
 
 
