@@ -16,21 +16,23 @@ const page = async() => {
         
   return (
     <>
-          <div className=''>
-        <Tabs defaultValue="account"   >
-  <TabsList  className="grid w-full grid-cols-4 h-13 " >
-    <TabsTrigger value="account"  className="  text-lg  border-b-2  border-transparent transition duration-300 ease-in-out " > 
+          <div className='w-full min-h-screen'>
+            <div  className="py-2">
+            <Tabs defaultValue="account"   >
+  <TabsList  className="w-full justify-start flex md:flex-row gap-5 h-13 border-b border-gray-100 " >
+    <TabsTrigger value="account"  className="  text-lg border-transparent transition duration-300 ease-in-out " > 
       
           Profile     <User size={18} className="ml-2" />
       </TabsTrigger>
-    <TabsTrigger value="order" className="  text-lg border-b-2 border-transparent  transition duration-300 ease-in-out active:border-blue-500" >My Orders
+    <TabsTrigger value="order" className="  text-lg  border-transparent  transition duration-300 ease-in-out active:border-blue-500" >My Orders
     <ShoppingBag size={18} className="ml-2" />
     </TabsTrigger>
-    <TabsTrigger value="wishlist" className="  text-lg border-b-2 border-transparent  transition duration-300 ease-in-out active:border-blue-500" >Wishlist
+    <TabsTrigger value="wishlist" className="  text-lg  border-transparent  transition duration-300 ease-in-out active:border-blue-500" >Wishlist
     <Heart size={18} className="ml-2" />
 
     </TabsTrigger>
-    <TabsTrigger value="other" className="  text-lg border-b-2 border-transparent  transition duration-300 ease-in-out active:border-blue-500" >
+    {/* className="  text-lg border-b-2 border-transparent  transition duration-300 ease-in-out active:border-blue-500"  */}
+    <TabsTrigger value="other" className="  text-lg  border-transparent  transition duration-300 ease-in-out active:border-blue-500" >
       Notification <Bell className='ml-2' size={18}/></TabsTrigger>
 
   </TabsList>
@@ -82,6 +84,8 @@ const page = async() => {
     </div>
   </TabsContent>
 </Tabs>
+            </div>
+
 
     </div>
     </>
