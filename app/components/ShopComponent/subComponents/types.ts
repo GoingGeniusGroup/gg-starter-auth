@@ -3,6 +3,12 @@ export interface VirtualCategory {
   name: string;
 }
 
+export interface Category {
+  id: string;
+  categoryName: string;
+  categoryDescription: string | null;
+}
+
 export interface VirtualProduct {
   id: string;
   name: string;

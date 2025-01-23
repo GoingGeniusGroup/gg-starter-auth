@@ -16,7 +16,7 @@ const BusinessCard = () => {
   return (
     <div className="">
       <motion.div
-        className="w-[336px] h-[192px]"
+        className="w-[280px] h-[178px]"
         onClick={handleCardClick}
         animate={{ rotateY: flipped ? 180 : 0 }}
         transition={{ duration: 0.7 }}

@@ -53,7 +53,7 @@ const BusinessCardFront: React.FC<BusinessCardFrontProps> = ({
 
   const qrCodeData = "https://kaayush.vercel.app/";
   return (
-    <Card className="grid grid-cols-2 w-[336px] h-[192px] bg-white overflow-hidden relative border-none">
+    <Card className="grid grid-cols-2 w-[280px] h-[178px] bg-white overflow-hidden relative border-none">
       {/*left side*/}
       <div className="flex flex-col space-y-8">
         <CardHeader className="flex flex-col space-y-0">
@@ -114,7 +114,7 @@ const BusinessCardFront: React.FC<BusinessCardFrontProps> = ({
 
         {/*Dark BG*/}
         <svg
-          className="absolute w-full h-full z-30 left-1"
+          className="absolute z-30 -left-2"
           width="164"
           height="192"
           viewBox="0 0 164 192"

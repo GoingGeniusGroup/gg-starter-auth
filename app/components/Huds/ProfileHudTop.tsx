@@ -19,13 +19,7 @@ import { IconArrowDown } from "@tabler/icons-react";
 import { useState } from "react";
 import { useMobileSimulator } from "../MobileSimulator/provider/MobileSimulatorContext";
 
-interface ProfileHudProps {
-  handleServerSignOut: () => Promise<{ success: boolean; error?: string }>;
-}
-
-export default function ProfileHudTop({
-  handleServerSignOut,
-}: ProfileHudProps) {
+export default function ProfileHudTop() {
   const { data: session, status } = useSession();
   const usernameContext = useUser();
   const [isLoggingOut, setIsLoggingOut] = useState(false);
@@ -56,39 +50,18 @@ export default function ProfileHudTop({
     }
   };
 
-  const delay = (ms: number) =>
-    new Promise((resolve) => setTimeout(resolve, ms));
-
   const logoutAndToggleSidebar = async () => {
     if (isLoggingOut) return;
 
     try {
       setIsLoggingOut(true);
-      const loadingToast = toast.loading("Logging out...");
-
-      // First handle server-side session cleanup
-      const serverResult = await handleServerSignOut();
-
-      if (!serverResult.success) {
-        throw new Error(serverResult.error || "Server logout failed");
-      }
-
-      // Dismiss loading toast and show success message
-      toast.dismiss(loadingToast);
-      await delay(500);
-      toast.success("Redirecting...");
-
-      // Add delay to ensure toast is visible
-      await delay(1000);
-
-      // Handle client-side logout with redirect
-      await signOut({
-        redirect: true,
-        callbackUrl: "/",
-      });
+      toast.loading("Logging out...");
+      await signOut({ callbackUrl: "/" });
+      toast.success("Logged out successfully!");
     } catch (error) {
       console.error("Logout error:", error);
       toast.error("Failed to logout. Please try again.");
+    } finally {
       setIsLoggingOut(false);
     }
   };

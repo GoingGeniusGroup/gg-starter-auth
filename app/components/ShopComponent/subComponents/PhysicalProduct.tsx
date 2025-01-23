@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 
 import { Button } from "@/components/ui/button";
@@ -15,17 +15,40 @@ import "swiper/css/scrollbar";
 import "swiper/css/pagination";
 
 import physicalProducts from "../data/physicalProducts";
+import { getCategories } from "@/actions/category";
+import { Category } from "./types";
 
 export default function PhysicalProduct() {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState("");
+  const [categories, setCategories] = useState<Category[]>([]);
 
   const products = physicalProducts;
 
-  const categories = [...new Set(products.map((product) => product.category))];
+  // Fetch Categories
+  useEffect(() => {
+    const fetchCategories = async () => {
+      const data = await getCategories();
 
+      if (data && Array.isArray(data)) {
+        const formattedCategories: Category[] = data.map((item) => ({
+          id: item.id,
+          categoryName: "categoryName" in item ? item.categoryName ?? "" : "",
+          categoryDescription:
+            "categoryDescription" in item ? item.categoryDescription ?? "" : "",
+        }));
+        setCategories(formattedCategories);
+      } else {
+        setCategories([]);
+      }
+    };
+
+    fetchCategories();
+  }, []);
+
+  // Category and Product Filtering
   const handleCategoryClick = (category: string | null) => {
-    setSelectedCategory(category === "All" ? null : category);
+    setSelectedCategory(category);
   };
 
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -58,63 +81,64 @@ export default function PhysicalProduct() {
         />
       </div>
 
-      {/* Category Carousel */}
+      {/* Category Slider */}
       <div className="relative">
-        <h1 className="font-medium mb-2">Categories:</h1>
+        <h1 className="font-medium mb-2 flex flex-row items-center gap-2">
+          Categories:
+        </h1>
         <Carousel className="w-full">
           <CarouselContent>
-            {[{ id: "all", name: "All" }, ...categories]
-              .reduce(
-                (
-                  result: (string | { id: string; name: string })[][],
-                  _,
-                  index,
-                  array
-                ) => {
-                  if (index % 2 === 0) {
-                    result.push(array.slice(index, index + 2));
-                  }
-                  return result;
-                },
-                []
-              )
+            {[
+              { id: "all", categoryName: "All", categoryDescription: null },
+              ...categories,
+            ]
+              .reduce((result: Category[][], _, index, array) => {
+                if (index % 2 === 0) {
+                  result.push(array.slice(index, index + 2));
+                }
+                return result;
+              }, [])
               .map((pair, index) => (
                 <CarouselItem key={index} className="shrink-0 pb-4">
                   <div className="flex justify-between gap-2">
-                    {pair.map((category) => (
+                    <button
+                      className={`w-1/2 h-10 rounded-md text-md font-normal flex items-center justify-center border ${
+                        selectedCategory === pair[0]?.categoryName ||
+                        (pair[0]?.categoryName === "All" &&
+                          selectedCategory === null)
+                          ? "bg-black text-white"
+                          : "bg-white text-black"
+                      }`}
+                      onClick={() =>
+                        handleCategoryClick(
+                          pair[0]?.categoryName === "All"
+                            ? null
+                            : pair[0]?.categoryName
+                        )
+                      }
+                    >
+                      {pair[0]?.categoryName || "N/A"}
+                    </button>
+                    {pair[1] && (
                       <button
-                        key={
-                          typeof category === "string" ? category : category.id
-                        }
                         className={`w-1/2 h-10 rounded-md text-md font-normal flex items-center justify-center border ${
-                          selectedCategory ===
-                            (typeof category === "string"
-                              ? category
-                              : category.name) ||
-                          ((typeof category === "string"
-                            ? category
-                            : category.name) === "All" &&
+                          selectedCategory === pair[1]?.categoryName ||
+                          (pair[1]?.categoryName === "All" &&
                             selectedCategory === null)
                             ? "bg-black text-white"
                             : "bg-white text-black"
                         }`}
                         onClick={() =>
                           handleCategoryClick(
-                            (typeof category === "string"
-                              ? category
-                              : category.name) === "All"
+                            pair[1]?.categoryName === "All"
                               ? null
-                              : typeof category === "string"
-                              ? category
-                              : category.name
+                              : pair[1]?.categoryName
                           )
                         }
                       >
-                        {typeof category === "string"
-                          ? category
-                          : category.name}
+                        {pair[1]?.categoryName || "N/A"}
                       </button>
-                    ))}
+                    )}
                   </div>
                 </CarouselItem>
               ))}
@@ -129,7 +153,7 @@ export default function PhysicalProduct() {
             {searchedProducts.map((product) => (
               <CarouselItem key={product.id} className="shrink-0 pb-4">
                 <div className="relative overflow-hidden rounded-md bg-white/40 border border-gray-300 shadow-md dark:bg-white">
-                  <div className="h-50 w-full overflow-hidden rounded-md bg-gray-100 flex justify-center">
+                  <div className="h-[230px] w-[300px] overflow-hidden rounded-md bg-gray-100 flex justify-center items-center">
                     <Image
                       src={product.images[0]}
                       alt={product.name}

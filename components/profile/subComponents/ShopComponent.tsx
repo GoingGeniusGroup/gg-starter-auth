@@ -170,7 +170,7 @@ export default function ShopComponent() {
   });
 
   return (
-    <>
+    <div>
       <h1 className="font-bold px-2 pb-2 text-xl">Shop</h1>
       <div>
         <div className="mb-4 flex items-center gap-2">
@@ -269,6 +269,6 @@ export default function ShopComponent() {
           </Carousel>
         </div>
       </div>
-    </>
+    </div>
   );
 }

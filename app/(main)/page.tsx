@@ -1,17 +1,14 @@
-// import VideoHome from "@/components/HomePage/VideoHome";
-import { currentUser } from "@/lib/auth";
 import { Metadata } from "next";
+import HeroSection from "@/components/landingPage/HeroSection";
 
 export const metadata: Metadata = {
   title: "Home",
 };
 
 export default async function Home() {
-  const user = await currentUser();
   return (
-    <>
-      <div>Hello {user?.username}</div>
-      {/* <VideoHome /> */}
-    </>
+    <div className="container mx-auto px-4 py-16">
+      <HeroSection />
+    </div>
   );
 }

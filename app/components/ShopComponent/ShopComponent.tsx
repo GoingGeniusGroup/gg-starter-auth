@@ -5,8 +5,6 @@ import {
   Carousel,
   CarouselContent,
   CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
 } from "@/components/ui/carousel";
 
 import "swiper/css";
@@ -25,13 +23,11 @@ import { VirtualCategory } from "./subComponents/types";
 import ToggleButton from "./subComponents/ToggleButton";
 import PhysicalProduct from "./subComponents/PhysicalProduct";
 import { Card } from "../ui/card";
-import { IoIosArrowDown } from "react-icons/io";
 
 export default function ShopComponent() {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [categories, setCategories] = useState<VirtualCategory[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [products, setProducts] = useState<VirtualProduct[]>([]);
   const [isToggleActive, setIsToggleActive] = useState(false);
 
@@ -58,7 +54,6 @@ export default function ShopComponent() {
   // Category and Product Filtering
   const handleCategoryClick = (category: string | null) => {
     setSelectedCategory(category);
-    setIsDropdownOpen(false);
   };
 
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -128,10 +123,10 @@ export default function ShopComponent() {
 
   return (
     <>
-      <Card className="h-full p-4 overflow-auto pt-6">
+      <div className="h-full p-4 overflow-auto pt-6">
         <div className="flex items-center justify-between mb-3">
           <div>
-            <h1 className="font-semibold text-2xl">
+            <h1 className="font-semibold dark:text-gray-300 text-2xl">
               {isToggleActive ? "Virtual Shop" : "Shop"}
             </h1>
           </div>
@@ -225,7 +220,7 @@ export default function ShopComponent() {
                   {searchedProducts.map((product) => (
                     <CarouselItem key={product.id} className="shrink-0 pb-4">
                       <div className="relative overflow-hidden rounded-md bg-white/40 border border-gray-300 shadow-md dark:bg-white">
-                        <div className="h-50 w-full overflow-hidden rounded-md bg-gray-100 flex justify-center">
+                        <div className="h-[230px] w-[300px] overflow-hidden rounded-md bg-gray-100 flex justify-center items-center">
                           <Image
                             src={product.images[0]}
                             alt={product.name}
@@ -242,11 +237,6 @@ export default function ShopComponent() {
                           <h1 className="text-sm text-gray-500 ">
                             ${product.price}
                           </h1>
-                        </div>
-                        <div className="absolute left-2 top-2 rounded-full p-1 border border-gray-200 shadow-md">
-                          <span className="text-sm font-bold text-yellow-400">
-                            {product.rating}
-                          </span>
                         </div>
                         <div className="p-2 w-full flex justify-center">
                           <Button
@@ -286,7 +276,7 @@ export default function ShopComponent() {
           onRemoveFromCart={removeFromCart}
           totalPrice={totalPrice}
         />
-      </Card>
+      </div>
     </>
   );
 }

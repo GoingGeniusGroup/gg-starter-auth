@@ -4,6 +4,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import ProfileCard from "./ProfileCard"; // ProfileCard component
 import { ThemeSwitcher } from "@/app/components/ThemeToggler/ThemeSwitcher";
+import { toast } from "react-hot-toast";
+import { signOut, useSession } from "next-auth/react";
 
 // Custom hook to detect clicks outside a given element
 const useClickOutside = (
@@ -27,8 +29,25 @@ const useClickOutside = (
 const Topbar = ({ isCollapsed }: { isCollapsed: boolean }) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isProfileCardVisible, setIsProfileCardVisible] = useState(false);
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const profileCardRef = useRef<HTMLDivElement>(null);
+
+  const handleSignout = async () => {
+    if (isLoggingOut) return;
+
+    try {
+      setIsLoggingOut(true);
+      toast.loading("Logging out...");
+      await signOut({ callbackUrl: "/" });
+      toast.success("Logged out successfully!");
+    } catch (error) {
+      console.error("Logout error:", error);
+      toast.error("Failed to logout. Please try again.");
+    } finally {
+      setIsLoggingOut(false);
+    }
+  };
 
   // Close both dropdown and profile card when clicking outside
   useClickOutside(dropdownRef, () => {
@@ -118,7 +137,7 @@ const Topbar = ({ isCollapsed }: { isCollapsed: boolean }) => {
 
                 <button
                   className="flex items-center w-full px-4 py-2 hover:bg-gray-100 text-gray-700"
-                  onClick={() => alert("Logout clicked")}
+                  onClick={handleSignout}
                 >
                   <Image
                     src="/assets/logoutIcon.svg"
@@ -133,9 +152,8 @@ const Topbar = ({ isCollapsed }: { isCollapsed: boolean }) => {
             )}
           </div>
           <div className=" z-55">
-                 <ThemeSwitcher />
-           </div>
-          
+            <ThemeSwitcher />
+          </div>
         </div>
       </div>
     </header>

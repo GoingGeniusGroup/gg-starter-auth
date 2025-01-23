@@ -3,25 +3,10 @@ import Link from "next/link";
 import React from "react";
 import logo from "@/public/card/GGReal Icon.svg";
 import shop from "@/public/assets/shop.svg";
-import { Layout } from "../dom/Layout";
 import ProfileHudTop from "../Huds/ProfileHudTop";
-import { signOut } from "@/app/auth";
-import { revalidatePath } from "next/cache";
 import { ThemeSwitcher } from "../ThemeToggler/ThemeSwitcher";
 
 const Navbar = async () => {
-  async function handleServerSignOut() {
-    "use server";
-
-    try {
-      await signOut({ redirect: false });
-      revalidatePath("/");
-      return { success: true };
-    } catch (error) {
-      console.error("Server logout error:", error);
-      return { success: false, error: "Failed to logout" };
-    }
-  }
   return (
     <nav className="mx-auto py-2 px-6 flex justify-between border-b-2 shadow-sm">
       <Link href={"/"} className="flex items-center">
@@ -46,7 +31,7 @@ const Navbar = async () => {
 
       <div className="flex items-center gap-4">
         <ThemeSwitcher />
-        <ProfileHudTop handleServerSignOut={handleServerSignOut} />
+        <ProfileHudTop />
       </div>
     </nav>
   );
