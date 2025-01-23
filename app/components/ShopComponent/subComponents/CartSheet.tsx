@@ -103,9 +103,7 @@ const CartSheet: React.FC<CartSheetProps> = ({
                         Total: $
                         {(Number(item.price) * item.quantity).toFixed(2)}
                       </p>
-                      <p className="text-xs text-gray-400">
-                        Type: {item.productType === "virtual"}
-                      </p>
+                      <p className="text-xs text-gray-400">Type: virtual</p>
                     </div>
                     <div className="flex items-center space-x-2">
                       <Button
