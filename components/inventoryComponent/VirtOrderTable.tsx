@@ -52,7 +52,7 @@ const VirtOrderTable = () => {
           <TableHeader>
             <TableRow>
               <TableHead>S.N</TableHead>
-              <TableHead>Product</TableHead>
+              {/* <TableHead>Product</TableHead> */}
               <TableHead>OrderBy</TableHead>
               <TableHead>Order Date</TableHead>
               <TableHead>Order quantity</TableHead>
@@ -67,9 +67,9 @@ const VirtOrderTable = () => {
             {vorders.map((vorder, index) => (
               <TableRow key={index}>
                 <TableCell>{index + 1}</TableCell>
-                <TableCell className="text-blue-500">
+                {/* <TableCell className="text-blue-500">
                   {vorder.VirtualProduct && vorder.VirtualProduct.name}
-                </TableCell>
+                </TableCell> */}
                 <TableCell>{vorder.Order?.user?.userName || "N/A"}</TableCell>
                 <TableCell>
                   {" "}
