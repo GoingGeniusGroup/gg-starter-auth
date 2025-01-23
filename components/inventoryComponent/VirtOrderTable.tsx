@@ -56,11 +56,11 @@ const VirtOrderTable = () => {
               <TableHead>OrderBy</TableHead>
               <TableHead>Order Date</TableHead>
               <TableHead>Order quantity</TableHead>
-              <TableHead>Status</TableHead>
               <TableHead>Amount</TableHead>
+              <TableHead>Status</TableHead>
               {/* <TableHead>Status</TableHead> */}
 
-              {/* <TableHead>Actions</TableHead> */}
+              <TableHead>Actions</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -81,12 +81,28 @@ const VirtOrderTable = () => {
                 <TableCell>
                   {vorder.Order && vorder.Order.orderQuantity}
                 </TableCell>
+               
+                <TableCell>
+                  {vorder.Order && vorder.Order.orderAmount}
+                </TableCell>
                 <TableCell>
                   {vorder.Order && vorder.Order.orderStatus}
                 </TableCell>
                 <TableCell>
-                  {vorder.Order && vorder.Order.orderAmount}
-                </TableCell>
+                <div className="flex space-x-2">
+                  <Link href={`/dashboard/virtualOrder/${vorder.Order && vorder.Order.id}`}>
+                  <button 
+                    className=" rounded-md shadow p-2 text-white bg-green-500 hover:bg-green-600 "
+                    aria-label="Edit"
+                  >
+                    View Details
+                  </button>
+                  </Link>
+                
+                
+                
+                </div>
+              </TableCell> 
 
                 {/* <TableCell>
                 <div className="flex space-x-2">
