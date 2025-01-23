@@ -65,12 +65,12 @@ const ProfileDetail = ({ userId }: UserProps) => {
     };
 
     return (
-        <div className='rounded-lg shadow-lg p-6'>
+        <div className='rounded-lg shadow  shadow-gray-300 dark:shadow-gray-50 p-6 dark:bg-black'>
             <h2 className="text-xl mb-3 font-semibold">Profile Information</h2>
 
             <form onSubmit={handleSubmit(onSubmit)}>
                 <div className='space-y-2 mb-2'>
-                    <label className="block text-sm font-medium text-gray-700 capitalize">
+                    <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 capitalize">
                         Full Name
                     </label>
                     {isEditing ? (
@@ -80,11 +80,11 @@ const ProfileDetail = ({ userId }: UserProps) => {
                             className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500"
                         />
                     ) : (
-                        <p className="text-gray-900  px-2 py-2">{userInfo?.fullName|| 'N/A'}</p>
+                        <p className="text-gray-900  dark:text-slate-100 px-2 py-2">{userInfo?.fullName|| 'N/A'}</p>
                     )}
                 </div>
                 <div className='space-y-2 mb-2'>
-                    <label className="block text-sm font-medium text-gray-700 capitalize">
+                    <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 capitalize">
                         User Name
                     </label>
                     {isEditing ? (
@@ -94,12 +94,12 @@ const ProfileDetail = ({ userId }: UserProps) => {
                             className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500"
                         />
                     ) : (
-                        <p className="text-gray-900  px-2 py-2">{userInfo?.userName}</p>
+                        <p className="text-gray-900 dark:text-slate-100 px-2 py-2">{userInfo?.userName}</p>
                     )}
                 </div>
 
                 <div className='space-y-2 mb-2'>
-                    <label className="block text-sm font-medium text-gray-700 capitalize">
+                    <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 capitalize">
                         Email
                     </label>
                     {isEditing ? (
@@ -109,12 +109,12 @@ const ProfileDetail = ({ userId }: UserProps) => {
                             className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500"
                         />
                     ) : (
-                        <p className="text-gray-900  px-2 py-2">{userInfo?.email?.[0]}</p>
+                        <p className="text-gray-900 dark:text-slate-100 px-2 py-2">{userInfo?.email?.[0]}</p>
                     )}
                 </div>
 
                 <div className='space-y-2 mb-2'>
-                    <label className="block text-sm font-medium text-gray-700 capitalize">
+                    <label className="block text-sm dark:text-slate-100 font-medium text-gray-700 capitalize">
                         Mobile Phone
                     </label>
                     {isEditing ? (
@@ -124,12 +124,12 @@ const ProfileDetail = ({ userId }: UserProps) => {
                             className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500"
                         />
                     ) : (
-                        <p className="text-gray-900 px-2 py-2">{userInfo?.mobilePhone?.[0]}</p>
+                        <p className="text-gray-900 dark:text-slate-100 px-2 py-2">{userInfo?.mobilePhone?.[0]}</p>
                     )}
                 </div>
 
                 <div className='space-y-2 mb-2'>
-                    <label className="block text-sm font-medium text-gray-700 capitalize">
+                    <label className="block text-sm font-medium dark:text-slate-300 text-gray-700 capitalize">
                         Address
                     </label>
                     {isEditing ? (
@@ -139,7 +139,7 @@ const ProfileDetail = ({ userId }: UserProps) => {
                             className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500"
                         />
                     ) : (
-                        <p className="text-gray-900 px-2 py-2">{userInfo?.address?.[0] ||"N/A"}</p>
+                        <p className="text-gray-900 dark:text-slate-100 px-2 py-2">{userInfo?.address?.[0] ||"N/A"}</p>
                     )}
                 </div>
 
