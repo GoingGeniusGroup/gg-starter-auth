@@ -1,3 +1,4 @@
+"use client";
 import { useState } from "react";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
@@ -43,25 +44,24 @@ const CartSheet: React.FC<CartSheetProps> = ({
   const [selectedMethod, setSelectedMethod] = useState<string | null>(null);
 
   const handleCheckout = async () => {
-    if (selectedMethod !== "stripe") {
-      console.log("Please select Stripe as your payment method.");
-      return;
-    }
-
-    try {
-      const response = await fetch("/api/stripe-checkout", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ cartItems }),
-      });
-      const data = await response.json();
-      if (data?.message?.url) {
-        window.location.href = data.message.url;
+    if (selectedMethod === "stripe") {
+      try {
+        const response = await fetch("/api/stripe-checkout", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ cartItems }),
+        });
+        const data = await response.json();
+        if (data?.message?.url) {
+          window.location.href = data.message.url;
+        }
+      } catch (error) {
+        console.error("Checkout error:", error);
       }
-    } catch (error) {
-      console.log("Checkout error:", error);
+    } else {
+      window.location.href = "/payment/wallet";
     }
   };
 
