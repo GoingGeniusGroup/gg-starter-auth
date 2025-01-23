@@ -33,7 +33,7 @@ export default function PhysicalProduct() {
       if (data && Array.isArray(data)) {
         const formattedCategories: Category[] = data.map((item) => ({
           id: item.id,
-          categoryName: "categoryName" in item ? item.categoryName : item.label,
+          categoryName: "categoryName" in item ? item.categoryName ?? "" : "",
           categoryDescription:
             "categoryDescription" in item ? item.categoryDescription ?? "" : "",
         }));
