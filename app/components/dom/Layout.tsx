@@ -3,24 +3,20 @@ import ProfileHudTop from "../Huds/ProfileHudTop";
 
 interface LayoutProps {
   children: ReactNode;
-  handleServerSignOut: any;
 }
 
-const Layout: React.FC<LayoutProps> = ({ children, handleServerSignOut }) => {
+const Layout: React.FC<LayoutProps> = ({ children }) => {
   return (
     <>
-      <ProfileHudTop handleServerSignOut={handleServerSignOut} />
+      <ProfileHudTop />
       {/* <CartHud /> */}
       {children}
     </>
   );
 };
 
-const LayoutWithProvider: React.FC<LayoutProps> = ({
-  children,
-  handleServerSignOut,
-}) => {
-  return <Layout handleServerSignOut={handleServerSignOut}>{children}</Layout>;
+const LayoutWithProvider: React.FC<LayoutProps> = ({ children }) => {
+  return <Layout>{children}</Layout>;
 };
 
 export { LayoutWithProvider as Layout };

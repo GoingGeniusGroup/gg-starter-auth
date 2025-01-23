@@ -3,29 +3,15 @@ import { cache } from "@/lib/cache";
 import { db } from "@/lib/db";
 
 export const getCategories = cache(
-  async (fromClient: boolean = false) => {
+  async () => {
     try {
-      const categories = await db.category.findMany({
-        select: {
-          id: true,
-          categoryName: true,
-          categoryDescription: true,
-        },
-      });
-
-      if (fromClient) {
-        const categoriesClient = categories.map((category) => ({
-          id: category.id,
-          label: category.categoryName,
-          value: category.categoryName.toUpperCase(),
-        }));
-        return categoriesClient;
-      }
+      const categories = await db.category.findMany();
       return categories;
     } catch (error) {
-      return null;
+      console.error("Error fetching categories:", error);
+      return [];
     }
   },
-  ["admin/categories", "getCategories"],
+  ["user/categories", "getCategories"],
   { revalidate: 60 }
 );

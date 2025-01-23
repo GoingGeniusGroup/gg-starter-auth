@@ -115,3 +115,9 @@ body,
 .backface-hidden {
   backface-visibility: hidden;
 }
+
+@layer utilities {
+  .gradient-title {
+    @apply font-extrabold bg-gradient-to-br from-indigo-700 to-indigo-500 bg-clip-text tracking-tighter text-transparent pb-4 pr-2;
+  }
+}

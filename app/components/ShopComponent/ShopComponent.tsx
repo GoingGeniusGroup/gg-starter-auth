@@ -220,7 +220,7 @@ export default function ShopComponent() {
                   {searchedProducts.map((product) => (
                     <CarouselItem key={product.id} className="shrink-0 pb-4">
                       <div className="relative overflow-hidden rounded-md bg-white/40 border border-gray-300 shadow-md dark:bg-white">
-                        <div className="h-50 w-full overflow-hidden rounded-md bg-gray-100 flex justify-center">
+                        <div className="h-[230px] w-[300px] overflow-hidden rounded-md bg-gray-100 flex justify-center items-center">
                           <Image
                             src={product.images[0]}
                             alt={product.name}

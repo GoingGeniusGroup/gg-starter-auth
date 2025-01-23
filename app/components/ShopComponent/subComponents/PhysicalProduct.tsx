@@ -33,7 +33,7 @@ export default function PhysicalProduct() {
       if (data && Array.isArray(data)) {
         const formattedCategories: Category[] = data.map((item) => ({
           id: item.id,
-          categoryName: "categoryName" in item ? item.categoryName : item.label,
+          categoryName: "categoryName" in item ? item.categoryName ?? "" : "",
           categoryDescription:
             "categoryDescription" in item ? item.categoryDescription ?? "" : "",
         }));
@@ -153,7 +153,7 @@ export default function PhysicalProduct() {
             {searchedProducts.map((product) => (
               <CarouselItem key={product.id} className="shrink-0 pb-4">
                 <div className="relative overflow-hidden rounded-md bg-white/40 border border-gray-300 shadow-md dark:bg-white">
-                  <div className="h-50 w-full overflow-hidden rounded-md bg-gray-100 flex justify-center">
+                  <div className="h-[230px] w-[300px] overflow-hidden rounded-md bg-gray-100 flex justify-center items-center">
                     <Image
                       src={product.images[0]}
                       alt={product.name}
