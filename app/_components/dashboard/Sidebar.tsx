@@ -88,12 +88,14 @@ const Sidebar: React.FC<{
               GG Shop
             </span>
           )}
-          <Image
-            src="/assets/shopIcon.svg"
-            alt="GG Shop Logo"
-            width={isCollapsed ? 40 : 32}
-            height={isCollapsed ? 40 : 32}
-          />
+          <Link href="/">
+            <Image
+              src="/assets/shopIcon.svg"
+              alt="GG Shop Logo"
+              width={isCollapsed ? 40 : 32}
+              height={isCollapsed ? 40 : 32}
+            />
+          </Link>
         </div>
         {!isCollapsed && (
           <span className="text-xl font-bold ml-4 text-gray-900 dark:text-white/40">
