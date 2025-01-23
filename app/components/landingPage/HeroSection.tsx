@@ -21,7 +21,7 @@ const HeroSection = () => {
           Enjoy fast, secure payments with credit cards, Stripe, and more. Your
           perfect purchase is just a click away!
         </p>
-        <Link href="/dashboard">
+        <Link href="/">
           <button className="flex items-center px-3 py-4 rounded-lg text-xl text-white bg-indigo-700 hover:bg-indigo-600 mb-8">
             Get Started <ArrowRight className="ml-2 w-5 h-5" />
           </button>
@@ -77,9 +77,9 @@ const HeroSection = () => {
 
       {/*Poster*/}
       <div className="lg:w-1/2 flex justify-center">
-        <div className="relative w-full aspect-square max-w-md">
+        <div className="relative w-full aspect-square max-w-lg">
           <Image
-            src="/poster.png"
+            src="/homepage/heroPoster.png"
             alt="poster"
             layout="fill"
             objectFit="contain"
