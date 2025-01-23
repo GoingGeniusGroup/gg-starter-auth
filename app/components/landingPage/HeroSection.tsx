@@ -3,8 +3,10 @@ import { Card, CardDescription, CardHeader, CardTitle } from "../ui/card";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
+import { FaStar } from "react-icons/fa";
 import Image from "next/image";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
+import google from "@/public/svgs/google logo.svg";
 
 const HeroSection = () => {
   return (
@@ -24,9 +26,11 @@ const HeroSection = () => {
             Get Started <ArrowRight className="ml-2 w-5 h-5" />
           </button>
         </Link>
-        <div className="flex items-center gap-4">
+        <div className="flex flex-col md:flex-row md:items-center items-start justify-between max-w-xl gap-4">
+          {/* Customer service */}
           <div className="flex flex-col">
-            <div className="flex">
+            {/* Avatar overlapp */}
+            <div className="flex mb-4">
               <Avatar className="-mr-4 z-10">
                 <AvatarImage src="https://i.pravatar.cc/150?img=1" />
                 <AvatarFallback>CN</AvatarFallback>
@@ -40,8 +44,34 @@ const HeroSection = () => {
                 <AvatarFallback>XY</AvatarFallback>
               </Avatar>
             </div>
+
+            <div>
+              <h1 className="text-xl font-semibold mb-1">
+                Friendly Customer Service
+              </h1>
+              <p className="text-sm font-light text-gray-600 dark:text-gray-300">
+                Good maintenance from customer support
+              </p>
+            </div>
           </div>
-          <div className="flex flex-col">hello</div>
+
+          {/* rating */}
+          <div className="flex flex-col">
+            <Image src={google} alt="google" className="w-36 mb-5" />
+
+            <div>
+              <h1 className="flex gap-1 mb-1 text-yellow-400">
+                <FaStar />
+                <FaStar />
+                <FaStar />
+                <FaStar />
+                <FaStar />
+              </h1>
+              <p className="text-sm font-light text-gray-600 dark:text-gray-300">
+                More than 10.000 local businesses use it
+              </p>
+            </div>
+          </div>
         </div>
       </div>
 
