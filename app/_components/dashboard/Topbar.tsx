@@ -32,9 +32,26 @@ interface Props {
 const Topbar = ({ isCollapsed }: Props) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isProfileCardVisible, setIsProfileCardVisible] = useState(false);
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const [isLoggingOut, setIsLoggingOut] = useState(false);
   const profileCardRef = useRef<HTMLDivElement>(null);
+
+  const handleSignout = async () => {
+    if (isLoggingOut) return;
+
+    try {
+      setIsLoggingOut(true);
+      toast.loading("Logging out...");
+      await signOut({ callbackUrl: "/" });
+      toast.success("Logged out successfully!");
+    } catch (error) {
+      console.error("Logout error:", error);
+      toast.error("Failed to logout. Please try again.");
+    } finally {
+      setIsLoggingOut(false);
+    }
+  };
 
   // Close both dropdown and profile card when clicking outside
   useClickOutside(dropdownRef, () => {
@@ -172,6 +189,8 @@ const Topbar = ({ isCollapsed }: Props) => {
             )}
           </div>
           <div className=" z-55">
+            <ThemeSwitcher />
+          </div>
             <ThemeSwitcher />
           </div>
         </div>
