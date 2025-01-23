@@ -78,7 +78,7 @@ const backgrounds = [
   },
   {
     name: "Dark Matter",
-    class: "bg-gradient-to-b from-gray-900 to-black text-white",
+    class: "bg-gradient-to-b from-gray-700 to-black-700 text-white",
   },
   {
     name: "Snowfall",

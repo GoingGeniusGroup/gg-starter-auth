@@ -4,7 +4,9 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import ProfileCard from "./ProfileCard"; // ProfileCard component
 import { ThemeSwitcher } from "@/app/components/ThemeToggler/ThemeSwitcher";
-
+import { toast } from "react-hot-toast";
+import { signOut } from "next-auth/react";
+import handleServerSignOut from "@/actions/users";
 // Custom hook to detect clicks outside a given element
 const useClickOutside = (
   ref: React.RefObject<HTMLElement>,
@@ -23,11 +25,15 @@ const useClickOutside = (
     };
   }, [ref, onClose]);
 };
+interface Props {
+  isCollapsed: boolean;
+}
 
-const Topbar = ({ isCollapsed }: { isCollapsed: boolean }) => {
+const Topbar = ({ isCollapsed }: Props) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isProfileCardVisible, setIsProfileCardVisible] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
   const profileCardRef = useRef<HTMLDivElement>(null);
 
   // Close both dropdown and profile card when clicking outside
@@ -38,6 +44,39 @@ const Topbar = ({ isCollapsed }: { isCollapsed: boolean }) => {
 
   const handleProfileClick = () => {
     setIsProfileCardVisible(true); // Show profile card only when clicked
+  };
+  const delay = (ms: number) =>
+    new Promise((resolve) => setTimeout(resolve, ms));
+
+  const logoutAndHandleSession = async () => {
+    if (isLoggingOut) return;
+
+    try {
+      setIsLoggingOut(true);
+      const loadingToast = toast.loading("Logging out...");
+
+      // Handle server-side logout
+      const serverResult = await handleServerSignOut();
+      if (!serverResult.success) {
+        throw new Error(serverResult.error || "Server logout failed");
+      }
+
+      // Dismiss loading toast and show success
+      toast.dismiss(loadingToast);
+      await delay(500);
+      toast.success("Redirecting...");
+
+      // Add delay and perform client-side logout
+      await delay(1000);
+      await signOut({
+        redirect: true,
+        callbackUrl: "/",
+      });
+    } catch (error) {
+      console.error("Logout error:", error);
+      toast.error("Failed to logout. Please try again.");
+      setIsLoggingOut(false);
+    }
   };
 
   return (
@@ -118,7 +157,7 @@ const Topbar = ({ isCollapsed }: { isCollapsed: boolean }) => {
 
                 <button
                   className="flex items-center w-full px-4 py-2 hover:bg-gray-100 text-gray-700"
-                  onClick={() => alert("Logout clicked")}
+                  onClick={logoutAndHandleSession}
                 >
                   <Image
                     src="/assets/logoutIcon.svg"
@@ -127,15 +166,14 @@ const Topbar = ({ isCollapsed }: { isCollapsed: boolean }) => {
                     width={20}
                     height={20}
                   />
-                  Logout
+                  <span>{isLoggingOut ? "Logging out..." : "Logout"}</span>
                 </button>
               </div>
             )}
           </div>
           <div className=" z-55">
-                 <ThemeSwitcher />
-           </div>
-          
+            <ThemeSwitcher />
+          </div>
         </div>
       </div>
     </header>

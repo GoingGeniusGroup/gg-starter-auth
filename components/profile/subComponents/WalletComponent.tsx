@@ -10,7 +10,12 @@ import { useSession } from "next-auth/react";
 import axios from "axios";
 import { useRouter, useSearchParams } from "next/navigation";
 import BusinessCard from "@/app/components/card/businessCard";
-import StudentCard from "@/app/components/card/studentCard";
+// import StudentCard from "@/app/components/card/studentCard";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+} from "@/components/ui/carousel";
 interface Transaction {
   id: number;
   type: string;
@@ -45,9 +50,6 @@ export default function WalletComponent() {
       type: "VISA",
     },
   ]);
-  const [activeTab, setActiveTab] = useState<"cards" | "transactions">(
-    "transactions"
-  );
   const [addingCard, setAddingCard] = useState(false);
   const [newCard, setNewCard] = useState({
     name: "",
@@ -56,6 +58,17 @@ export default function WalletComponent() {
     type: "",
   });
 
+  const [activeTab, setActiveTab] = useState<"cards" | "transactions">(
+    "transactions"
+  );
+
+  const handleAddCard = () => {
+    if (newCard.name && newCard.number && newCard.expiry && newCard.type) {
+      setCards([...cards, { ...newCard, id: Date.now() }]);
+      setNewCard({ name: "", number: "", expiry: "", type: "" });
+      setAddingCard(false);
+    }
+  };
   if (!session) {
     return <div>Please login to proceed with the payment.</div>;
   }
@@ -135,14 +148,6 @@ export default function WalletComponent() {
       ]);
       setRedeemCode("");
       setActiveSection(null);
-    }
-  };
-
-  const handleAddCard = () => {
-    if (newCard.name && newCard.number && newCard.expiry && newCard.type) {
-      setCards([...cards, { ...newCard, id: Date.now() }]);
-      setNewCard({ name: "", number: "", expiry: "", type: "" });
-      setAddingCard(false);
     }
   };
 
@@ -341,8 +346,8 @@ export default function WalletComponent() {
         {activeTab === "cards" && (
           <div>
             <h3 className="font-semibold mb-2">My Cards</h3>
-            <div className="space-y-4 ">
-              {cards.map((card) => (
+            <div className="space-y-4 relative">
+              {/* {cards.map((card) => (
                 <div
                   key={card.id}
                   className=" border rounded-lg overflow-hidden bg-gradient-to-r from-gray-900 to-red-900 p-4 text-white"
@@ -361,6 +366,8 @@ export default function WalletComponent() {
                   </p>
                 </div>
               ))}
+               
+            
               {addingCard ? (
                 <div className="space-y-2">
                   <Input
@@ -402,11 +409,78 @@ export default function WalletComponent() {
                 >
                   <Plus /> Add New Card
                 </Button>
-              )}
-               {/* <BusinessCard /> */}
+              )} */}
+              {/* <BusinessCard /> */}
+              <Carousel className="max-w-full relative">
+                <CarouselContent className="flex gap-4">
+                  <CarouselItem className="flex-shrink-0">
+                    <div>
+                      <BusinessCard />
+                    </div>
+                  </CarouselItem>
+                  {cards.map((card) => (
+                    <CarouselItem key={card.id}>
+                      <div className="p-4 rounded-lg bg-gradient-to-r from-gray-900 to-red-900 text-white">
+                        <div className="flex justify-between items-center">
+                          <p className="font-medium mb-4 mb-2 text-lg">
+                            {card.type}
+                          </p>
+                          <CreditCard className="h-8 w-8" />
+                        </div>
+                        <p className="mt-4 mb-4 text-lg">{card.number}</p>
+                        <p className="text-sm mt-4 mb-4">
+                          Expiry: {card.expiry} | {card.name}
+                        </p>
+                      </div>
+                    </CarouselItem>
+                  ))}
+                </CarouselContent>
+              </Carousel>
 
+              {/* Add Card Form */}
+              {addingCard ? (
+                <div className="space-y-2 mt-4">
+                  <Input
+                    placeholder="Cardholder Name"
+                    value={newCard.name}
+                    onChange={(e) =>
+                      setNewCard({ ...newCard, name: e.target.value })
+                    }
+                  />
+                  <Input
+                    placeholder="Card Number"
+                    value={newCard.number}
+                    onChange={(e) =>
+                      setNewCard({ ...newCard, number: e.target.value })
+                    }
+                  />
+                  <Input
+                    placeholder="Expiry Date (MM/YY)"
+                    value={newCard.expiry}
+                    onChange={(e) =>
+                      setNewCard({ ...newCard, expiry: e.target.value })
+                    }
+                  />
+                  <Input
+                    placeholder="Card Type (e.g., VISA)"
+                    value={newCard.type}
+                    onChange={(e) =>
+                      setNewCard({ ...newCard, type: e.target.value })
+                    }
+                  />
+                  <Button onClick={handleAddCard} className="w-full">
+                    Add Card
+                  </Button>
+                </div>
+              ) : (
+                <Button
+                  onClick={() => setAddingCard(true)}
+                  className="w-full flex items-center gap-2 mt-4"
+                >
+                  <Plus /> Add New Card
+                </Button>
+              )}
             </div>
-           
           </div>
         )}
       </CardContent>

@@ -8,7 +8,11 @@ import {
   MapPin,
 } from "lucide-react";
 import Image from "next/image";
+import { useSession } from "next-auth/react";
 export default function ProfileCard() {
+  const { data: session } = useSession();
+  const user = session?.user;
+  console.log(user);
   return (
     <div className="w-full max-w-md  ">
       <div className="relative overflow-hidden rounded-2xl border border-white/35 bg-white/10 backdrop-blur-md backdrop-filter">
@@ -27,15 +31,15 @@ export default function ProfileCard() {
               </div>
               <div>
                 <h2 className="text-xl block  font-bold text-gray-800">
-                  Jennie Shrestha
+                  {user?.name}
                 </h2>
-                <p className="text-gray-400">jennie@gmail.com</p>
+                <p className="text-gray-400">{user?.email}</p>
                 <span className="inline-block px-2 py-1 mt-1 text-xs font-semibold text-blue-400 bg-blue-400/20 rounded-full">
-                  Manager
+                  {user?.role}
                 </span>
               </div>
             </div>
-             
+
             <div className="flex space-x-2">
               <button className="p-2 text-gray-400 hover:text-black transition-colors">
                 <Pencil className="w-5 h-5" />
