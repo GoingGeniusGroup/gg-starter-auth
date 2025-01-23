@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import Image from "next/image";
 import stripeLogo from "@/public/assets/stripe_logo.png";
 import cardLogo from "@/public/assets/card_logo.png";
