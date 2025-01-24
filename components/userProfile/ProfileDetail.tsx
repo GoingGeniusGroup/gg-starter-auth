@@ -1,6 +1,7 @@
 "use client"
 import React, { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
+import { useRouter } from "next/navigation";
 
 interface UserData {
     fullName?: string;
@@ -16,10 +17,12 @@ interface UserProps {
 }
 
 import { getUserDetail,updateUserDetail } from '@/action/user';
+import { revalidatePath } from 'next/cache';
 
 const ProfileDetail = ({ userId }: UserProps) => {
     const [isEditing, setIsEditing] = useState(false);
     const [userInfo, setUserInfo] = useState<any>(null);
+    const router = useRouter();
 
     const { register, handleSubmit, reset } = useForm<any>();
 
@@ -55,6 +58,7 @@ const ProfileDetail = ({ userId }: UserProps) => {
                 console.log('user updated')
                 setUserInfo(response.data);
                 setIsEditing(false); 
+                router.push(`/profile/${userInfo?.userName[0]}`);
             } else {
                 console.error(response.message);
             }
