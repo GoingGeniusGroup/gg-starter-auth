@@ -27,6 +27,7 @@ export async function updateUserDetail(formData:FormData,userId:string){
         email: formData.get("email")?.toString()?.split(",") || [],
         mobilePhone: formData.get("mobilePhone")?.toString()?.split(",") || [],
         address: formData.get("address")?.toString()?.split(",") || [],
+        imageUser:Array.from(formData.getAll("imageUser")) as string[]
       };
       try{
         const existingUser = await db.user.findUnique({
