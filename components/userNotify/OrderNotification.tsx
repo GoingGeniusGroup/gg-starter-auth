@@ -56,13 +56,13 @@ const OrderNotification = ({user}:OrderProps) => {
         {notifications.map((notification) => (
           <div
             key={notification.id}
-            className="flex items-start gap-4 p-4 border border-gray-200 rounded-lg shadow-sm bg-white"
+            className="flex items-start gap-4 p-4 border border-gray-200 rounded-lg shadow-sm "
           >
-            <Bell className="w-6 h-6 text-gray-400 mt-1" />
+            <Bell className="w-6 h-6 text-gray-400 dark:text-slate-300 mt-1" />
             <div className="flex-1">
               <h3 className="font-medium">{notification.title}</h3>
-              <p className="text-sm text-gray-500">Dear {user?.username} , {notification.message}</p>
-              <span className="text-xs text-gray-400">{notification.time}</span>
+              <p className="text-sm text-gray-500 dark:text-slate-300">Dear {user?.username} , {notification.message}</p>
+              <span className="text-xs text-gray-400 dark:text-slate-100">{notification.time}</span>
             </div>
           </div>
         ))}
