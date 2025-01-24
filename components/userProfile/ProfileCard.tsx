@@ -3,14 +3,18 @@ import React,{useState,useEffect} from 'react'
 import { getUserDetail,updateUserDetail } from '@/action/user';
 import { Mail, Phone, Briefcase } from "lucide-react";
 import { revalidatePath } from 'next/cache';
+import ClipLoader from "react-spinners/ClipLoader"; 
+
 interface UserProps {
     userId: string;
 }
 const ProfileCard = ({userId}:UserProps) => {
         const [userInfo, setUserInfo] = useState<any>(null);
-    
+        const [loading, setLoading] = useState<boolean>(true)
+
        useEffect(() => {
             async function fetchData() {
+              setLoading(true)
                 try {
                     const response = await getUserDetail(userId);
                     if (response.success && response.data) {
@@ -22,9 +26,19 @@ const ProfileCard = ({userId}:UserProps) => {
                 } catch (error) {
                     console.error("Failed to fetch data", error);
                 }
+                finally{
+                  setLoading(false);
+                }
             }
             fetchData();
         }, [userId]);
+        if (loading) {
+          return (
+              <div className="flex justify-center items-center h-full">
+                       <ClipLoader color='green' loading={loading} size={40} /> 
+              </div>
+          );
+      }
   return (
     <>
           <div className="w-full  flex  ">
