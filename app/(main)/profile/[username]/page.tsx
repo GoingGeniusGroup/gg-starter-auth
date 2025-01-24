@@ -10,6 +10,7 @@ import {
   } from "@/components/ui/tabs"
 import OrderDetailCard from '@/components/orderComp/OrderDetailCard';
 import ProfileDetail from '@/components/userProfile/ProfileDetail';
+import ProfileCard from '@/components/userProfile/ProfileCard';
 
 const page = async() => {
         const user = await currentUser();
@@ -41,7 +42,7 @@ const page = async() => {
       <div className='flex flex-col md:flex-row gap-8'>
       <div className="w-full md:w-1/3">
       <div className="w-full  flex  ">
-      <div className="bg-white dark:bg-black rounded-lg shadow-lg p-6 w-full max-w-md">
+      {/* <div className="bg-white dark:bg-black rounded-lg shadow-lg p-6 w-full max-w-md">
         <div className="flex flex-col items-center">
           <img
           src="https://www.sourcenepal.com/wp-content/uploads/2023/10/Hari-Bansha-Acharya-Age.webp"
@@ -66,7 +67,8 @@ const page = async() => {
             </div>
           </div>
         </div>
-      </div>
+      </div> */}
+    {user && <ProfileCard userId={user.id}/>} 
     </div>
         </div>
         <div className='w-full md:w-2/3 p-2'>
@@ -80,12 +82,11 @@ const page = async() => {
 
   <TabsContent value="order">
   <div className="w-full min-h-screen p-6 flex justify-center items-start">
-  {user && <OrderDetailCard user={user} />}
+       {user && <OrderDetailCard user={user} />}
     </div>
   </TabsContent>
 </Tabs>
-            </div>
-
+ </div>
 
     </div>
     </>
