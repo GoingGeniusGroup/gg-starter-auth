@@ -11,6 +11,7 @@ import {
 import OrderDetailCard from '@/components/orderComp/OrderDetailCard';
 import ProfileDetail from '@/components/userProfile/ProfileDetail';
 import ProfileCard from '@/components/userProfile/ProfileCard';
+import OrderNotification from '@/components/userNotify/OrderNotification';
 
 const page = async() => {
         const user = await currentUser();
@@ -33,7 +34,7 @@ const page = async() => {
 
     </TabsTrigger>
     {/* className="  text-lg border-b-2 border-transparent  transition duration-300 ease-in-out active:border-blue-500"  */}
-    <TabsTrigger value="other" className="  text-lg  border-transparent  transition duration-300 ease-in-out active:border-blue-500" >
+    <TabsTrigger value="notify" className="  text-lg  border-transparent  transition duration-300 ease-in-out active:border-blue-500" >
       Notification <Bell className='ml-2' size={18}/></TabsTrigger>
 
   </TabsList>
@@ -60,6 +61,13 @@ const page = async() => {
        {user && <OrderDetailCard user={user} />}
     </div>
   </TabsContent>
+<TabsContent value="notify">
+  <div className='w-full min-h-screen p-4 flex justify-center items-start'>
+  {user && <OrderNotification user={user}/>}   
+
+  </div>
+</TabsContent>
+
 </Tabs>
  </div>
 
