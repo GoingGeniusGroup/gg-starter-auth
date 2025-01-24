@@ -2,7 +2,10 @@
 import React, { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { useRouter } from "next/navigation";
+import { FileUploaderRegular } from "@uploadcare/react-uploader";
+import { useTheme } from "next-themes";
 
+import "@uploadcare/react-uploader/core.css";
 interface UserData {
     fullName?: string;
     userName?: string[];
@@ -18,16 +21,22 @@ interface UserProps {
 
 import { getUserDetail,updateUserDetail } from '@/action/user';
 import { revalidatePath } from 'next/cache';
-
+import BeatLoader from "react-spinners/BeatLoader";
 const ProfileDetail = ({ userId }: UserProps) => {
+    const uploadkey = process.env.NEXT_PUBLIC_UPLOADCARE_PUBLIC_KEY;
+  const [uploadedImgUrls, setUploadedImgUrls] = useState<string[]>([]);
+
     const [isEditing, setIsEditing] = useState(false);
     const [userInfo, setUserInfo] = useState<any>(null);
+    const [loading, setLoading] = useState<boolean>(true);
     const router = useRouter();
+    const { theme } = useTheme();
 
     const { register, handleSubmit, reset } = useForm<any>();
 
     useEffect(() => {
         async function fetchData() {
+            setLoading(true);
             try {
                 const response = await getUserDetail(userId);
                 if (response.success && response.data) {
@@ -40,6 +49,9 @@ const ProfileDetail = ({ userId }: UserProps) => {
             } catch (error) {
                 console.error("Failed to fetch data", error);
             }
+            finally{
+                setLoading(false)
+            }
         }
         fetchData();
     }, [userId]);
@@ -51,8 +63,10 @@ const ProfileDetail = ({ userId }: UserProps) => {
         formData.append("email", data.email?.join(",") || "");
         formData.append("mobilePhone", data.mobilePhone?.join(",") || "");
         formData.append("address", data.address?.join(",") || "");
+        if (uploadedImgUrls.length > 0) {
+            uploadedImgUrls.forEach(url => formData.append("imageUser", url));
+          }
         try {
-           
             const response = await updateUserDetail(formData, userId);
             if (response.success) {
                 console.log('user updated')
@@ -67,7 +81,13 @@ const ProfileDetail = ({ userId }: UserProps) => {
         }
         
     };
-
+    if (loading) {
+        return (
+            <div className="flex justify-center items-center h-screen">
+                <BeatLoader color="#123abc" loading={loading} size={16} /> 
+            </div>
+        );
+    }
     return (
         <div className='rounded-lg shadow  shadow-gray-300 dark:shadow-gray-50 p-6 dark:bg-black'>
             <h2 className="text-xl mb-3 font-semibold">Profile Information</h2>
@@ -146,6 +166,27 @@ const ProfileDetail = ({ userId }: UserProps) => {
                         <p className="text-gray-900 dark:text-slate-100 px-2 py-2">{userInfo?.address?.[0] ||"N/A"}</p>
                     )}
                 </div>
+                {isEditing ? (<>
+                    <label className="block text-sm font-medium dark:text-slate-300 text-gray-700 capitalize">
+                        Image
+                    </label>
+                       <FileUploaderRegular
+                                      multiple
+                                      sourceList="local, url, gdrive"
+                                      classNameUploader={theme === "dark" ? "uc-dark" : "uc-light"}
+                                      pubkey={`${uploadkey}`}
+                                      imgOnly={true}
+                    
+                                      onChange={(event) => {
+                                        const files = event.successEntries;
+                                        if (files.length > 0) {
+                                          const urls = files.map(file => file.cdnUrl); 
+                                          setUploadedImgUrls(urls); 
+                                        }
+                                      }}
+                                    />
+
+                </>):(<></>)}
 
                 <div className='flex  justify-between items-center mt-4 mb-6'>
     {isEditing ? (
