@@ -28,7 +28,6 @@ const OrderDetailCard = ({user}:OrderProps) => {
   console.log("hello")
   console.log(user)
           const [loading, setLoading] = useState<boolean>(true)
-  
   const[orders,setOrders]=useState<any[]>([])
   useEffect(()=>{
     setLoading(true)
