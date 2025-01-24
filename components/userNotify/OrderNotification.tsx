@@ -3,6 +3,7 @@ import { getUserOrderMsg } from '@/action/userOrderNotification';
 import React from 'react'
 import { useEffect, useState } from "react";
 import {Bell,} from "lucide-react";
+import BeatLoader from "react-spinners/BeatLoader"; 
 
 interface Notification {
   id: string;
@@ -43,7 +44,11 @@ const OrderNotification = ({user}:OrderProps) => {
         fetchData();
     },[user])
     if(loading){
-        return <div>...</div>
+        return (
+          <div className="flex justify-center items-center h-full">
+                       <BeatLoader color='#498d7f' loading={loading} size={16} /> 
+              </div>
+        )
     }
   return (
     <div className="w-full mx-auto p-4">
