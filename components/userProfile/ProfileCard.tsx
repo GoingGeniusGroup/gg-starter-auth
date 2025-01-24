@@ -4,6 +4,7 @@ import { getUserDetail,updateUserDetail } from '@/action/user';
 import { Mail, Phone, Briefcase } from "lucide-react";
 import { revalidatePath } from 'next/cache';
 import ClipLoader from "react-spinners/ClipLoader"; 
+import Image from 'next/image';
 
 interface UserProps {
     userId: string;
@@ -44,11 +45,19 @@ const ProfileCard = ({userId}:UserProps) => {
           <div className="w-full  flex  ">
       <div className="bg-white dark:bg-black rounded-lg shadow-lg px-7 py-20 w-full max-w-md">
         <div className="flex flex-col items-center">
-          <img
+          {/* <img
           src="https://www.sourcenepal.com/wp-content/uploads/2023/10/Hari-Bansha-Acharya-Age.webp"
             alt="hari"
             className="w-24 h-24 rounded-full object-cover border-2 border-gray-200"
-          />
+          /> */}
+
+<Image
+  src={userInfo.imageUser[0]}
+  alt="user-img"
+  width={96} 
+  height={96} 
+  className="rounded-full object-cover border-2 border-gray-200"
+/>
           <h1 className="mt-4 text-2xl font-semibold text-gray-800 dark:text-slate-100">
             {userInfo?.userName[0]}
           </h1>
