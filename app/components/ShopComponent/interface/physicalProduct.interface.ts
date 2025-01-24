@@ -1,5 +1,5 @@
 export interface PhysicalProduct {
-    id: number;
+    id: string;
     name: string;
     price: number;
     images: string[];

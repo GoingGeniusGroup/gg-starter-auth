@@ -13,15 +13,7 @@ import {
 } from "@/components/ui/sheet";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import PaymentDetails from "./PaymentDetails";
-
-interface CartItem {
-  id: string;
-  name: string;
-  price: number;
-  quantity: number;
-  images: string[];
-  productType: string;
-}
+import { CartItem } from "./types";
 
 interface CartSheetProps {
   isOpen: boolean;
@@ -86,13 +78,13 @@ const CartSheet: React.FC<CartSheetProps> = ({
               <div className="space-y-4">
                 {cartItems.map((item, idx) => (
                   <div key={idx} className="flex items-center space-x-4">
-                    <Image
+                    <img
                       src={item.images[0]}
                       alt={item.name}
                       className="w-16 h-16 object-cover rounded"
                       loading="lazy"
-                      width={64}
-                      height={64}
+                      // width={64}
+                      // height={64}
                     />
                     <div className="flex-grow">
                       <h4 className="font-semibold">{item.name}</h4>
@@ -103,7 +95,9 @@ const CartSheet: React.FC<CartSheetProps> = ({
                         Total: $
                         {(Number(item.price) * item.quantity).toFixed(2)}
                       </p>
-                      <p className="text-xs text-gray-400">Type: virtual</p>
+                      <p className="text-xs text-gray-400">
+                        {item.productType}
+                      </p>
                     </div>
                     <div className="flex items-center space-x-2">
                       <Button
