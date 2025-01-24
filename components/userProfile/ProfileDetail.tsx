@@ -4,6 +4,7 @@ import { useForm } from 'react-hook-form';
 import { useRouter } from "next/navigation";
 import { FileUploaderRegular } from "@uploadcare/react-uploader";
 import { useTheme } from "next-themes";
+import { toast } from "sonner";
 
 import "@uploadcare/react-uploader/core.css";
 interface UserData {
@@ -71,6 +72,7 @@ const ProfileDetail = ({ userId }: UserProps) => {
             if (response.success) {
                 console.log('user updated')
                 setUserInfo(response.data);
+                toast.success("Your profile has been updated successfully")
                 setIsEditing(false); 
                 router.push(`/profile/${userInfo?.userName[0]}`);
             } else {
