@@ -52,24 +52,24 @@ const VirtOrderTable = () => {
           <TableHeader>
             <TableRow>
               <TableHead>S.N</TableHead>
-              <TableHead>Product</TableHead>
+              {/* <TableHead>Product</TableHead> */}
               <TableHead>OrderBy</TableHead>
               <TableHead>Order Date</TableHead>
               <TableHead>Order quantity</TableHead>
-              <TableHead>Status</TableHead>
               <TableHead>Amount</TableHead>
+              <TableHead>Status</TableHead>
               {/* <TableHead>Status</TableHead> */}
 
-              {/* <TableHead>Actions</TableHead> */}
+              <TableHead>Actions</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {vorders.map((vorder, index) => (
               <TableRow key={index}>
                 <TableCell>{index + 1}</TableCell>
-                <TableCell className="text-blue-500">
+                {/* <TableCell className="text-blue-500">
                   {vorder.VirtualProduct && vorder.VirtualProduct.name}
-                </TableCell>
+                </TableCell> */}
                 <TableCell>{vorder.Order?.user?.userName || "N/A"}</TableCell>
                 <TableCell>
                   {" "}
@@ -81,12 +81,28 @@ const VirtOrderTable = () => {
                 <TableCell>
                   {vorder.Order && vorder.Order.orderQuantity}
                 </TableCell>
+               
+                <TableCell>
+                  {vorder.Order && vorder.Order.orderAmount}
+                </TableCell>
                 <TableCell>
                   {vorder.Order && vorder.Order.orderStatus}
                 </TableCell>
                 <TableCell>
-                  {vorder.Order && vorder.Order.orderAmount}
-                </TableCell>
+                <div className="flex space-x-2">
+                  <Link href={`/dashboard/virtualOrder/${vorder.Order && vorder.Order.id}`}>
+                  <button 
+                    className=" rounded-md shadow p-2 text-white bg-green-500 hover:bg-green-600 "
+                    aria-label="Edit"
+                  >
+                    View Details
+                  </button>
+                  </Link>
+                
+                
+                
+                </div>
+              </TableCell> 
 
                 {/* <TableCell>
                 <div className="flex space-x-2">
