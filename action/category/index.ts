@@ -133,7 +133,10 @@ export async function deleteCategory(categoryId:string){
     if (!existingCategory) {
         return { success: false, message: "Category not found" };
       }
-
+    // Delete all products associated with the category
+    await db.product.deleteMany({
+      where: { categoryId: categoryId },
+    });
     // Delete the category
     await db.category.delete({
       where: { id: categoryId },
