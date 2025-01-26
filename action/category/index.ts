@@ -17,7 +17,8 @@ export async function savecategory(formData: FormData) {
   const data = {
     categoryName: formData.get("categoryName") as string,
     categoryDescription: formData.get("categoryDescription") as string,
-    categoryImage: formData.getAll("categoryImage") as File[], // Get all the files
+    // categoryImage: formData.getAll("categoryImage") as File[], // Get all the files
+    categoryImage:Array.from(formData.getAll("categoryImage")) as string[]
   };
 
   try {
@@ -31,18 +32,18 @@ export async function savecategory(formData: FormData) {
       return { success: false, message: "Category must be unique" };
     }
 
-    // Process each image
-    const imgPaths = validData.categoryImage ? await Promise.all(
-      validData.categoryImage.map(async (file) => {
-        return await writeImageToDisk(file);
-      })
-    ) : [];
+    // // Process each image
+    // const imgPaths = validData.categoryImage ? await Promise.all(
+    //   validData.categoryImage.map(async (file) => {
+    //     return await writeImageToDisk(file);
+    //   })
+    // ) : [];
 
     const newCategory = await db.category.create({
       data: {
         categoryName: validData.categoryName,
         categoryDescription: validData.categoryDescription,
-        categoryImage: imgPaths, // Save paths as an array
+        categoryImage: validData.categoryImage, 
       },
     });
     revalidatePath("/dashboard/category");
