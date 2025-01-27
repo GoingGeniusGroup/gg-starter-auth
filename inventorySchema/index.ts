@@ -10,16 +10,18 @@ export const categorySchema = z.object({
     .string()
     .min(10, "Description should be at least 10 characters")
     .max(500, "Description should not exceed 500 characters"),
-  categoryImage: z
-    .array(
-      z.instanceof(File).refine((file) => ACCEPTED_IMAGE_TYPES.includes(file.type), {
-        message: "Only .jpg, .jpeg, .png, .webp files are accepted",
-      })
-      .refine((file) => file.size <= MAX_FILE_SIZE, {
-        message: "Max file size is 3 MB",
-      })
-    )
-    .optional(), // Allow null for initial state
+  // categoryImage: z
+  //   .array(
+  //     z.instanceof(File).refine((file) => ACCEPTED_IMAGE_TYPES.includes(file.type), {
+  //       message: "Only .jpg, .jpeg, .png, .webp files are accepted",
+  //     })
+  //     .refine((file) => file.size <= MAX_FILE_SIZE, {
+  //       message: "Max file size is 3 MB",
+  //     })
+  //   )
+  //   .optional(), // Allow null for initial state
+  categoryImage: z.array(z.string()).optional() 
+
 });
 
 export type categoryData = z.infer<typeof categorySchema>;
