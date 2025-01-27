@@ -1,30 +1,27 @@
 "use client";
-import React,{useState} from "react";
-import { useForm, Controller } from "react-hook-form";
+import React, { useState } from "react";
+import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { categorySchema, categoryData } from "@/inventorySchema";
 import { savecategory } from "@/action/category";
-import { revalidatePath } from "next/cache";
-import { Toaster, toast } from "sonner";
+import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { FileUploaderRegular } from "@uploadcare/react-uploader";
 import { useTheme } from "next-themes";
 
 import "@uploadcare/react-uploader/core.css";
+
 interface CategoryFormProps {
   onCancel: () => void;
-  // onCategoryAdd: (newCategory: any) => void;
 }
 
 const CategoryForm = ({ onCancel }: CategoryFormProps) => {
-      const router = useRouter();
-      const uploadkey = process.env.NEXT_PUBLIC_UPLOADCARE_PUBLIC_KEY;
-      const { theme } = useTheme();
-      const [uploadedImgUrls, setUploadedImgUrls] = useState<string[]>([]);
-
+  const router = useRouter();
+  const uploadkey = process.env.NEXT_PUBLIC_UPLOADCARE_PUBLIC_KEY || "";
+  const { theme } = useTheme();
+  const [allImages, setAllImages] = useState<string[]>([]); 
 
   const {
-    control,
     register,
     handleSubmit,
     reset,
@@ -33,45 +30,31 @@ const CategoryForm = ({ onCancel }: CategoryFormProps) => {
     resolver: zodResolver(categorySchema),
   });
 
+  const handleRemoveImage = (index: number) => {
+    setAllImages((prev) => prev.filter((_, i) => i !== index));
+  };
+
   const onSubmit = async (data: categoryData) => {
     const formData = new FormData();
     formData.append("categoryName", data.categoryName);
     formData.append("categoryDescription", data.categoryDescription);
-    // if (data.categoryImage && data.categoryImage.length > 0) {
-    //   data.categoryImage.forEach((image) => {
-    //     formData.append("categoryImage", image);
-    //   });
-    // }
-    if (uploadedImgUrls.length > 0) {
-      uploadedImgUrls.forEach(url => formData.append("categoryImage", url));
-    }
+
+    // Add images to the form data
+    allImages.forEach((url) => formData.append("categoryImage", url));
+
     try {
       const result = await savecategory(formData);
       if (result.success && result.data) {
-        // alert("Category saved successfully!");
-        toast.success("Category has saved successfully!");
-        console.log("Saved category:", result.data);
-        // const newCategory = {
-        //   CategoryId: result.data.id,
-        //   categoryName: result.data.categoryName,
-        //   categoryDescription: result.data.categoryDescription || "",
-        //   categoryType: "PHYSICAL",
-        //   // productQuantity: result.data.products ? result.data.products.length : 0,
-        //   productQuantity: 0,
-        // };
-        // onCategoryAdd(newCategory); // Add to parent state
+        toast.success("Category has been saved successfully!");
         reset();
-        router.push("/dashboard/category")
+        router.push("/dashboard/category");
         onCancel();
-
       } else {
         console.error("Validation errors:", result.errors);
-        // alert("Validation errors occurred. Check console for details.");
         toast.warning("Validation errors occurred. Check console for details.");
       }
     } catch (error) {
       console.error("Error:", error);
-      // alert("Failed to save category");
       toast.error("Failed to save category");
     }
   };
@@ -87,12 +70,13 @@ const CategoryForm = ({ onCancel }: CategoryFormProps) => {
             Categories
           </legend>
 
+    
           <div className="mb-3">
             <label
               htmlFor="categoryName"
               className="block text-sm font-semibold text-gray-700 dark:text-gray-300"
             >
-              Categories Name:
+              Category Name:
             </label>
             <input
               type="text"
@@ -107,6 +91,7 @@ const CategoryForm = ({ onCancel }: CategoryFormProps) => {
             )}
           </div>
 
+          
           <div className="mb-3">
             <label
               htmlFor="categoryDescription"
@@ -127,6 +112,7 @@ const CategoryForm = ({ onCancel }: CategoryFormProps) => {
             )}
           </div>
 
+          
           <div className="mb-3">
             <label
               htmlFor="categoryImage"
@@ -134,45 +120,43 @@ const CategoryForm = ({ onCancel }: CategoryFormProps) => {
             >
               Category Images:
             </label>
-            {/* <Controller
-              name="categoryImage"
-              control={control}
-              defaultValue={[]}
-              render={({ field }) => (
-                <input
-                  type="file"
-                  id="categoryImage"
-                  accept="image/*"
-                  multiple
-                  onChange={(e) =>
-                    field.onChange(Array.from(e.target.files || []))
-                  }
-                  className="w-full mt-1 p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
-              )}
-            /> */}
-                 <FileUploaderRegular
-                  multiple
-                  sourceList="local, url, gdrive"
-                  classNameUploader={theme === "dark" ? "uc-dark" : "uc-light"}
-                  pubkey={`${uploadkey}`}
-                  imgOnly={true}
 
-                  onChange={(event) => {
-                    const files = event.successEntries;
-                    if (files.length > 0) {
-                      const urls = files.map(file => file.cdnUrl); 
-                      setUploadedImgUrls(urls); 
-                    }
-                  }}
-                />
-            {errors.categoryImage && (
-              <p className="text-sm text-red-500 mt-1">
-                {errors.categoryImage.message}
-              </p>
-            )}
+        
+            <div className="flex gap-4 flex-wrap mt-2 mb-2">
+              {allImages.map((url, index) => (
+                <div key={index} className="relative">
+                  <img
+                    src={url}
+                    alt={`Image ${index + 1}`}
+                    className="w-24 h-24 object-cover rounded border"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => handleRemoveImage(index)}
+                    className="absolute top-0 right-0 bg-red-500 text-white rounded-full p-1 text-xs"
+                  >
+                    ×
+                  </button>
+                </div>
+              ))}
+            </div>
+
+            {/* File Upload */}
+            <FileUploaderRegular
+              multiple
+              sourceList="local, url, gdrive"
+              classNameUploader={theme === "dark" ? "uc-dark" : "uc-light"}
+              pubkey={uploadkey}
+              imgOnly={true}
+              onChange={(event) => {
+                const files = event.successEntries || [];
+                const urls = files.map((file) => file.cdnUrl);
+                setAllImages((prev) => [...prev, ...urls]);
+              }}
+            />
           </div>
 
+          {/* Submit and Cancel Buttons */}
           <div className="grid grid-cols-2 gap-4">
             <button
               type="button"
@@ -193,4 +177,5 @@ const CategoryForm = ({ onCancel }: CategoryFormProps) => {
     </div>
   );
 };
+
 export default CategoryForm;
