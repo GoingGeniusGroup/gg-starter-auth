@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React,{useState} from "react";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { categorySchema, categoryData } from "@/inventorySchema";
@@ -7,7 +7,10 @@ import { savecategory } from "@/action/category";
 import { revalidatePath } from "next/cache";
 import { Toaster, toast } from "sonner";
 import { useRouter } from "next/navigation";
+import { FileUploaderRegular } from "@uploadcare/react-uploader";
+import { useTheme } from "next-themes";
 
+import "@uploadcare/react-uploader/core.css";
 interface CategoryFormProps {
   onCancel: () => void;
   // onCategoryAdd: (newCategory: any) => void;
@@ -15,6 +18,11 @@ interface CategoryFormProps {
 
 const CategoryForm = ({ onCancel }: CategoryFormProps) => {
       const router = useRouter();
+      const uploadkey = process.env.NEXT_PUBLIC_UPLOADCARE_PUBLIC_KEY;
+      const { theme } = useTheme();
+      const [uploadedImgUrls, setUploadedImgUrls] = useState<string[]>([]);
+
+
   const {
     control,
     register,
@@ -29,10 +37,13 @@ const CategoryForm = ({ onCancel }: CategoryFormProps) => {
     const formData = new FormData();
     formData.append("categoryName", data.categoryName);
     formData.append("categoryDescription", data.categoryDescription);
-    if (data.categoryImage && data.categoryImage.length > 0) {
-      data.categoryImage.forEach((image) => {
-        formData.append("categoryImage", image);
-      });
+    // if (data.categoryImage && data.categoryImage.length > 0) {
+    //   data.categoryImage.forEach((image) => {
+    //     formData.append("categoryImage", image);
+    //   });
+    // }
+    if (uploadedImgUrls.length > 0) {
+      uploadedImgUrls.forEach(url => formData.append("categoryImage", url));
     }
     try {
       const result = await savecategory(formData);
@@ -123,7 +134,7 @@ const CategoryForm = ({ onCancel }: CategoryFormProps) => {
             >
               Category Images:
             </label>
-            <Controller
+            {/* <Controller
               name="categoryImage"
               control={control}
               defaultValue={[]}
@@ -139,7 +150,22 @@ const CategoryForm = ({ onCancel }: CategoryFormProps) => {
                   className="w-full mt-1 p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
               )}
-            />
+            /> */}
+                 <FileUploaderRegular
+                  multiple
+                  sourceList="local, url, gdrive"
+                  classNameUploader={theme === "dark" ? "uc-dark" : "uc-light"}
+                  pubkey={`${uploadkey}`}
+                  imgOnly={true}
+
+                  onChange={(event) => {
+                    const files = event.successEntries;
+                    if (files.length > 0) {
+                      const urls = files.map(file => file.cdnUrl); 
+                      setUploadedImgUrls(urls); 
+                    }
+                  }}
+                />
             {errors.categoryImage && (
               <p className="text-sm text-red-500 mt-1">
                 {errors.categoryImage.message}
