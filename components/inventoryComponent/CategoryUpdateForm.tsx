@@ -8,7 +8,7 @@ import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { FileUploaderRegular } from "@uploadcare/react-uploader";
 import { useTheme } from "next-themes";
-
+import Image from "next/image";
 import "@uploadcare/react-uploader/core.css";
 
 interface CategoryFormProps {
@@ -97,7 +97,6 @@ const CategoryUpdateForm = ({
             Update Category
           </legend>
 
-          {/* Category Name */}
           <div className="mb-3">
             <label
               htmlFor="categoryName"
@@ -118,7 +117,6 @@ const CategoryUpdateForm = ({
             )}
           </div>
 
-          {/* Category Description */}
           <div className="mb-3">
             <label
               htmlFor="categoryDescription"
@@ -152,10 +150,12 @@ const CategoryUpdateForm = ({
             <div className="flex gap-4 flex-wrap mt-2 mb-2">
               {allImages.map((url, index) => (
                 <div key={index} className="relative">
-                  <img
+                  <Image
                     src={url}
                     alt={`Image ${index + 1}`}
-                    className="w-24 h-24 object-cover rounded border"
+                    width={96}
+                    height={96}
+                    className="object-cover rounded border"
                   />
                   <button
                     type="button"
