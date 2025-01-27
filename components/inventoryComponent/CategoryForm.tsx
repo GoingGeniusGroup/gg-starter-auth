@@ -8,6 +8,7 @@ import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { FileUploaderRegular } from "@uploadcare/react-uploader";
 import { useTheme } from "next-themes";
+import Image from "next/image";
 
 import "@uploadcare/react-uploader/core.css";
 
@@ -125,11 +126,13 @@ const CategoryForm = ({ onCancel }: CategoryFormProps) => {
             <div className="flex gap-4 flex-wrap mt-2 mb-2">
               {allImages.map((url, index) => (
                 <div key={index} className="relative">
-                  <img
-                    src={url}
-                    alt={`Image ${index + 1}`}
-                    className="w-24 h-24 object-cover rounded border"
-                  />
+                <Image
+                                    src={url}
+                                    alt={`Image ${index + 1}`}
+                                    width={96}
+                                    height={96}
+                                    className="object-cover rounded border"
+                                  />
                   <button
                     type="button"
                     onClick={() => handleRemoveImage(index)}
