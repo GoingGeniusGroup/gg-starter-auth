@@ -180,13 +180,13 @@ const ProductTable = () => {
               key={product.id}
               className=" rounded-lg border border-gray-200 overflow-hidden hover:shadow-lg transition-shadow duration-300"
             >
-              <div className="relative">
+              <div className="relative w-full h-56">
               <Image 
-  src={`/upload/${product.imageUrl[0]}`} 
+  src={product.imageUrl[0]} 
   alt={product.name} 
-  width={500} 
-  height={224} 
-  className="w-full h-60 object-cover"
+  layout='fill'
+  objectFit="contain"
+  className="rounded-t-lg"
 />
       
                 {product.isFeatured && (
