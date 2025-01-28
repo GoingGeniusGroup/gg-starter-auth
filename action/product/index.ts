@@ -102,7 +102,9 @@ export async function updateProduct(formData:FormData,productId:string){
     salePrice:parseFloat(formData.get("salePrice") as string),
     costPrice:parseFloat(formData.get("costPrice") as string),
     stockQuantity:parseInt(formData.get("stockQuantity") as string),
-    productImage:formData.getAll("productImage") as File[],
+    // productImage:formData.getAll("productImage") as File[],
+    productImage:Array.from(formData.getAll("productImage")) as string[],
+
     brand:formData.get("brand") as string,
     rating:parseInt(formData.get("rating") as string),
     category:formData.get("category") as string,
@@ -127,16 +129,16 @@ export async function updateProduct(formData:FormData,productId:string){
     if(duplicateProduct){
       return {success:false,message:"Product name must be unique"}
     }
-   let imgPaths:string[]=[]
-   if(validData.productImage && validData.productImage.length>0){
-     imgPaths=await Promise.all(
-       validData.productImage.map(async(file)=>{
-         return await writeImageToDisk(file)
-       })
-     )
-    } else{
-      imgPaths=product.imageUrl
-    }
+  //  let imgPaths:string[]=[]
+  //  if(validData.productImage && validData.productImage.length>0){
+  //    imgPaths=await Promise.all(
+  //      validData.productImage.map(async(file)=>{
+  //        return await writeImageToDisk(file)
+  //      })
+  //    )
+  //   } else{
+  //     imgPaths=product.imageUrl
+  //   }
     const updatedProduct=await db.product.update({
       where:{id:productId},
       data:{
@@ -145,7 +147,7 @@ export async function updateProduct(formData:FormData,productId:string){
         salePrice:validData.salePrice,
         costPrice:validData.costPrice,
         stockQuantity:validData.stockQuantity,
-        imageUrl:imgPaths,
+        imageUrl:validData.productImage,
         brand:validData.brand,
         rating:validData.rating,
         categoryId:validData.category,
