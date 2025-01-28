@@ -21,7 +21,9 @@ const data={
   salePrice:parseFloat(formData.get("salePrice") as string),
   costPrice:parseFloat(formData.get("costPrice") as string),
   stockQuantity:parseInt(formData.get("stockQuantity") as string),
-  productImage:formData.getAll("productImage") as File[],
+  // productImage:formData.getAll("productImage") as File[],
+  productImage:Array.from(formData.getAll("productImage")) as string[],
+
   brand:formData.get("brand") as string,
   rating:parseInt(formData.get("rating") as string),
   category:formData.get("category") as string,
@@ -44,11 +46,11 @@ try{
       }
 
      
-      const imgPaths = validData.productImage ? await Promise.all(
-        validData.productImage.map(async (file) => {
-          return await writeImageToDisk(file);
-        })
-      ) : [];
+      // const imgPaths = validData.productImage ? await Promise.all(
+      //   validData.productImage.map(async (file) => {
+      //     return await writeImageToDisk(file);
+      //   })
+      // ) : [];
       console.log("hello")
       const newProduct=await db.product.create({
         data:{
@@ -57,7 +59,7 @@ try{
           salePrice:validData.salePrice,
           costPrice:validData.costPrice,
           stockQuantity:validData.stockQuantity,
-          imageUrl:imgPaths,
+          imageUrl:validData.productImage,
           brand:validData.brand,
           rating:validData.rating,
           categoryId:validData.category,
