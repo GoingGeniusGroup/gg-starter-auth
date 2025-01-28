@@ -8,6 +8,10 @@ import { useRouter } from "next/navigation";
 import { updateProduct, getProductDetail } from "@/action/product";
 import { getAllCategories } from "@/action/category";
 import { Toaster, toast } from "sonner";
+import { FileUploaderRegular } from "@uploadcare/react-uploader";
+import { useTheme } from "next-themes";
+import Image from "next/image";
+import "@uploadcare/react-uploader/core.css";
 interface Category {
   id: string;
   categoryName: string;
@@ -60,6 +64,11 @@ interface UpdateProductProps {
 
 const UpdateProduct: React.FC<UpdateProductProps> = ({ params }) => {
   const router = useRouter();
+    const uploadkey = process.env.NEXT_PUBLIC_UPLOADCARE_PUBLIC_KEY || "";
+    const { theme } = useTheme();
+  
+    // (existing + newly uploaded)
+    const [allImages, setAllImages] = useState<string[]>([]);
   const { id } = params;
   const [product, setProduct] = useState<any | null>(null);
   const [categories, setCategories] = useState<Category[]>([]);
@@ -101,10 +110,15 @@ const UpdateProduct: React.FC<UpdateProductProps> = ({ params }) => {
         status: product.status,
         discount: product.discount,
         category: product.category.id,
-        productImage: product.productImage,
+        
       });
+      setAllImages(product.imageUrl || []); 
+
     }
   }, [product, reset]);
+  const handleRemoveImage = (index: number) => {
+    setAllImages((prev) => prev.filter((_, i) => i !== index));
+  };
 
   useEffect(() => {
     async function fetchCategory() {
@@ -135,11 +149,13 @@ const UpdateProduct: React.FC<UpdateProductProps> = ({ params }) => {
     formData.append("status", data.status.toString());
     formData.append("discount", data.discount.toString());
     formData.append("category", data.category);
-    if (data.productImage && data.productImage.length > 0) {
-      data.productImage.forEach((image) => {
-        formData.append("productImage", image);
-      });
-    }
+    // if (data.productImage && data.productImage.length > 0) {
+    //   data.productImage.forEach((image) => {
+    //     formData.append("productImage", image);
+    //   });
+    // }
+    allImages.forEach((url) => formData.append("productImage", url));
+
     try {
       const result = await updateProduct(formData, id);
       if (result?.success && result.data) {
@@ -305,25 +321,21 @@ const UpdateProduct: React.FC<UpdateProductProps> = ({ params }) => {
                   htmlFor="productImage"
                   className="block text-sm font-semibold text-gray-700 dark:text-gray-300"
                 >
-                  Image
+                 Product Image
                 </label>
-                <Controller
-                  name="productImage"
-                  control={control}
-                  defaultValue={[]}
-                  render={({ field }) => (
-                    <input
-                      type="file"
-                      id="productImage"
-                      accept="image/*"
-                      multiple
-                      onChange={(e) =>
-                        field.onChange(Array.from(e.target.files || []))
-                      }
-                      className="w-full mt-1 p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    />
-                  )}
-                />
+                                <FileUploaderRegular
+                                             multiple
+                                             sourceList="local, url, gdrive"
+                                             classNameUploader={theme === "dark" ? "uc-dark" : "uc-light"}
+                                             pubkey={uploadkey}
+                                             imgOnly={true}
+                                             onChange={(event) => {
+                                               const files = event.successEntries || [];
+                                               const urls = files.map((file) => file.cdnUrl);
+                                               setAllImages((prev) => [...prev, ...urls]);
+                                             }}
+                                           />
+             
                 {errors.productImage && (
                   <p className="text-sm text-red-500 mt-1">
                     {errors.productImage.message}
