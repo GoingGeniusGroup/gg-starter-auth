@@ -335,7 +335,26 @@ const UpdateProduct: React.FC<UpdateProductProps> = ({ params }) => {
                                                setAllImages((prev) => [...prev, ...urls]);
                                              }}
                                            />
-             
+                <div className="flex gap-4 flex-wrap mt-2 mb-2">
+                             {allImages.map((url, index) => (
+                               <div key={index} className="relative">
+                               <Image
+                                                   src={url}
+                                                   alt={`Image ${index + 1}`}
+                                                   width={96}
+                                                   height={96}
+                                                   className="object-cover rounded border"
+                                                 />
+                                 <button
+                                   type="button"
+                                   onClick={() => handleRemoveImage(index)}
+                                   className="absolute top-0 right-0 bg-red-500 text-white rounded-full p-1 text-xs"
+                                 >
+                                   ×
+                                 </button>
+                               </div>
+                             ))}
+                           </div>
                 {errors.productImage && (
                   <p className="text-sm text-red-500 mt-1">
                     {errors.productImage.message}
