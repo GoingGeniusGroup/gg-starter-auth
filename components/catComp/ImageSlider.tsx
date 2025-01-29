@@ -1,6 +1,7 @@
 "use client"
 import React, { useState } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import Image from "next/image";
 interface ImageSliderProps {
   images: string[];
 }
@@ -19,19 +20,19 @@ export const ImageSlider = ({ images }: ImageSliderProps) => {
         <img
          src={images[currentIndex]}
           alt={`Category image ${currentIndex + 1}`}
-          className="h-full w-full object-cover rounded-md"
+          className="h-full w-full object-contain rounded-md"
         />
       </div>
       <button
         onClick={prevSlide}
-        className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/80 p-2 rounded-full shadow-lg hover:bg-white"
+        className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/80 dark:bg-slate-800 p-2 rounded-full shadow-lg hover:bg-white dark:hover:bg-slate-700"
         aria-label="Previous image"
       >
         <ChevronLeft className="h-6 w-6" />
       </button>
       <button
         onClick={nextSlide}
-        className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/80 p-2 rounded-full shadow-lg hover:bg-white"
+        className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/80 dark:bg-slate-800 p-2 rounded-full shadow-lg hover:bg-white dark:hover:bg-slate-700"
         aria-label="Next image"
       >
         <ChevronRight className="h-6 w-6" />
