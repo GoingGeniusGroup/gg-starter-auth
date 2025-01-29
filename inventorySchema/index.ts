@@ -32,9 +32,10 @@ description: z.string().optional(),
 salePrice: z.number().nonnegative("sale price must be positive").optional(),
 costPrice: z.number().nonnegative("cost price must be positive").optional(),
 stockQuantity: z.number().int().nonnegative().min(0,"stock must be at least 0"),
-productImage: z.array(z.instanceof(File)
-.refine((file)=>ACCEPTED_IMAGE_TYPES.includes(file.type),{message:"Only .jpg, .jpeg, .png, .webp files are accepted"}))
-.optional(),
+// productImage: z.array(z.instanceof(File)
+// .refine((file)=>ACCEPTED_IMAGE_TYPES.includes(file.type),{message:"Only .jpg, .jpeg, .png, .webp files are accepted"}))
+// .optional(),
+productImage: z.array(z.string()).optional() ,
 brand: z.string().optional(),
  rating: z.number().int().min(0).max(5,"rating must be between 0 and 5"),
  category: z.string(),

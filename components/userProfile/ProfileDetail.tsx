@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { FileUploaderRegular } from "@uploadcare/react-uploader";
 import { useTheme } from "next-themes";
 import { toast } from "sonner";
-
+import Image from 'next/image';
 import "@uploadcare/react-uploader/core.css";
 interface UserData {
     fullName?: string;
@@ -26,6 +26,7 @@ import BeatLoader from "react-spinners/BeatLoader";
 const ProfileDetail = ({ userId }: UserProps) => {
     const uploadkey = process.env.NEXT_PUBLIC_UPLOADCARE_PUBLIC_KEY;
   const [uploadedImgUrls, setUploadedImgUrls] = useState<string[]>([]);
+    const [allImages, setAllImages] = useState<string[]>([]);
 
     const [isEditing, setIsEditing] = useState(false);
     const [userInfo, setUserInfo] = useState<any>(null);
@@ -44,6 +45,8 @@ const ProfileDetail = ({ userId }: UserProps) => {
                     console.log(response.data); 
                     setUserInfo(response.data);
                     reset(response.data); 
+                    setAllImages(response.data.imageUser || []); 
+
                 } else {
                     console.error("Failed to fetch user data");
                 }
@@ -56,7 +59,9 @@ const ProfileDetail = ({ userId }: UserProps) => {
         }
         fetchData();
     }, [userId]);
-
+    const handleRemoveImage = (index: number) => {
+        setAllImages((prev) => prev.filter((_, i) => i !== index));
+      };
     const onSubmit = async (data: UserData) => {
         const formData = new FormData();
         formData.append("fullName", data.fullName || "");
@@ -64,9 +69,11 @@ const ProfileDetail = ({ userId }: UserProps) => {
         formData.append("email", data.email?.join(",") || "");
         formData.append("mobilePhone", data.mobilePhone?.join(",") || "");
         formData.append("address", data.address?.join(",") || "");
-        if (uploadedImgUrls.length > 0) {
-            uploadedImgUrls.forEach(url => formData.append("imageUser", url));
-          }
+        // if (uploadedImgUrls.length > 0) {
+        //     uploadedImgUrls.forEach(url => formData.append("imageUser", url));
+        //   }
+          allImages.forEach((url) => formData.append("imageUser", url));
+
         try {
             const response = await updateUserDetail(formData, userId);
             if (response.success) {
@@ -172,6 +179,26 @@ const ProfileDetail = ({ userId }: UserProps) => {
                     <label className="block text-sm font-medium dark:text-slate-300 text-gray-700 capitalize">
                         Image
                     </label>
+                    <div className="flex gap-4 flex-wrap mt-2 mb-2">
+                                  {allImages.map((url, index) => (
+                                    <div key={index} className="relative">
+                                      <Image
+                                        src={url}
+                                        alt={`Image ${index + 1}`}
+                                        width={96}
+                                        height={96}
+                                        className="object-cover rounded border"
+                                      />
+                                      <button
+                                        type="button"
+                                        onClick={() => handleRemoveImage(index)}
+                                        className="absolute top-0 right-0 bg-red-500 text-white rounded-full p-1 text-xs"
+                                      >
+                                        ×
+                                      </button>
+                                    </div>
+                                  ))}
+                                </div>
                        <FileUploaderRegular
                                       multiple
                                       sourceList="local, url, gdrive"
