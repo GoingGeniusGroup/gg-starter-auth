@@ -52,22 +52,22 @@ const CategoryDetail = ({categoryId}:categoryProps) => {
               <ImageSlider images={categoryInfo?.categoryImage ||[]} />
             </div>
             <div className="p-6 lg:p-8 flex flex-col lg:col-span-4">
-              <h1 className="text-3xl font-semibold text-gray-900 mb-4">
+              <h1 className="text-3xl font-semibold text-gray-900 dark:text-slate-50 mb-4">
                 {categoryInfo?.categoryName}
               </h1>
               <div className="flex items-center gap-2 mb-6">
-                <Package className="h-5 w-5 text-gray-500" />
-                <span className="text-gray-600">
+                <Package className="h-5 w-5 text-gray-500 dark:text-slate-200" />
+                <span className="text-gray-600 dark:text-slate-100">
                   Physical
                 </span>
               </div>
-              <p className="text-gray-600 mb-6 flex-grow">
+              <p className="text-gray-600 dark:text-slate-200 mb-6 flex-grow">
                 {categoryInfo?.categoryDescription}
               </p>
               <div className="border-t pt-6">
                 <div className="flex items-center justify-between text-sm">
-                  <span className="text-gray-500">Products In This Category:</span>
-                  <span className="font-medium text-gray-900">
+                  <span className="text-gray-500 dark:text-gray-200">Products In This Category:</span>
+                  <span className="font-medium text-gray-900 dark:text-slate-50">
                     {categoryInfo?.products?.length}
                   </span>
                 </div>
