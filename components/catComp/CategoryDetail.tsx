@@ -15,6 +15,7 @@ const CategoryDetail = ({categoryId}:categoryProps) => {
                         const response = await getCategory(categoryId);
                         if (response.success && response.data) {
                             console.log(response.data); 
+                            console.log("eeeegg")
                             setCategoryInfo(response.data)
                         } else {
                             console.error("Failed to fetch user data");
@@ -26,14 +27,15 @@ const CategoryDetail = ({categoryId}:categoryProps) => {
                 }
                 fetchData();
             }, [categoryId]);
+        
   return (
     <div>
-           <main className="w-full  bg-gray-50">
+           <main className="w-full ">
       <div className="container mx-auto p-4 md:p-6 lg:p-8">
-        <div className="bg-white rounded-xl shadow-sm overflow-hidden">
+        <div className=" rounded-xl shadow-sm overflow-hidden">
           <div className="grid grid-cols-1 lg:grid-cols-10 ">
             <div className="h-[300px] lg:h-[350px] lg:col-span-6 p-3">
-              <ImageSlider images={categoryInfo?.categoryImage} />
+              <ImageSlider images={categoryInfo?.categoryImage ||[]} />
             </div>
             <div className="p-6 lg:p-8 flex flex-col lg:col-span-4">
               <h1 className="text-3xl font-semibold text-gray-900 mb-4">
