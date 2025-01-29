@@ -17,6 +17,7 @@ import { BiShow } from "react-icons/bi";
 import { FaEdit, FaTrash, FaPlus } from "react-icons/fa";
 import { AiOutlineTable, AiOutlineAppstore } from "react-icons/ai"; // Import icons for table and grid
 import Image from "next/image";
+import Link from "next/link";
 interface Category {
   id: number; // Ensure id is a number
   categoryName: string;
@@ -150,12 +151,15 @@ const CategoryTable = ({
                 <TableCell>{category.products.length}</TableCell>
                 <TableCell>
                   <div className="flex space-x-2">
+                    <Link href={`/dashboard/category/${category.id}`}>
                     <button
                       className="text-green-500 hover:text-green-700 text-2xl"
                       aria-label="View"
                     >
                       <BiShow />
                     </button>
+                    </Link>
+                 
                     <button
                       onClick={() => onEditClick(category)}
                       className="text-blue-500 hover:text-blue-700 text-2xl"
