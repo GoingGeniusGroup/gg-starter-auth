@@ -4,6 +4,7 @@ import React,{useState,useEffect} from 'react'
 import { Package } from "lucide-react";
 import { ImageSlider } from './ImageSlider';
 import BeatLoader from "react-spinners/BeatLoader"; 
+import CatProdTable from './CatProdTable';
 
 interface categoryProps{
     categoryId:string;
@@ -77,6 +78,16 @@ const CategoryDetail = ({categoryId}:categoryProps) => {
         </div>
       </div>
     </main>
+    <div className='p-4'>
+    <h1 className="text-2xl px-3 font-semibold text-gray-900 dark:text-slate-50 mb-4">
+         Products   
+      </h1>
+      {categoryInfo.products.length>0 ?    <CatProdTable products={categoryInfo.products}/>
+  : <>
+  <h2 className='px-4'>No Products in this Category </h2>
+  </> }
+
+    </div>
     </div>
   )
 }
