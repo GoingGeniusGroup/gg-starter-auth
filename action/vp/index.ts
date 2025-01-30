@@ -11,15 +11,17 @@ export async function saveVirtualProd(formData: FormData) {
       stockQuantity: parseInt(formData.get("stockQuantity") as string, 10),
       type: formData.get("type") as string,
       categoryId: formData.get("categoryId") as string,
-      source: formData.get("source") as string,
+      source: formData.get("source") as string | null,
+      images: Array.from(formData.getAll("images")) as string[], 
+
   };
 
   try {
-     const validData = virtualProdSchema.parse(data);
+     
 
     // Check if the virtual product name already exists
     const existingProduct = await db.virtualProduct.findFirst({
-      where: { name: validData.name },
+      where: { name: data.name },
     });
 
     if (existingProduct) {
@@ -29,14 +31,15 @@ export async function saveVirtualProd(formData: FormData) {
     // Save the virtual product
     const newProduct = await db.virtualProduct.create({
       data: {
-        name: validData.name,
-        description: validData.description,
-        price: validData.price,
-        stockQuantity: validData.stockQuantity,
-        type: validData.type,
+        name: data.name,
+        description: data.description,
+        price: data.price,
+        stockQuantity: data.stockQuantity,
+        type: data.type,
         rating:1,
-        categoryId: validData.categoryId,
-        src: validData.source,
+        categoryId: data.categoryId,
+        src: data.source ||null,
+        images:data.images
       },
     });
     revalidatePath("/dashboard/virtualProduct")

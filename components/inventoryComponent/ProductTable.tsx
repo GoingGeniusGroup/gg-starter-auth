@@ -14,7 +14,7 @@ import { getAllproducts, deleteProduct } from '@/action/product'
 import { Input } from "@/components/ui/input1"
 import { LuListFilter } from "react-icons/lu";
 import { BiShow } from 'react-icons/bi';
-
+import Image from "next/image";
 import { FaEdit, FaTrash, FaPlus, FaFilter } from "react-icons/fa";
 import { toast } from "sonner";
 import { AiOutlineTable, AiOutlineAppstore } from "react-icons/ai"; // Import icons for table and grid
@@ -180,9 +180,14 @@ const ProductTable = () => {
               key={product.id}
               className=" rounded-lg border border-gray-200 overflow-hidden hover:shadow-lg transition-shadow duration-300"
             >
-              <div className="relative">
-              <img src={`/upload/${product.imageUrl[0]}`} alt={product.name} className="w-full h-56 object-cover" />
-
+              <div className="relative w-full h-56">
+              <Image 
+  src={product.imageUrl[0]} 
+  alt={product.name} 
+  layout='fill'
+  objectFit="contain"
+  className="rounded-t-lg"
+/>
       
                 {product.isFeatured && (
                   <div className="absolute top-2 right-2">

@@ -4,6 +4,8 @@ import { Package, MapPin, Calendar, CreditCard } from "lucide-react";
 import { getUserOrderDetail } from '@/action/userOrder';
 import Link from 'next/link';                  
 import { virtualCategorySchema } from '@/inventorySchema';
+import GridLoader from "react-spinners/GridLoader"; 
+
 interface Product {
   name: string;
   quantity: number;
@@ -25,8 +27,10 @@ interface OrderProps{
 const OrderDetailCard = ({user}:OrderProps) => {
   console.log("hello")
   console.log(user)
+          const [loading, setLoading] = useState<boolean>(true)
   const[orders,setOrders]=useState<any[]>([])
   useEffect(()=>{
+    setLoading(true)
     async function fetchData(){
       try{
         if (user) {
@@ -46,6 +50,9 @@ const OrderDetailCard = ({user}:OrderProps) => {
       catch (error) {
         console.error("Failed to fetch data", error);
       }
+      finally{
+        setLoading(false)
+      }
 
     }
     fetchData();
@@ -63,6 +70,14 @@ const OrderDetailCard = ({user}:OrderProps) => {
     };
     return colors[status];
   };
+
+  if (loading) {
+    return (
+        <div className="flex justify-center mt-10 items-center h-full">
+                 <GridLoader color="#498d7f" loading={loading} size={16} /> 
+        </div>
+    );
+}
   return (
     <div>
      {orders.map((order,index)=>(
@@ -163,9 +178,9 @@ const OrderDetailCard = ({user}:OrderProps) => {
   return (
     <tr key={index}>
       <td className="px-4 py-3 text-sm">{product.name}</td>
-      <td className="px-4 py-3 text-sm">{order.VirtualProductOnOrder.quantity}</td>
+      <td className="px-4 py-3 text-sm">{virtualProductOnOrder.quantity}</td>
       <td className="px-4 py-3 text-sm">${product.price.toFixed(2)}</td>
-      <td className="px-4 py-3 text-sm">${(order.VirtualProductOnOrder.quantity * product.price).toFixed(2)}</td>
+      <td className="px-4 py-3 text-sm">${(virtualProductOnOrder.quantity * product.price).toFixed(2)}</td>
     </tr>
   );
 })}

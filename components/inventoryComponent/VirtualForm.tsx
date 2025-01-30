@@ -24,7 +24,8 @@ interface vProduct {
   stockQuantity: number;
   type: string;
   categoryId: string;
-  source?: string;
+  source?: string |null;
+  images?:string[]
 }
 
 const VirtualForm = () => {
@@ -41,6 +42,8 @@ const VirtualForm = () => {
     resolver: zodResolver(virtualProdSchema),
   });
   const [uploadedUrl, setUploadedUrl] = useState<string | null>(null);
+  const [uploadedImgUrls, setUploadedImgUrls] = useState<string[]>([]);
+
   const { theme } = useTheme();
 
   useEffect(() => {
@@ -71,6 +74,9 @@ const VirtualForm = () => {
     formData.append("categoryId", data.categoryId);
     if (uploadedUrl) {
       formData.append("source", uploadedUrl);
+    }
+    if (uploadedImgUrls.length > 0) {
+      uploadedImgUrls.forEach(url => formData.append("images", url));
     }
     console.log("hello");
     try {
@@ -223,6 +229,36 @@ const VirtualForm = () => {
                 {errors.categoryId && (
                   <p className="text-sm text-red-500 mt-1">
                     {errors.categoryId.message}
+                  </p>
+                )}
+              </div>
+                     
+              
+                     <div className="mb-4">
+                <label
+                  htmlFor="images"
+                  className="block text-sm font-semibold text-gray-700 dark:text-gray-300"
+                >
+                  Images:
+                </label>
+                <FileUploaderRegular
+                  multiple
+                  sourceList="local, url, gdrive"
+                  classNameUploader={theme === "dark" ? "uc-dark" : "uc-light"}
+                  pubkey={`${uploadkey}`}
+                  imgOnly={true}
+
+                  onChange={(event) => {
+                    const files = event.successEntries;
+                    if (files.length > 0) {
+                      const urls = files.map(file => file.cdnUrl); 
+                      setUploadedImgUrls(urls); 
+                    }
+                  }}
+                />
+                {errors.images && (
+                  <p className="text-sm text-red-500 mt-1">
+                    {errors.images.message}
                   </p>
                 )}
               </div>
