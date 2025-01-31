@@ -140,18 +140,18 @@ const ProdDetailPage = ({ productId }: prodProps) => {
         <div className="space-y-8 mt-4 border-t border-gray-200 pt-4">
   <div className="flex flex-col md:flex-row md:gap-6">
     <div className="flex items-start gap-3 md:w-1/2">
-      <MapPin className="w-5 h-5 text-gray-500 mt-1" />
+      <MapPin className="w-5 h-5 text-gray-500 dark:text-slate-300 mt-1" />
       <div>
-        <h3 className="font-medium text-gray-900">Inventory Location</h3>
-        <p className="text-gray-600">{prodInfo.inventory?.address}</p>
+        <h3 className="font-medium text-gray-900 dark:text-slate-50">Inventory Location</h3>
+        <p className="text-gray-600 dark:text-slate-200">{prodInfo.inventory?.address}</p>
 
       </div>
     </div>
     <div className="flex items-start gap-3 md:w-1/2">
-      <Building2 className="w-5 h-5 text-gray-500 mt-1" />
+      <Building2 className="w-5 h-5 text-gray-500 mt-1 dark:text-slate-300" />
       <div>
-        <h3 className="font-medium text-gray-900">Supplier Information</h3>
-        <p className="text-gray-600">{prodInfo.Supplier?.supplierName}</p>
+        <h3 className="font-medium text-gray-900 dark:text-slate-50">Supplier Information</h3>
+        <p className="text-gray-600 dark:text-slate-200">{prodInfo.Supplier?.supplierName}</p>
         <div className="flex items-center gap-1 text-sm text-gray-500">
           {/* <span>ID: {prodInfo.Supplier?.id}</span> */}
           <span className="mx-2">•</span>
