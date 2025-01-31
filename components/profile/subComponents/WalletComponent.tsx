@@ -58,6 +58,7 @@ export default function WalletComponent() {
     type: "",
   });
 
+  //function to fetch user balance
   const fetchUserBalance = useCallback(async () => {
     setIsLoading(true);
     try {
@@ -83,7 +84,7 @@ export default function WalletComponent() {
     }
   }, [retryCount]);
 
-  //function to fetch user balance
+  //useeffect to fetch userbalance
   useEffect(() => {
     fetchUserBalance();
   }, [fetchUserBalance]);
