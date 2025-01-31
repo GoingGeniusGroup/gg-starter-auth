@@ -1,3 +1,4 @@
+"use client"
 import React,{useState} from 'react'
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
@@ -13,7 +14,7 @@ const ImageGallery = ({images}:ImageProps) => {
         setCurrentIndex((prev) => (prev - 1 + images.length) % images.length);
       };
   return (
-    <div>ImageGallery
+    <div>
           <div className="relative h-full w-full">
               <div className="relative h-full w-full overflow-hidden">
             
@@ -47,7 +48,9 @@ const ImageGallery = ({images}:ImageProps) => {
                   />
                 ))}
               </div>
-              <div className="flex mt-4 gap-4">
+             
+            </div>
+            <div className="flex mt-2 gap-4">
               {images.map((url, index) => (
                 <button
                   key={index}
@@ -59,7 +62,6 @@ const ImageGallery = ({images}:ImageProps) => {
                   <img src={url} alt="" className="w-full h-full object-cover" />
                 </button>
               ))}
-            </div>
             </div>
     </div>
   )
