@@ -17,12 +17,14 @@ const ImageGallery = ({images}:ImageProps) => {
     <div>
           <div className="relative h-full w-full">
               <div className="relative h-full w-full overflow-hidden">
-            
-                <img
+            <div className='h-[500px]'>
+            <img
                  src={images[currentIndex]}
                   alt={`Category image ${currentIndex + 1}`}
                   className="h-full w-full object-contain rounded-md"
                 />
+            </div>
+              
               </div>
               <button
                 onClick={prevSlide}
@@ -50,7 +52,7 @@ const ImageGallery = ({images}:ImageProps) => {
               </div>
              
             </div>
-            <div className="flex mt-2 gap-4">
+            <div className="flex mt-4 gap-4">
               {images.map((url, index) => (
                 <button
                   key={index}
