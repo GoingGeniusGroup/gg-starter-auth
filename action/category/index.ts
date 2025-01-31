@@ -178,6 +178,9 @@ export async function getCategory(id: string) {
   try {
     const category = await db.category.findUnique({
       where: { id },
+      include:{
+        products:true,
+      }
     })
     if (!category) {
       return { success: false, message: 'Category not found' }
