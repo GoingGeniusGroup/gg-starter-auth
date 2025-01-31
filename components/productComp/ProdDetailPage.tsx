@@ -3,6 +3,8 @@ import React, { useState, useEffect } from "react";
 import { getProductDetail } from "@/action/product";
 import ImageGallery from "./ImageGallery";
 import ProdPrices from "./ProdPrices";
+import BeatLoader from "react-spinners/BeatLoader"; 
+
 import {
   Star,
   ShoppingCart,
@@ -68,7 +70,11 @@ const ProdDetailPage = ({ productId }: prodProps) => {
     fetchData();
   }, [productId]);
   if (loading) {
-    return <div>loading data...</div>;
+    return (
+      <div className="flex justify-center items-center my-20 h-full">
+                             <BeatLoader color="#123abc" loading={loading} size={16} /> 
+                    </div>
+    )
   }
   return (
     <main className="w-full p-4 md:p-8">
