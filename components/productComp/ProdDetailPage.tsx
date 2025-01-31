@@ -78,10 +78,10 @@ const ProdDetailPage = ({ productId }: prodProps) => {
             <ImageGallery images={prodInfo.imageUrl} />
           </div>
           <div className="space-y-4">
-            <h1 className="text-3xl font-bold text-gray-900">
+            <h1 className="text-3xl font-bold text-gray-900 dark:text-slate-50">
               {prodInfo.name}
             </h1>
-            <p className="text-lg text-gray-600">By {prodInfo.brand}</p>
+            <p className="text-lg text-gray-600 dark:text-slate-200">By {prodInfo.brand}</p>
           
          
             <div className="flex items-center gap-3">
@@ -99,7 +99,7 @@ const ProdDetailPage = ({ productId }: prodProps) => {
                   />
                 ))}
               </div>
-              <span className="text-gray-600">({prodInfo.rating} / 5)</span>
+              <span className="text-gray-600 dark:text-slate-300">({prodInfo.rating} / 5)</span>
             </div>
             <div className="px-2">
             {prodInfo?.isFeatured && (
@@ -131,9 +131,9 @@ const ProdDetailPage = ({ productId }: prodProps) => {
                 </>
               )}
             </div>
-            <p className="text-gray-700">{prodInfo.description}</p>
+            <p className="text-gray-700 dark:text-slate-100">{prodInfo.description}</p>
               <div className="space-y-2">
-              <p className="text-gray-600">Category: {prodInfo.category && prodInfo.category.categoryName}</p>
+              <p className="text-gray-600 dark:text-slate-200">Category: {prodInfo.category && prodInfo.category.categoryName}</p>
               </div>
           </div>
         </div>
