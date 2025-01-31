@@ -27,7 +27,7 @@ const getProfileColor = (name: string) => {
 export const ProdReview: React.FC<ReviewSectionProps> = ({ reviews }) => {
   return (
     <div>
-      <h2 className="text-2xl font-bold text-gray-900 mb-6">
+      <h2 className="text-2xl font-bold text-gray-900 dark:text-slate-50 mb-6">
         Customer Reviews
       </h2>
       <div className="space-y-6">
@@ -40,7 +40,7 @@ export const ProdReview: React.FC<ReviewSectionProps> = ({ reviews }) => {
                 {getInitial(review.user)}
               </div>
               <div className="flex flex-col">
-                <span className="font-medium text-gray-900">{review.user}</span>
+                <span className="font-medium text-gray-900 dark:text-slate-50">{review.user}</span>
                 <div className="flex items-center gap-2">
                   <div className="flex">
                     {[...Array(5)].map((_, i) => (
@@ -54,7 +54,7 @@ export const ProdReview: React.FC<ReviewSectionProps> = ({ reviews }) => {
                 </div>
               </div>
             </div>
-            <p className="text-gray-700 ml-14">{review.comment}</p>
+            <p className="text-gray-700 ml-14 dark:text-slate-200">{review.comment}</p>
           </div>
         ))}
       </div>
