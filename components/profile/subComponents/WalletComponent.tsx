@@ -1,6 +1,6 @@
 "use client";
 
-import { FormEvent, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
 import { Eye, EyeOff, CreditCard, Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -11,6 +11,7 @@ import axios from "axios";
 import { useRouter, useSearchParams } from "next/navigation";
 import BusinessCard from "@/app/components/card/businessCard";
 import StudentCard from "@/app/components/card/studentCard";
+import { getUserBalance } from "@/app/actions/wallet";
 interface Transaction {
   id: number;
   type: string;
@@ -19,7 +20,7 @@ interface Transaction {
 }
 
 export default function WalletComponent() {
-  const [balance, setBalance] = useState(1000);
+  const [balance, setBalance] = useState<number | null>(null);
   const [showBalance, setShowBalance] = useState(false);
   const [topUpAmount, setTopUpAmount] = useState("");
   const [redeemCode, setRedeemCode] = useState("");
@@ -55,6 +56,16 @@ export default function WalletComponent() {
     expiry: "",
     type: "",
   });
+
+  useEffect(() => {
+    async function fetchBalance() {
+      const result = await getUserBalance();
+      if (result.success && result.data) {
+        setBalance(result.data);
+      }
+    }
+    fetchBalance();
+  }, []);
 
   if (!session) {
     return <div>Please login to proceed with the payment.</div>;

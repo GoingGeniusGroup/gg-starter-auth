@@ -3,7 +3,6 @@
 import { currentUser } from "@/app/lib/auth";
 import { cache } from "@/lib/cache";
 import { db } from "@/lib/db";
-import { error } from "console";
 
 export const getUserBalance = cache(
   async () => {
@@ -11,28 +10,27 @@ export const getUserBalance = cache(
       const user = await currentUser();
 
       if (!user || !user.id) {
-        throw new Error("User doesn't exists");
+        throw new Error("User not authenticated");
       }
 
-      const userId = user.id;
-
-      const userBalance = db.user.findUnique({
-        where: { id: userId },
+      const userBalanceResult = await db.user.findUnique({
+        where: { id: user.id },
         select: { balance: true },
       });
 
-      if (!userBalance) {
+      if (!userBalanceResult) {
         throw new Error("User balance not found");
       }
+
       return {
         success: true,
-        data: userBalance,
+        data: userBalanceResult.balance,
       };
     } catch (error) {
-      console.log(error);
+      console.error("Error fetching user balance:", error);
       return {
         success: false,
-        error: "Something went wrong",
+        error: "Failed to fetch user balance",
       };
     }
   },
