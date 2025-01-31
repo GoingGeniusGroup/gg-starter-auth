@@ -17,7 +17,8 @@ export async function savecategory(formData: FormData) {
   const data = {
     categoryName: formData.get("categoryName") as string,
     categoryDescription: formData.get("categoryDescription") as string,
-    categoryImage: formData.getAll("categoryImage") as File[], // Get all the files
+    // categoryImage: formData.getAll("categoryImage") as File[], // Get all the files
+    categoryImage:Array.from(formData.getAll("categoryImage")) as string[]
   };
 
   try {
@@ -31,18 +32,18 @@ export async function savecategory(formData: FormData) {
       return { success: false, message: "Category must be unique" };
     }
 
-    // Process each image
-    const imgPaths = validData.categoryImage ? await Promise.all(
-      validData.categoryImage.map(async (file) => {
-        return await writeImageToDisk(file);
-      })
-    ) : [];
+    // // Process each image
+    // const imgPaths = validData.categoryImage ? await Promise.all(
+    //   validData.categoryImage.map(async (file) => {
+    //     return await writeImageToDisk(file);
+    //   })
+    // ) : [];
 
     const newCategory = await db.category.create({
       data: {
         categoryName: validData.categoryName,
         categoryDescription: validData.categoryDescription,
-        categoryImage: imgPaths, // Save paths as an array
+        categoryImage: validData.categoryImage, 
       },
     });
     revalidatePath("/dashboard/category");
@@ -69,7 +70,9 @@ export async function updateCategory(formData: FormData, categoryid: string) {
   const data = {
     categoryName: formData.get("categoryName") as string,
     categoryDescription: formData.get("categoryDescription") as string,
-    categoryImage: formData.getAll("categoryImage") as File[], // Get all the files
+    // categoryImage: formData.getAll("categoryImage") as File[], // Get all the files
+    categoryImage:Array.from(formData.getAll("categoryImage")) as string[]
+
   }
   try {
     const validData = categorySchema.parse(data);
@@ -94,18 +97,18 @@ export async function updateCategory(formData: FormData, categoryid: string) {
       return { success: false, message: "Category name must be unique" };
     }
 
-    // If new images are uploaded, write them to disk
-    let imgPaths: string[] = [];
-    if (validData.categoryImage && validData.categoryImage.length > 0) {
-      imgPaths = await Promise.all(
-        validData.categoryImage.map(async (file) => {
-          return await writeImageToDisk(file);
-        })
-      );
-    } else {
-      // If no new images, keep the old images
-      imgPaths = category.categoryImage;
-    }
+    // // If new images are uploaded, write them to disk
+    // let imgPaths: string[] = [];
+    // if (validData.categoryImage && validData.categoryImage.length > 0) {
+    //   imgPaths = await Promise.all(
+    //     validData.categoryImage.map(async (file) => {
+    //       return await writeImageToDisk(file);
+    //     })
+    //   );
+    // } else {
+    //   // If no new images, keep the old images
+    //   imgPaths = category.categoryImage;
+    // }
 
     // Update the category in the database
     const updatedCategory = await db.category.update({
@@ -113,7 +116,7 @@ export async function updateCategory(formData: FormData, categoryid: string) {
       data: {
         categoryName: validData.categoryName,
         categoryDescription: validData.categoryDescription,
-        categoryImage: imgPaths, // Save updated paths as an array
+        categoryImage: validData.categoryImage || category.categoryImage
       },
     });
     revalidatePath("/dashboard/category");
@@ -132,7 +135,10 @@ export async function deleteCategory(categoryId:string){
     if (!existingCategory) {
         return { success: false, message: "Category not found" };
       }
-
+    // Delete all products associated with the category
+    await db.product.deleteMany({
+      where: { categoryId: categoryId },
+    });
     // Delete the category
     await db.category.delete({
       where: { id: categoryId },

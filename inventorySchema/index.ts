@@ -10,16 +10,18 @@ export const categorySchema = z.object({
     .string()
     .min(10, "Description should be at least 10 characters")
     .max(500, "Description should not exceed 500 characters"),
-  categoryImage: z
-    .array(
-      z.instanceof(File).refine((file) => ACCEPTED_IMAGE_TYPES.includes(file.type), {
-        message: "Only .jpg, .jpeg, .png, .webp files are accepted",
-      })
-      .refine((file) => file.size <= MAX_FILE_SIZE, {
-        message: "Max file size is 3 MB",
-      })
-    )
-    .optional(), // Allow null for initial state
+  // categoryImage: z
+  //   .array(
+  //     z.instanceof(File).refine((file) => ACCEPTED_IMAGE_TYPES.includes(file.type), {
+  //       message: "Only .jpg, .jpeg, .png, .webp files are accepted",
+  //     })
+  //     .refine((file) => file.size <= MAX_FILE_SIZE, {
+  //       message: "Max file size is 3 MB",
+  //     })
+  //   )
+  //   .optional(), // Allow null for initial state
+  categoryImage: z.array(z.string()).optional() 
+
 });
 
 export type categoryData = z.infer<typeof categorySchema>;
@@ -30,9 +32,10 @@ description: z.string().optional(),
 salePrice: z.number().nonnegative("sale price must be positive").optional(),
 costPrice: z.number().nonnegative("cost price must be positive").optional(),
 stockQuantity: z.number().int().nonnegative().min(0,"stock must be at least 0"),
-productImage: z.array(z.instanceof(File)
-.refine((file)=>ACCEPTED_IMAGE_TYPES.includes(file.type),{message:"Only .jpg, .jpeg, .png, .webp files are accepted"}))
-.optional(),
+// productImage: z.array(z.instanceof(File)
+// .refine((file)=>ACCEPTED_IMAGE_TYPES.includes(file.type),{message:"Only .jpg, .jpeg, .png, .webp files are accepted"}))
+// .optional(),
+productImage: z.array(z.string()).optional() ,
 brand: z.string().optional(),
  rating: z.number().int().min(0).max(5,"rating must be between 0 and 5"),
  category: z.string(),
@@ -71,7 +74,9 @@ export const virtualProdSchema=z.object({
   stockQuantity:z.number().int().nonnegative(),
   type:z.string(),
   categoryId:z.string(),
-  source: z.string().optional()
+  source: z.string().optional(),
+  images: z.array(z.string()).optional() 
+
 })
 
 
