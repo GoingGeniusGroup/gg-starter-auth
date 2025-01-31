@@ -137,9 +137,36 @@ const ProdDetailPage = ({ productId }: prodProps) => {
               </div>
           </div>
         </div>
+        <div className="space-y-8 mt-4 border-t border-gray-200 pt-4">
+  <div className="flex flex-col md:flex-row md:gap-6">
+    <div className="flex items-start gap-3 md:w-1/2">
+      <MapPin className="w-5 h-5 text-gray-500 mt-1" />
+      <div>
+        <h3 className="font-medium text-gray-900">Inventory Location</h3>
+        <p className="text-gray-600">{prodInfo.inventory?.address}</p>
+
+      </div>
+    </div>
+    <div className="flex items-start gap-3 md:w-1/2">
+      <Building2 className="w-5 h-5 text-gray-500 mt-1" />
+      <div>
+        <h3 className="font-medium text-gray-900">Supplier Information</h3>
+        <p className="text-gray-600">{prodInfo.Supplier?.supplierName}</p>
+        <div className="flex items-center gap-1 text-sm text-gray-500">
+          {/* <span>ID: {prodInfo.Supplier?.id}</span> */}
+          <span className="mx-2">•</span>
+          {/* <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" /> */}
+          <span>{prodInfo.Supplier?.rating}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
         <div className="mt-12">
           <ProdReview reviews={prodReview} />
         </div>
+
       </div>
     </main>
   );
