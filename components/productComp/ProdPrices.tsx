@@ -15,11 +15,11 @@ const ProdPrices: React.FC<PriceSectionProps>  = ({
   return (
     <div className='space-y-3'>
         <div className='flex items-center gap-4' >
-        <span className="text-3xl font-bold text-gray-900">
+        <span className="text-3xl font-bold text-gray-900 dark:text-slate-50">
                   ${discountedPrice.toFixed(2)}
                 </span>
                 {discount > 0 && (
-                  <span className="text-lg text-gray-500 line-through">
+                  <span className="text-lg text-gray-500 dark:text-slate-300 line-through">
                     ${salePrice.toFixed(2)}
                   </span>
                 )}
