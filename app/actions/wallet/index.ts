@@ -3,6 +3,7 @@
 import { currentUser } from "@/app/lib/auth";
 import { cache } from "@/lib/cache";
 import { db } from "@/lib/db";
+import { error } from "console";
 
 export const getUserBalance = cache(
   async () => {
@@ -20,6 +21,9 @@ export const getUserBalance = cache(
         select: { balance: true },
       });
 
+      if (!userBalance) {
+        throw new Error("User balance not found");
+      }
       return {
         success: true,
         data: userBalance,
@@ -33,5 +37,5 @@ export const getUserBalance = cache(
     }
   },
   ["getUserBalance"],
-  { revalidate: 60 }
+  { revalidate: 60, tags: ["userBalance"] }
 );
