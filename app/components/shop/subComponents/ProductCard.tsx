@@ -3,6 +3,7 @@ import Image from "next/image";
 import { Button } from "@/components/ui/button/button";
 import { Badge } from "@/components/ui/badge";
 import { Product } from "./types";
+import { FaHeart, FaRegHeart } from "react-icons/fa";
 
 interface ProductCardProps {
   product: Product;
@@ -10,7 +11,9 @@ interface ProductCardProps {
   cartQuantity: number;
   onAddToCart: (productId: number, productType: string) => void;
   onSelectProduct?: (product: Product) => void;
+  onToggleWishlist?: (productId: number) => void;
   productType: "physical" | "virtual";
+  isInWishlist?: boolean;
 }
 
 const ProductCard: React.FC<ProductCardProps> = ({
@@ -19,15 +22,34 @@ const ProductCard: React.FC<ProductCardProps> = ({
   cartQuantity,
   onAddToCart,
   onSelectProduct,
+  onToggleWishlist,
   productType,
+  isInWishlist = false,
 }) => {
   return (
     <div
-      className={`border border-gray-200/30 rounded-lg bg-white text-black shadow-sm cursor-pointer ${
+      className={`relative border border-gray-200/30 rounded-lg bg-white text-black shadow-sm cursor-pointer ${
         isMobile ? "h-[220px]" : "h-[300px]"
       } flex flex-col`}
       onClick={onSelectProduct ? () => onSelectProduct(product) : () => {}}
     >
+      {/* Wishlist Icon */}
+      {onToggleWishlist && (
+        <button
+          className="absolute top-2 right-2 z-10 text-gray-400 hover:text-black transition-colors"
+          onClick={(e) => {
+            e.stopPropagation(); // Prevent triggering card click
+            onToggleWishlist(product.id);
+          }}
+        >
+          {isInWishlist ? (
+            <FaHeart className="h-5 w-5 text-black" />
+          ) : (
+            <FaRegHeart className="h-5 w-5" />
+          )}
+        </button>
+      )}
+
       <div className="relative overflow-hidden h-[222px]">
         <Image
           src={product.images[0]}

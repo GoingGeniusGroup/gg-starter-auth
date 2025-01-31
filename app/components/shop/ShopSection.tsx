@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { ShoppingCart } from "lucide-react";
 import { Button } from "@/components/ui/button/button";
 import { Badge } from "@/components/ui/badge";
@@ -15,7 +15,16 @@ const ShopSection = ({ isMobile }: { isMobile: boolean }) => {
   const [cart, setCart] = useState<Record<string, number>>({});
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState("All");
-
+  const [wishlist, setWishlist] = React.useState<number[]>([]);
+  const productDetailRef = useRef<HTMLDivElement | null>(null);
+  // Function to toggle wishlist
+  const toggleWishlist = (productId: number) => {
+    setWishlist((prev) =>
+      prev.includes(productId)
+        ? prev.filter((id) => id !== productId)
+        : [...prev, productId]
+    );
+  };
   // Get products based on the physical view
   const products = physicalProducts;
 
@@ -145,6 +154,8 @@ const ShopSection = ({ isMobile }: { isMobile: boolean }) => {
             cart={cart}
             onAddToCart={addToCart}
             isMobile={isMobile || false}
+            wishlist={wishlist} // Pass wishlist state
+            onToggleWishlist={toggleWishlist}
           />
         </div>
       </div>
