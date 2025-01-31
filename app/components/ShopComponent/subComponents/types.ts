@@ -9,11 +9,20 @@ export interface Category {
   categoryDescription: string | null;
 }
 
+export interface Product {
+  id: string;
+  name: string;
+  price: number;
+  category: string;
+  description: string;
+  images: string[];
+}
+
 export interface VirtualProduct {
   id: string;
   name: string;
   price: number;
-  type: string;
+  type: string; 
   images: string[];
   rating: number;
   categoryId: string;
@@ -23,7 +32,11 @@ export interface VirtualProduct {
   stockQuantity: number;
 }
 
-export interface CartItem extends VirtualProduct {
+export interface CartItem  {
+  id: string;
+  name: string;
+  price: number;
   quantity: number;
+  images: string[];
   productType: string;
 }

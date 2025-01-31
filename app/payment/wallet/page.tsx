@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import cardLogo from "@/public/assets/card_logos.png";
+import cardLogoTwo from "@/public/assets/card_logo_two.png";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { toast } from "sonner";
@@ -26,15 +27,15 @@ interface CardOption {
 const cardOptions: CardOption[] = [
   {
     id: "cardOne",
-    name: "Wallet Card One (NPR)",
+    name: "Wallet Card",
     image: cardLogo,
-    description: "Pay easily using your saved card in NPR.",
+    description: "Pay easily using your saved card.",
   },
   {
     id: "cardTwo",
-    name: "Wallet Card Two (NPR)",
-    image: cardLogo,
-    description: "Pay easily using your saved card in NPR.",
+    name: "Wallet Card",
+    image: cardLogoTwo,
+    description: "Pay easily using your saved card.",
   },
 ];
 
