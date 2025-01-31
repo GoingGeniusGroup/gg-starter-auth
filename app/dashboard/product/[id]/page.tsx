@@ -1,3 +1,4 @@
+import ProdDetailPage from '@/components/productComp/ProdDetailPage';
 import React from 'react'
 interface prodProps {
     params: {
@@ -7,7 +8,9 @@ interface prodProps {
 const ProductViewPage: React.FC<prodProps>= ({params}) => {
     const {id}=params
   return (
-    <div>ProductPage</div>
+    <div>
+      <ProdDetailPage productId={id}/>
+    </div>
   )
 }
 
