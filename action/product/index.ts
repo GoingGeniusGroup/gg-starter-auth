@@ -189,7 +189,10 @@ export async function getProductDetail(productId:string){
     const product=await db.product.findUnique({
       where:{id:productId},
       include:{
-        category:true
+        category:true,
+        inventory:true,
+        order:true,
+        Tax:true
       }
     })
     return {success:true,data:product}
