@@ -1,6 +1,7 @@
 "use client"
 import { getAllUsers } from '@/action/user';
 import React,{useState,useEffect} from 'react'
+import UserStat from './UserStat';
 
 const UserInfoSection = () => {
      const [userInfo, setUserInfo] = useState<any[]>([]);
@@ -26,7 +27,9 @@ const UserInfoSection = () => {
         fetchData();
     }, []);
   return (
-    <div>UserInfoSection</div>
+    <div>
+        <UserStat userInfo={userInfo}/>
+    </div>
   )
 }
 
