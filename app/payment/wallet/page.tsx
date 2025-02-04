@@ -1,5 +1,6 @@
 "use client";
 import React, { useState, useEffect } from "react";
+import { useSearchParams } from "next/navigation";
 import Image from "next/image";
 import cardLogo from "@/public/assets/card_logos.png";
 import cardLogoTwo from "@/public/assets/card_logo_two.png";
@@ -10,11 +11,12 @@ import { toast } from "sonner";
 interface Item {
   name: string;
   price: number;
-  image: string;
+  images: string[];
 }
 
 interface ItemWithNPR extends Item {
   priceInNPR: string;
+  images: string[];
 }
 
 interface CardOption {
@@ -42,42 +44,41 @@ const cardOptions: CardOption[] = [
 const PaymentPage: React.FC = () => {
   const [selectedMethod, setSelectedMethod] = useState<string | null>(null);
   const [conversionRate, setConversionRate] = useState<number | null>(null);
+  const searchParams = useSearchParams();
 
-  const items: Item[] = [
-    {
-      name: "Selfie",
-      price: 1.99,
-      image:
-        "https://png.pngtree.com/png-vector/20240421/ourmid/pngtree-d-cartoon-style-young-business-man-taking-selfie-on-a-transparent-png-image_12305634.png",
-    },
-    {
-      name: "Anime Song",
-      price: 0.99,
-      image:
-        "https://png.pngtree.com/png-clipart/20230815/original/pngtree-sound-wave-vector-icon-digital-abstract-audio-vector-picture-image_10796636.png",
-    },
-  ];
+  // Parse cart items from URL
+  const cart: Item[] = searchParams.get("cart")
+    ? JSON.parse(decodeURIComponent(searchParams.get("cart")!))
+    : [];
 
-  // Calculate total in USD for reference
-  const totalUSD: string = items
+  console.log(cart);
+
+  // Calculate total in USD
+  const totalUSD: string = cart
     .reduce((acc, item) => acc + item.price, 0)
     .toFixed(2);
 
-  // Calculate total in NPR for each item
+  // Convert prices to NPR
   const itemsInNPR: ItemWithNPR[] = conversionRate
-    ? items.map((item) => ({
+    ? cart.map((item) => ({
         ...item,
         priceInNPR: (item.price * conversionRate).toFixed(2),
+        images: item.images || [],
       }))
-    : (items as ItemWithNPR[]);
+    : cart.map((item) => ({
+        ...item,
+        priceInNPR: "Loading...",
+        images: item.images || [],
+      }));
 
+  // Calculate total in NPR
   const totalNPR: string = conversionRate
     ? itemsInNPR
         .reduce((acc, item) => acc + parseFloat(item.priceInNPR), 0)
         .toFixed(2)
     : "Loading...";
 
-  // Fetch conversion rate (USD to NPR)
+  // Fetch currency conversion rate (USD to NPR)
   useEffect(() => {
     const fetchConversionRate = async (): Promise<void> => {
       try {
@@ -117,7 +118,7 @@ const PaymentPage: React.FC = () => {
               >
                 <div className="flex items-center">
                   <img
-                    src={item.image}
+                    src={item.images?.[0]}
                     alt={item.name}
                     className="mr-3 w-16 h-16 rounded-md"
                   />
