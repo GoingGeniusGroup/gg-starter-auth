@@ -40,3 +40,37 @@ export const getUserBalance = cache(
   ["getUserBalance"],
   { revalidate: 60, tags: ["userBalance"] }
 );
+
+export const updateUserBalance = async (userId: string, amount: number) => {
+  try {
+    // Find the user and deduct the amount
+    const user = await db.user.findUnique({
+      where: { id: userId },
+      select: { balance: true },
+    });
+
+    if (!user) {
+      throw new Error("User not found");
+    }
+
+    if (user.balance === null) {
+      throw new Error("User balance is null");
+    }
+    const newBalance = user.balance - amount;
+
+    if (newBalance < 0) {
+      throw new Error("Insufficient balance for the transaction");
+    }
+
+    // Update the balance in the database
+    await db.user.update({
+      where: { id: userId },
+      data: { balance: newBalance },
+    });
+
+    return { success: true, newBalance };
+  } catch (error) {
+    console.error("Error updating balance:", error);
+    throw new Error("Failed to update balance");
+  }
+};

@@ -7,6 +7,9 @@ import cardLogoTwo from "@/public/assets/card_logo_two.png";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { toast } from "sonner";
+import { getUserBalance } from "@/app/actions/wallet";
+import { updateUserBalance } from "@/app/actions/wallet";
+import { useSession } from "next-auth/react";
 
 interface Item {
   name: string;
@@ -45,6 +48,8 @@ const PaymentPage: React.FC = () => {
   const [selectedMethod, setSelectedMethod] = useState<string | null>(null);
   const [conversionRate, setConversionRate] = useState<number | null>(null);
   const searchParams = useSearchParams();
+  const { data: session } = useSession();
+  const userId = session?.user.id;
 
   // Parse cart items from URL
   const cart: Item[] = searchParams.get("cart")
@@ -97,8 +102,40 @@ const PaymentPage: React.FC = () => {
 
   const handleCheckout = async (): Promise<void> => {
     if (selectedMethod) {
-      toast.success(`Payment Successful! Total paid: NPR ${totalNPR}`);
-      window.location.href = "/";
+      try {
+        // Get user balance
+        const balanceResponse = await getUserBalance();
+
+        if (!balanceResponse.success) {
+          toast.error("Failed to fetch user balance");
+          return;
+        }
+
+        const userBalance = balanceResponse.data;
+
+        // Convert totalNPR to a number for comparison
+        const totalAmountNPR = parseFloat(totalNPR);
+
+        if (
+          userBalance !== null &&
+          userBalance !== undefined &&
+          userBalance >= totalAmountNPR
+        ) {
+          toast.success(`Payment Successful! Total paid: NPR ${totalNPR}`);
+
+          if (userId) {
+            await updateUserBalance(userId, totalAmountNPR);
+            window.location.href = "/";
+          } else {
+            toast.error("User ID is missing.");
+          }
+        } else {
+          toast.warning("Insufficient balance to complete the payment.");
+        }
+      } catch (error) {
+        console.error("Error checking balance:", error);
+        toast.error("An error occurred while checking balance.");
+      }
     } else {
       toast.warning("Please select a payment method.");
     }
