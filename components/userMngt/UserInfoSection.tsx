@@ -2,6 +2,7 @@
 import { getAllUsers } from '@/action/user';
 import React,{useState,useEffect} from 'react'
 import UserStat from './UserStat';
+import UserTable from './UserTable';
 
 const UserInfoSection = () => {
      const [userInfo, setUserInfo] = useState<any[]>([]);
@@ -29,6 +30,7 @@ const UserInfoSection = () => {
   return (
     <div>
         <UserStat userInfo={userInfo}/>
+        <UserTable userInfo={userInfo}/>
     </div>
   )
 }
