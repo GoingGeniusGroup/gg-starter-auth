@@ -59,3 +59,15 @@ export async function updateUserDetail(formData:FormData,userId:string){
       }
 
 }
+
+//get all user info 
+export async function getAllUsers(){
+    try{
+        const users = await db.user.findMany()
+        return { success: true, data: users }
+    }
+    catch(error){
+        console.error("unexpected error occured",error)
+        return { success: false, message: 'An unexpected error occurred' }
+    }
+}
