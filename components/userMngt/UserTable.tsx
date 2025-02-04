@@ -25,7 +25,7 @@ const UserTable = ({userInfo}:UserProps) => {
               <TableHead>UserName</TableHead>
               <TableHead>FullName</TableHead>
               <TableHead>Role</TableHead>
-
+              <TableHead>Balance</TableHead>
               <TableHead>Email</TableHead>
               <TableHead>Phone</TableHead>
               <TableHead>Address</TableHead>
@@ -37,14 +37,12 @@ const UserTable = ({userInfo}:UserProps) => {
               <TableRow key={user.id}>
                 <TableCell>{index + 1}</TableCell>
                 <TableCell className="text-blue-500">{user.userName}</TableCell>
-                <TableCell >{user.fullName}</TableCell>
+                <TableCell >{user.fullName ? user.fullName : 'N/A'}</TableCell>
                 <TableCell >{user.role}</TableCell>
-
+                <TableCell >{user.balance ? user.balance : "-"}</TableCell>
                 <TableCell >{user.email[0]}</TableCell>
                 <TableCell >{user.mobilePhone[0]}</TableCell>
-                <TableCell >{user.address[0]}</TableCell>
-
-
+                <TableCell >{user.address[0]? user.address :"N/A"}</TableCell>
                 <TableCell>
                   <div className="flex space-x-2">
                     <button
