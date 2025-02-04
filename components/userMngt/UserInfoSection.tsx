@@ -3,6 +3,7 @@ import { getAllUsers } from '@/action/user';
 import React,{useState,useEffect} from 'react'
 import UserStat from './UserStat';
 import UserTable from './UserTable';
+import BeatLoader from "react-spinners/BeatLoader"; 
 
 const UserInfoSection = () => {
      const [userInfo, setUserInfo] = useState<any[]>([]);
@@ -27,6 +28,13 @@ const UserInfoSection = () => {
         }
         fetchData();
     }, []);
+    if (loading) {
+      return (
+        <div className="flex justify-center items-center my-20 h-full">
+                               <BeatLoader color='#498d7f' loading={loading} size={16} /> 
+                      </div>
+      )
+    }
   return (
     <div>
         <UserStat userInfo={userInfo}/>
