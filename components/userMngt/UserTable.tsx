@@ -1,4 +1,6 @@
-import React from "react";
+import React,{useState} from "react";
+import { revalidatePath } from "next/cache"
+import { useRouter } from "next/navigation";
 import {
   Table,
   TableBody,
@@ -7,15 +9,44 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table1";
+import { toast } from "sonner";
+
 import Link from "next/link";
 import { Input } from "@/components/ui/input1";
 import { LuListFilter } from "react-icons/lu";
 import { BiShow } from "react-icons/bi";
 import { FaEdit, FaTrash, FaPlus } from "react-icons/fa";
+import { removeUser } from "@/action/user";
 interface UserProps {
   userInfo: any[];
 }
 const UserTable = ({ userInfo }: UserProps) => {
+  const router = useRouter();
+  const deleteUser=async(userId:string)=>{
+
+    const confirmed = window.confirm("Are you sure you want to delete  this user account?");
+    if(confirmed){
+      try{
+        const response=await removeUser(userId)
+        if(response.success){
+          toast.success("user deleted successfully")
+          router.refresh();
+          // window.location.reload(); 
+
+
+          // setUserInfo((prevUsers) => prevUsers.filter(user => user.id !== userId));
+          
+        }
+        else{
+           console.error("Failed to delete user");
+            toast.error("Failed to delete user");
+        }
+      } catch(error){
+        console.error("Failed to delete user",error);
+        toast.error("Failed to delete user");
+      }
+    }
+  }
   return (
     <div>
       <Table className="w-full border-collapse border shadow rounded">
@@ -61,6 +92,7 @@ const UserTable = ({ userInfo }: UserProps) => {
                     </Link>
 
                   <button
+                  onClick={() => deleteUser(user.id)}
                     className="text-red-500 hover:text-red-700 text-xl"
                     aria-label="Delete"
                   >
