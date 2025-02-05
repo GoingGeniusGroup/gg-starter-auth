@@ -100,6 +100,11 @@ const PaymentPage: React.FC = () => {
     fetchConversionRate();
   }, []);
 
+  // Generate transaction id
+  const generateTransactionId = () => {
+    return `TXN-${userId}-${Date.now()}-${Math.floor(Math.random() * 10000)}`;
+  };
+
   const handleCheckout = async (): Promise<void> => {
     if (selectedMethod) {
       try {
@@ -121,11 +126,14 @@ const PaymentPage: React.FC = () => {
           userBalance !== undefined &&
           userBalance >= totalAmountNPR
         ) {
+          const transactionId = generateTransactionId();
+          const sessionId = `session_${Date.now()}`;
+
           toast.success(`Payment Successful! Total paid: NPR ${totalNPR}`);
 
           if (userId) {
             await updateUserBalance(userId, totalAmountNPR);
-            window.location.href = "/";
+            window.location.href = `${process.env.NEXT_PUBLIC_APP_URL}/success?session_id=${sessionId}&transaction_id=${transactionId}&amount=${totalAmountNPR}`;
           } else {
             toast.error("User ID is missing.");
           }
