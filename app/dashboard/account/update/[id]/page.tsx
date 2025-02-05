@@ -7,6 +7,7 @@ import { FileUploaderRegular } from "@uploadcare/react-uploader";
 import "@uploadcare/react-uploader/core.css";
 import { updateUserDetail ,getUserDetail} from '@/action/user';
 import Image from 'next/image';
+import Link from 'next/link';
 interface UserData {
     fullName?: string;
     userName?: string[];
@@ -183,12 +184,15 @@ const UpdateUser: React.FC<UserProps> = ({params}) => {
             />
 
             <div className='flex justify-between items-center gap-3 mt-4 mb-6'>
-            <button
+                <Link href="/dashboard/account" className='w-full'>
+                <button
                     type="button"
-                    className="px-6 py-3  w-full text-sm font-medium text-white bg-red-500 rounded-md hover:bg-red-600"
+                    className="px-6 py-3 w-full text-sm font-medium text-white bg-red-500 rounded-md hover:bg-red-600"
                 >
                     Cancel
                 </button>
+                </Link>
+           
                 <button
                     type="submit" 
                     value="submit"
