@@ -71,3 +71,24 @@ export async function getAllUsers(){
         return { success: false, message: 'An unexpected error occurred' }
     }
 }
+
+export async function removeUser(userId:string){
+  try{
+    const existingUser=await db.user.findUnique({
+      where:{id:userId}
+  })
+  if(!existingUser){
+    return {success:false,message:"User not found"}
+  }
+  await db.user.delete({
+    where:{id:userId}
+  })
+  return{success:true,message:"User deleted successfully"}
+}
+  catch(error){
+    console.error("unexpected error occured",error)
+    return { success: false, message: 'An unexpected error occurred' }
+
+  }
+
+}
