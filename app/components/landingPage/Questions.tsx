@@ -10,8 +10,7 @@ const faqs = [
   },
   {
     question: "Can I use the POS system offline?",
-    answer:
-      "Yes, our POS system supports offline mode. Transactions made offline will sync automatically when you’re back online.",
+    answer: "No, our POS system doesn't supports offline mode yet.",
   },
   {
     question: "Is the POS system secure?",
@@ -31,6 +30,12 @@ const faqs = [
 ];
 
 const Questions = () => {
+  const [activeIndex, setActiveIndex] = useState<number | null>(null);
+
+  const toggleQuestion = (index: number) => {
+    setActiveIndex((prevIndex) => (prevIndex === index ? null : index));
+  };
+
   return (
     <div className="flex flex-col mb-24">
       <div className="max-w-2xl mx-auto">
@@ -41,8 +46,29 @@ const Questions = () => {
           We`ve complied a list of the most common questions we get asked. If
           you have any other questions, please feel free to reach out to us
         </p>
+      </div>
+      <div className="space-y-4">
+        {faqs.map((item, index) => (
+          <div key={index} className="border rounded-md shadow-md">
+            <button
+              className="w-full rounded-t-md text-left p-4 focus:outline-none bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-transform ease-in-out"
+              onClick={() => toggleQuestion(index)}
+            >
+              <div className="flex justify-between items-center">
+                <span className="font-medium">{item.question}</span>
+                <span className="text-xl">
+                  {activeIndex === index ? "−" : "+"}
+                </span>
+              </div>
+            </button>
 
-        <div></div>
+            {activeIndex === index && (
+              <div className="p-4 rounded-b-md text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-900 border-t">
+                {item.answer}
+              </div>
+            )}
+          </div>
+        ))}
       </div>
     </div>
   );
