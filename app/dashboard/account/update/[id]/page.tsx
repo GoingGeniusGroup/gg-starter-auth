@@ -8,6 +8,8 @@ import "@uploadcare/react-uploader/core.css";
 import { updateUserDetail ,getUserDetail} from '@/action/user';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useTheme } from "next-themes";
+import { toast } from "sonner";
 interface UserData {
     fullName?: string;
     userName?: string[];
@@ -29,6 +31,7 @@ const UpdateUser: React.FC<UserProps> = ({params}) => {
       const [uploadedImgUrls, setUploadedImgUrls] = useState<string[]>([]);
         const [allImages, setAllImages] = useState<string[]>([]);
             const [loading, setLoading] = useState<boolean>(true);
+            const {theme}=useTheme()
             const { register, handleSubmit, reset } = useForm<any>();
               useEffect(() => {
                     async function fetchData() {
@@ -71,6 +74,7 @@ const UpdateUser: React.FC<UserProps> = ({params}) => {
                         if (response.success) {
                             console.log('user updated')
                             setUserInfo(response.data);
+                          toast.success("Your profile has been updated successfully")
                             
                         } else {
                             console.error(response.message);
@@ -171,7 +175,8 @@ const UpdateUser: React.FC<UserProps> = ({params}) => {
             <FileUploaderRegular
                 multiple
                 sourceList="local, url, gdrive"
-                classNameUploader="uc-light"
+                classNameUploader={theme === "dark" ? "uc-dark" : "uc-light"}
+
                 pubkey={`${uploadkey}`}
                 imgOnly={true}
                 onChange={(event) => {
