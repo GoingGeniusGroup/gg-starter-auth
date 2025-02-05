@@ -3,6 +3,7 @@ import HeroSection from "@/components/landingPage/HeroSection";
 import About from "../components/landingPage/About";
 import Service from "../components/landingPage/Service";
 import Banner from "../components/landingPage/Banner";
+import Testimonials from "../components/landingPage/Testimonials";
 
 export const metadata: Metadata = {
   title: "Home",
@@ -15,6 +16,7 @@ export default async function Home() {
       <About />
       <Service />
       <Banner />
+      <Testimonials />
     </div>
   );
 }

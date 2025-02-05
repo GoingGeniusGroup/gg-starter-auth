@@ -1,14 +1,7 @@
 import React from "react";
 import bell from "@/public/assets/Bell.svg";
 import Image from "next/image";
-import {
-  HardDrive,
-  Truck,
-  CircleDollarSign,
-  User,
-  Users,
-  Check,
-} from "lucide-react";
+import { User, Users, Check } from "lucide-react";
 
 const banner = [
   {
@@ -31,7 +24,7 @@ const banner = [
 const Banner = () => {
   return (
     <div className="flex flex-col lg:flex-row items-center justify-between gap-12 mb-24">
-      <div className="lg:w-1/2">
+      <div className="lg:w-2/3">
         <h2 className="text-4xl font-semibold pb-6 gradient-title">
           Innovative Solutions, Diverse Success Across Industries.
         </h2>
@@ -41,7 +34,7 @@ const Banner = () => {
           fuels our
         </p>
 
-        <div className="md:flex items-center justify-start gap-6">
+        <div className="md:flex items-center justify-start gap-8">
           {banner.map((item, index) => (
             <div key={index} className="flex items-center gap-2 mb-4">
               {item.icon}
@@ -55,7 +48,7 @@ const Banner = () => {
           ))}
         </div>
       </div>
-      <div className="lg:w-1/2">
+      <div className="lg:w-1/3">
         <Image
           src={"/assets/bell.png"}
           alt="dashboard"
