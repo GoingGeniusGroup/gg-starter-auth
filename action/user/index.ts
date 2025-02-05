@@ -59,3 +59,36 @@ export async function updateUserDetail(formData:FormData,userId:string){
       }
 
 }
+
+//get all user info 
+export async function getAllUsers(){
+    try{
+        const users = await db.user.findMany()
+        return { success: true, data: users }
+    }
+    catch(error){
+        console.error("unexpected error occured",error)
+        return { success: false, message: 'An unexpected error occurred' }
+    }
+}
+
+export async function removeUser(userId:string){
+  try{
+    const existingUser=await db.user.findUnique({
+      where:{id:userId}
+  })
+  if(!existingUser){
+    return {success:false,message:"User not found"}
+  }
+  await db.user.delete({
+    where:{id:userId}
+  })
+  return{success:true,message:"User deleted successfully"}
+}
+  catch(error){
+    console.error("unexpected error occured",error)
+    return { success: false, message: 'An unexpected error occurred' }
+
+  }
+
+}
