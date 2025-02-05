@@ -17,10 +17,10 @@ const About = () => {
         />
       </div>
       <div className="lg:w-1/2">
-        <h1 className="text-4xl font-extrabold pb-6 gradient-title">
+        <h2 className="text-4xl font-semibold pb-6 gradient-title">
           Transform your POS, Next-Level Experience
-        </h1>
-        <p className="text-xl text-gray-600 dark:text-gray-300 mb-10">
+        </h2>
+        <p className="text-lg text-gray-600 dark:text-gray-300 mb-10">
           Transforming the way you conduct transcations, taking your
           Point-of-Sale system to the next level means more than just an
           upgradecustomer experiences, and unlocking new potentials
