@@ -11,6 +11,9 @@ const About = () => {
           alt="dashboard"
           width={500}
           height={500}
+          objectFit="cover"
+          loading="lazy"
+          decoding="async"
         />
       </div>
       <div className="lg:w-1/2">
