@@ -10,6 +10,8 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useTheme } from "next-themes";
 import { toast } from "sonner";
+import BeatLoader from "react-spinners/BeatLoader";
+
 interface UserData {
     fullName?: string;
     userName?: string[];
@@ -25,6 +27,8 @@ interface UserProps{
 }
 const UpdateUser: React.FC<UserProps> = ({params}) => {
     const {id}=params
+        const router = useRouter();
+    
         const [userInfo, setUserInfo] = useState<any>(null);
         const uploadkey = process.env.NEXT_PUBLIC_UPLOADCARE_PUBLIC_KEY;
 
@@ -75,7 +79,8 @@ const UpdateUser: React.FC<UserProps> = ({params}) => {
                             console.log('user updated')
                             setUserInfo(response.data);
                           toast.success("Your profile has been updated successfully")
-                            
+                          router.push(`/dashboard/account`);
+ 
                         } else {
                             console.error(response.message);
                         }
@@ -85,7 +90,11 @@ const UpdateUser: React.FC<UserProps> = ({params}) => {
                     
                 };
         if(loading){
-            return <div>Loading...</div>
+            return (
+                <div className="flex justify-center items-center h-screen">
+                <BeatLoader color="#123abc" loading={loading} size={16} /> 
+            </div>
+            )
         }
   return (
     <div className="flex justify-center items-center ">
