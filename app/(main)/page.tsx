@@ -16,7 +16,12 @@ export default async function Home() {
       <About />
       <Service />
       <Banner />
-      <Testimonials />
+      <div className="mb-24">
+        <h2 className="text-4xl font-semi-bold mb-12 gradient-title">
+          What our users say
+        </h2>
+        <Testimonials />
+      </div>
     </div>
   );
 }

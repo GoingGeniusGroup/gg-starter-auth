@@ -16,14 +16,14 @@ const testimonials = [
     role: "Retail Store Owner",
     content:
       "This POS system has completely streamlined my inventory and sales process. It's fast, reliable, and easy to use—perfect for managing my store efficiently!",
-    image: "https://i.pravatar.cc/150?img=5",
+    image: "https://i.pravatar.cc/150?img=6",
   },
   {
     name: "Anita Gurung",
     role: "Cafe Manager",
     content:
       "The reloadable card feature is a game-changer! Our customers love the convenience, and it has made transactions smoother than ever.",
-    image: "https://i.pravatar.cc/150?img=6",
+    image: "https://i.pravatar.cc/150?img=5",
   },
   {
     name: "Suman Thapa",
@@ -57,7 +57,7 @@ const Testimonials = () => {
           <CarouselItem key={index} className="md:basis-1/2 lg:basis-1/3">
             <Card className="h-full">
               <CardContent className="flex flex-col justify-between h-full p-6">
-                <p className="text-gray-600 mb-4">
+                <p className="dark:text-gray-300 text-gray-600 mb-4">
                   &quot;{testimonial.content}&quot;
                 </p>
                 <div className="flex items-center mt-4">
@@ -75,7 +75,9 @@ const Testimonials = () => {
                   </Avatar>
                   <div>
                     <p className="font-semibold">{testimonial.name}</p>
-                    <p className="text-sm text-gray-500">{testimonial.role}</p>
+                    <p className="text-sm dark:text-gray-300 text-gray-500">
+                      {testimonial.role}
+                    </p>
                   </div>
                 </div>
               </CardContent>
