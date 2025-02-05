@@ -83,132 +83,127 @@ const UpdateUser: React.FC<UserProps> = ({params}) => {
             return <div>Loading...</div>
         }
   return (
-    <div>
-          <div className='rounded-lg shadow  shadow-gray-300 dark:shadow-gray-50 p-6 dark:bg-black'>
-                    <h2 className="text-xl mb-3 font-semibold">Profile Information</h2>
-        
-                    <form onSubmit={handleSubmit(onSubmit)}>
-                        <div className='space-y-2 mb-2'>
-                            <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 capitalize">
-                                Full Name
-                            </label>
-                            
-                                <input
-                                    type="text"
-                                    {...register("fullName")}
-                                    className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500"
-                                />
-                           
-                        </div>
-                        <div className='space-y-2 mb-2'>
-                            <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 capitalize">
-                                User Name
-                            </label>
-                    
-                                <input
-                                    type="text"
-                                    {...register("userName.0")}
-                                    className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500"
-                                />
-                           
-                        </div>
-        
-                        <div className='space-y-2 mb-2'>
-                            <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 capitalize">
-                                Email
-                            </label>
-                        
-                                <input
-                                    type="email"
-                                    {...register("email.0")}
-                                    className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500"
-                                />
-                           
-                        </div>
-        
-                        <div className='space-y-2 mb-2'>
-                            <label className="block text-sm dark:text-slate-100 font-medium text-gray-700 capitalize">
-                                Mobile Phone
-                            </label>
-                            
-                                <input
-                                    type="text"
-                                    {...register("mobilePhone.0")}
-                                    className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500"
-                                />
-                           
-                        </div>
-        
-                        <div className='space-y-2 mb-2'>
-                            <label className="block text-sm font-medium dark:text-slate-300 text-gray-700 capitalize">
-                                Address
-                            </label>
-                            
-                                <input
-                                    type="text"
-                                    {...register("address.0")}
-                                    className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500"
-                                />
-                           
-                        </div>
-                    
-                            <label className="block text-sm font-medium dark:text-slate-300 text-gray-700 capitalize">
-                                Image
-                            </label>
-                            <div className="flex gap-4 flex-wrap mt-2 mb-2">
-                                          {allImages.map((url, index) => (
-                                            <div key={index} className="relative">
-                                              <Image
-                                                src={url}
-                                                alt={`Image ${index + 1}`}
-                                                width={96}
-                                                height={96}
-                                                className="object-cover rounded border"
-                                              />
-                                              <button
-                                                type="button"
-                                                onClick={() => handleRemoveImage(index)}
-                                                className="absolute top-0 right-0 bg-red-500 text-white rounded-full p-1 text-xs"
-                                              >
-                                                ×
-                                              </button>
-                                            </div>
-                                          ))}
-                                        </div>
-                               <FileUploaderRegular
-                                              multiple
-                                              sourceList="local, url, gdrive"
-                                              classNameUploader="uc-light"
-                                              pubkey={`${uploadkey}`}
-                                              imgOnly={true}
-                            
-                                              onChange={(event) => {
-                                                const files = event.successEntries;
-                                                if (files.length > 0) {
-                                                  const urls = files.map(file => file.cdnUrl); 
-                                                  setUploadedImgUrls(urls); 
-                                                }
-                                              }}
-                                            />
-        
-                    
-        
-                        <div className='flex  justify-between items-center mt-4 mb-6'>
-           
+    <div className="flex justify-center items-center ">
+    <div className="rounded-lg shadow shadow-gray-300 my-4 dark:shadow-gray-50 p-6 bg-white dark:bg-black w-full max-w-lg">
+        <h2 className="text-xl mb-3 font-semibold text-center">Profile Information</h2>
+
+        <form onSubmit={handleSubmit(onSubmit)}>
+            <div className='space-y-2 mb-2'>
+                <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 capitalize">
+                    Full Name
+                </label>
+                <input
+                    type="text"
+                    {...register("fullName")}
+                    className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500"
+                />
+            </div>
+
+            <div className='space-y-2 mb-2'>
+                <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 capitalize">
+                    User Name
+                </label>
+                <input
+                    type="text"
+                    {...register("userName.0")}
+                    className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500"
+                />
+            </div>
+
+            <div className='space-y-2 mb-2'>
+                <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 capitalize">
+                    Email
+                </label>
+                <input
+                    type="email"
+                    {...register("email.0")}
+                    className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500"
+                />
+            </div>
+
+            <div className='space-y-2 mb-2'>
+                <label className="block text-sm dark:text-slate-100 font-medium text-gray-700 capitalize">
+                    Mobile Phone
+                </label>
+                <input
+                    type="text"
+                    {...register("mobilePhone.0")}
+                    className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500"
+                />
+            </div>
+
+            <div className='space-y-2 mb-2'>
+                <label className="block text-sm font-medium dark:text-slate-300 text-gray-700 capitalize">
+                    Address
+                </label>
+                <input
+                    type="text"
+                    {...register("address.0")}
+                    className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500"
+                />
+            </div>
+
+            <label className="block text-sm font-medium dark:text-slate-300 text-gray-700 capitalize">
+                Image
+            </label>
+            <div className="flex gap-4 flex-wrap mt-2 mb-2">
+                {allImages.map((url, index) => (
+                    <div key={index} className="relative">
+                        <Image
+                            src={url}
+                            alt={`Image ${index + 1}`}
+                            width={96}
+                            height={96}
+                            className="object-cover rounded border"
+                        />
+                        <button
+                            type="button"
+                            onClick={() => handleRemoveImage(index)}
+                            className="absolute top-0 right-0 bg-red-500 text-white rounded-full p-1 text-xs"
+                        >
+                            ×
+                        </button>
+                    </div>
+                ))}
+            </div>
+
+            <FileUploaderRegular
+                multiple
+                sourceList="local, url, gdrive"
+                classNameUploader="uc-light"
+                pubkey={`${uploadkey}`}
+                imgOnly={true}
+                onChange={(event) => {
+                    const files = event.successEntries;
+                    if (files.length > 0) {
+                        const urls = files.map(file => file.cdnUrl);
+                        setUploadedImgUrls(urls);
+                    }
+                }}
+            />
+
+            <div className='flex justify-between items-center gap-3 mt-4 mb-6'>
+            <button
+                    type="button"
+                    className="px-6 py-3  w-full text-sm font-medium text-white bg-red-500 rounded-md hover:bg-red-600"
+                >
+                    Cancel
+                </button>
+                <button
+                    type="submit" 
+                    value="submit"
+                    className="px-6 w-full py-3 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700"
+                >
+                    Submit
+                </button>
                 
-                    <button
-                        type="submit" 
-                        value="submit"
-                        className="px-6 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700"
-                    />
-            
-                  
                 
-        </div>
-        
-                    </form>
-                </div>
+              
+            </div>
+        </form>
     </div>
+</div>
+
   )
 }
 
