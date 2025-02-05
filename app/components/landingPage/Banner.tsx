@@ -48,7 +48,7 @@ const Banner = () => {
           ))}
         </div>
       </div>
-      <div className="lg:w-1/3">
+      <div className="max-lg:hidden lg:w-1/3">
         <Image
           src={"/assets/bell.png"}
           alt="dashboard"

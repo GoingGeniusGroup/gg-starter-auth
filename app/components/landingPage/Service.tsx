@@ -42,7 +42,7 @@ const Service = () => {
         {services.map((item, index) => (
           <div
             key={index}
-            className="flex flex-col items-center justify-center p-6 border rounded-xl shadow-md hover:shadow-lg transition duration-300 bg-white dark:bg-gray-800"
+            className="flex flex-col items-center justify-center px-12 py-6 md:py-6 md:px-6 border rounded-xl shadow-md hover:shadow-lg transition duration-300 bg-white dark:bg-gray-800"
           >
             {item.icon}
             <h3 className="mt-4 text-xl font-medium text-gray-800 dark:text-gray-200">
