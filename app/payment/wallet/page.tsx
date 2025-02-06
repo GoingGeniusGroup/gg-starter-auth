@@ -1,20 +1,25 @@
 "use client";
 import React, { useState, useEffect } from "react";
+import { useSearchParams } from "next/navigation";
 import Image from "next/image";
 import cardLogo from "@/public/assets/card_logos.png";
 import cardLogoTwo from "@/public/assets/card_logo_two.png";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { toast } from "sonner";
+import { getUserBalance } from "@/app/actions/wallet";
+import { updateUserBalance } from "@/app/actions/wallet";
+import { useSession } from "next-auth/react";
 
 interface Item {
   name: string;
   price: number;
-  image: string;
+  images: string[];
 }
 
 interface ItemWithNPR extends Item {
   priceInNPR: string;
+  images: string[];
 }
 
 interface CardOption {
@@ -42,42 +47,43 @@ const cardOptions: CardOption[] = [
 const PaymentPage: React.FC = () => {
   const [selectedMethod, setSelectedMethod] = useState<string | null>(null);
   const [conversionRate, setConversionRate] = useState<number | null>(null);
+  const searchParams = useSearchParams();
+  const { data: session } = useSession();
+  const userId = session?.user.id;
 
-  const items: Item[] = [
-    {
-      name: "Selfie",
-      price: 1.99,
-      image:
-        "https://png.pngtree.com/png-vector/20240421/ourmid/pngtree-d-cartoon-style-young-business-man-taking-selfie-on-a-transparent-png-image_12305634.png",
-    },
-    {
-      name: "Anime Song",
-      price: 0.99,
-      image:
-        "https://png.pngtree.com/png-clipart/20230815/original/pngtree-sound-wave-vector-icon-digital-abstract-audio-vector-picture-image_10796636.png",
-    },
-  ];
+  // Parse cart items from URL
+  const cart: Item[] = searchParams.get("cart")
+    ? JSON.parse(decodeURIComponent(searchParams.get("cart")!))
+    : [];
 
-  // Calculate total in USD for reference
-  const totalUSD: string = items
+  console.log(cart);
+
+  // Calculate total in USD
+  const totalUSD: string = cart
     .reduce((acc, item) => acc + item.price, 0)
     .toFixed(2);
 
-  // Calculate total in NPR for each item
+  // Convert prices to NPR
   const itemsInNPR: ItemWithNPR[] = conversionRate
-    ? items.map((item) => ({
+    ? cart.map((item) => ({
         ...item,
         priceInNPR: (item.price * conversionRate).toFixed(2),
+        images: item.images || [],
       }))
-    : (items as ItemWithNPR[]);
+    : cart.map((item) => ({
+        ...item,
+        priceInNPR: "Loading...",
+        images: item.images || [],
+      }));
 
+  // Calculate total in NPR
   const totalNPR: string = conversionRate
     ? itemsInNPR
         .reduce((acc, item) => acc + parseFloat(item.priceInNPR), 0)
         .toFixed(2)
     : "Loading...";
 
-  // Fetch conversion rate (USD to NPR)
+  // Fetch currency conversion rate (USD to NPR)
   useEffect(() => {
     const fetchConversionRate = async (): Promise<void> => {
       try {
@@ -94,10 +100,50 @@ const PaymentPage: React.FC = () => {
     fetchConversionRate();
   }, []);
 
+  // Generate transaction id
+  const generateTransactionId = () => {
+    return `TXN-${userId}-${Date.now()}-${Math.floor(Math.random() * 10000)}`;
+  };
+
   const handleCheckout = async (): Promise<void> => {
     if (selectedMethod) {
-      toast.success(`Payment Successful! Total paid: NPR ${totalNPR}`);
-      window.location.href = "/";
+      try {
+        // Get user balance
+        const balanceResponse = await getUserBalance();
+
+        if (!balanceResponse.success) {
+          toast.error("Failed to fetch user balance");
+          return;
+        }
+
+        const userBalance = balanceResponse.data;
+
+        // Convert totalNPR to a number for comparison
+        const totalAmountNPR = parseFloat(totalNPR);
+
+        if (
+          userBalance !== null &&
+          userBalance !== undefined &&
+          userBalance >= totalAmountNPR
+        ) {
+          const transactionId = generateTransactionId();
+          const sessionId = `session_${Date.now()}`;
+
+          toast.success(`Payment Successful! Total paid: NPR ${totalNPR}`);
+
+          if (userId) {
+            await updateUserBalance(userId, totalAmountNPR);
+            window.location.href = `${process.env.NEXT_PUBLIC_APP_URL}/success?session_id=${sessionId}&transaction_id=${transactionId}&amount=${totalAmountNPR}`;
+          } else {
+            toast.error("User ID is missing.");
+          }
+        } else {
+          toast.warning("Insufficient balance to complete the payment.");
+        }
+      } catch (error) {
+        console.error("Error checking balance:", error);
+        toast.error("An error occurred while checking balance.");
+      }
     } else {
       toast.warning("Please select a payment method.");
     }
@@ -117,7 +163,7 @@ const PaymentPage: React.FC = () => {
               >
                 <div className="flex items-center">
                   <img
-                    src={item.image}
+                    src={item.images?.[0]}
                     alt={item.name}
                     className="mr-3 w-16 h-16 rounded-md"
                   />

@@ -143,12 +143,15 @@ const ProductTable = () => {
 
                 <TableCell>
                   <div className="flex space-x-2">
+                    <Link href={`/dashboard/product/${product.id}`}>
                     <button
                       className="text-green-500 hover:text-green-700 text-xl"
                       aria-label="view"
                     >
                       <BiShow />
                     </button>
+                    </Link>
+                    
                     <Link href={`/dashboard/product/update/${product.id}`}>
                       <button
                         className="text-blue-500 hover:text-blue-700 text-xl"

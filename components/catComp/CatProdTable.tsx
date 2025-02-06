@@ -12,6 +12,7 @@ import {
     products:any[]
   }
   import { BiShow } from "react-icons/bi";
+import Link from 'next/link';
   const truncateText = (text: string, maxLength: number): string => {
     if (!text) return "N/A";
     return text.length > maxLength ? text.substring(0, maxLength) + "..." : text;
@@ -45,12 +46,14 @@ const CatProdTable = ({products}:categoryProps) => {
 
                 <TableCell>
                   <div className="flex space-x-2">
+                  <Link href={`/dashboard/product/${product.id}`}>
                     <button
                       className="text-green-500 hover:text-green-700 text-xl"
                       aria-label="view"
                     >
                       <BiShow />
                     </button>
+                    </Link>
                   
 
                     

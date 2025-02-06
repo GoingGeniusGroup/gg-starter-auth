@@ -53,7 +53,8 @@ const CartSheet: React.FC<CartSheetProps> = ({
         console.error("Checkout error:", error);
       }
     } else {
-      window.location.href = "/payment/wallet";
+      const cartData = encodeURIComponent(JSON.stringify(cartItems));
+      window.location.href = `/payment/wallet?cart=${cartData}`;
     }
   };
 
