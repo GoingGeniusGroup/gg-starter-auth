@@ -15,7 +15,21 @@ import { getAllproducts } from "@/action/product";
 import Image from "next/image";
 const FeatProdTable = () => {
   const [products, setProducts] = useState<any[]>([]);
-
+  useEffect(() => {
+    async function fetchProducts() {
+      try {
+        const response = await getAllproducts();
+        if (response.success && response.data) {
+          setProducts(response.data);
+        } else {
+          console.error("Failed to fetch products");
+        }
+      } catch (error) {
+        console.error("Failed to fetch products");
+      }
+    }
+    fetchProducts();
+  }, []);
   return (
     <div className="w-full max-w-4xl mx-auto p-6">
       <div className="flex justify-between items-center mb-4">
