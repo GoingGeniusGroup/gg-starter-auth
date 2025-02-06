@@ -11,6 +11,7 @@ import axios from "axios";
 import { useRouter, useSearchParams } from "next/navigation";
 import BusinessCard from "@/app/components/card/businessCard";
 import StudentCard from "@/app/components/card/studentCard";
+import { getUserBalance } from "@/app/actions/wallet";
 import {
   Carousel,
   CarouselContent,
