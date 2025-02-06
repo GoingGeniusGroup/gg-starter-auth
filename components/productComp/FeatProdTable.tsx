@@ -20,7 +20,10 @@ const FeatProdTable = () => {
       try {
         const response = await getAllproducts();
         if (response.success && response.data) {
-          setProducts(response.data);
+            const featuredProducts = response.data.filter(
+                (product: any) => product.isFeatured === true
+              );
+          setProducts(featuredProducts);
         } else {
           console.error("Failed to fetch products");
         }
