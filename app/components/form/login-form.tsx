@@ -106,11 +106,7 @@ export const LoginForm = ({ isMobile }: LoginFormProps) => {
               disabled={isPending}
               className="w-full flex items-center justify-center"
             >
-              {isPending ? (
-                <span className="loader" aria-hidden="true" />
-              ) : (
-                "Login"
-              )}
+              {isPending ? "Processing..." : "Login"}
             </Button>
           </form>
         </Form>
