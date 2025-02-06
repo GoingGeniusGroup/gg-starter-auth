@@ -2,6 +2,7 @@
 
 import React, { useRef, useEffect, useState } from "react";
 import Image from "next/image";
+import { FaHeart, FaRegHeart } from "react-icons/fa";
 import { Button } from "@/components/ui/button/button";
 import {
   ChevronLeft,
@@ -24,11 +25,15 @@ import { Slider } from "@/components/ui/slider/slider";
 interface ProductDetailProps {
   product: Product | null;
   onAddToCart: (productId: number) => void;
+  onToggleWishlist: (productId: number) => void;
+  isInWishlist: boolean;
 }
 
 const ProductDetail: React.FC<ProductDetailProps> = ({
   product,
   onAddToCart,
+  onToggleWishlist,
+  isInWishlist,
 }) => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -132,8 +137,20 @@ const ProductDetail: React.FC<ProductDetailProps> = ({
 
   return (
     <>
-      <h2 className="text-2xl font-bold mb-4">{product.name}</h2>
-
+      <div className="relative">
+        <h2 className="text-2xl font-bold mb-4 dark:text-black">{product.name}</h2>
+        {/* Wishlist Icon */}
+        <button
+          className="absolute top-2 right-2 z-10 text-gray-400 hover:text-black transition-colors"
+          onClick={() => onToggleWishlist(product.id)}
+        >
+          {isInWishlist ? (
+            <FaHeart className="h-6 w-6 text-black" />
+          ) : (
+            <FaRegHeart className="h-6 w-6" />
+          )}
+        </button>
+      </div>
       {product.type === "emote" ? (
         <div className="relative h-[256px] w-full">
           <Avatar
@@ -235,8 +252,8 @@ const ProductDetail: React.FC<ProductDetailProps> = ({
           </div>
         </div>
       )}
-      <p className="text-lg font-semibold mb-2">${product.price.toFixed(2)}</p>
-      <p className="mb-2">{product.description}</p>
+      <p className="text-lg font-semibold mb-2 dark:text-black">${product.price.toFixed(2)}</p>
+      <p className="mb-2 dark:text-black">{product.description}</p>
       <Button
         onClick={() => onAddToCart(product.id)}
         variant="black"

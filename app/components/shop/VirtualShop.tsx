@@ -1,6 +1,5 @@
 "use client";
-
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { ShoppingCart } from "lucide-react";
 import { Button } from "@/components/ui/button/button";
 import { Badge } from "@/components/ui/badge";
@@ -20,7 +19,6 @@ import {
 } from "@/components/ui/tooltip/tooltip";
 import { Label } from "@/components/ui/label";
 import VirtualProductList from "./subComponents/VirtualProductList";
-
 import physicalProducts from "@/components/core/data/physicalProduct";
 import virtualProducts from "@/components/core/data/virtualProduct";
 
@@ -30,7 +28,8 @@ const VirtualShop = () => {
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [isPhysicalView, setIsPhysicalView] = useState(true);
-
+  const [wishlist, setWishlist] = useState<number[]>([]);
+  const productDetailRef = useRef<HTMLDivElement | null>(null);
   // Get products based on the current view
   const products = isPhysicalView ? physicalProducts : virtualProducts;
 
@@ -89,7 +88,14 @@ const VirtualShop = () => {
     setIsPhysicalView(!isPhysicalView);
     setSelectedCategory("All");
   };
-
+  // Handle wishlist toggle
+  const toggleWishlist = (productId: number) => {
+    setWishlist((prev) =>
+      prev.includes(productId)
+        ? prev.filter((id) => id !== productId)
+        : [...prev, productId]
+    );
+  };
   return (
     <TooltipProvider>
       <div className="flex flex-col h-[96%] overflow-hidden">
@@ -187,21 +193,44 @@ const VirtualShop = () => {
                 onAddToCart={addToCart}
                 onSelectProduct={setSelectedProduct}
                 isMobile={false}
+                wishlist={wishlist} // Pass wishlist state
+                onToggleWishlist={toggleWishlist}
               />
             ) : (
               <VirtualProductList
                 products={filteredProducts}
                 cart={cart}
                 onAddToCart={addToCart}
-                onSelectProduct={setSelectedProduct}
+                // onSelectProduct={setSelectedProduct}
+                onSelectProduct={(product: Product) => {
+                  setSelectedProduct(product);
+                  if (productDetailRef.current) {
+                    // Scroll to the Product Detail section
+                    productDetailRef.current.scrollIntoView({
+                      behavior: "smooth", // Add smooth scrolling
+                      block: "start", // Align to the start of the section
+                    });
+                  }
+                }}
+                wishlist={wishlist} // Pass wishlist state
+                onToggleWishlist={toggleWishlist}
               />
             )}
           </div>
-          <div className="md:w-[30%] px-4 py-2 h-full overflow-auto z-40">
+          <div
+            ref={productDetailRef}
+            className="md:w-[30%] px-4 py-2 h-full overflow-auto z-40"
+          >
             <div className="bg-white rounded-lg shadow-lg p-6 border border-gray-200/30">
               <ProductDetail
                 product={selectedProduct}
                 onAddToCart={addToCart}
+                onToggleWishlist={toggleWishlist}
+                isInWishlist={
+                  selectedProduct
+                    ? wishlist.includes(selectedProduct.id)
+                    : false
+                }
               />
             </div>
           </div>
