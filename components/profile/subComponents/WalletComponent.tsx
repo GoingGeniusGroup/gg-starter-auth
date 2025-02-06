@@ -1,6 +1,6 @@
 "use client";
 
-import { FormEvent, useState } from "react";
+import { FormEvent, useCallback, useEffect, useState } from "react";
 import { Eye, EyeOff, CreditCard, Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -10,7 +10,7 @@ import { useSession } from "next-auth/react";
 import axios from "axios";
 import { useRouter, useSearchParams } from "next/navigation";
 import BusinessCard from "@/app/components/card/businessCard";
-// import StudentCard from "@/app/components/card/studentCard";
+import StudentCard from "@/app/components/card/studentCard";
 import {
   Carousel,
   CarouselContent,
@@ -24,7 +24,7 @@ interface Transaction {
 }
 
 export default function WalletComponent() {
-  const [balance, setBalance] = useState(1000);
+  const [balance, setBalance] = useState<number | null>(null);
   const [showBalance, setShowBalance] = useState(false);
   const [topUpAmount, setTopUpAmount] = useState("");
   const [redeemCode, setRedeemCode] = useState("");
@@ -36,6 +36,7 @@ export default function WalletComponent() {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const [amount, setAmount] = useState<number | undefined>(undefined);
+  const [retryCount, setRetryCount] = useState(0);
   const [transactions, setTransactions] = useState<Transaction[]>([
     { id: 1, type: "Top Up", amount: 500, date: "2024-06-10" },
     { id: 2, type: "Coffee purchase", amount: -50, date: "2024-06-09" },
@@ -58,6 +59,37 @@ export default function WalletComponent() {
     type: "",
   });
 
+  //function to fetch user balance
+  const fetchUserBalance = useCallback(async () => {
+    setIsLoading(true);
+    try {
+      const result = await getUserBalance();
+      if (result.success && typeof result.data === "number") {
+        setBalance(result.data);
+        setRetryCount(0);
+      } else {
+        console.error("failed to fetch user balance:", result.error);
+        if (retryCount < 3) {
+          //Retry up to 3 times
+          setRetryCount((prev) => prev + 1);
+          setTimeout(() => fetchUserBalance(), 1000);
+        } else {
+          setBalance(null);
+        }
+      }
+    } catch (error) {
+      console.error("Error fetching user balance:", error);
+      setBalance(null);
+    } finally {
+      setIsLoading(false);
+    }
+  }, [retryCount]);
+
+  //useeffect to fetch userbalance
+  useEffect(() => {
+    fetchUserBalance();
+  }, [fetchUserBalance]);
+
   const [activeTab, setActiveTab] = useState<"cards" | "transactions">(
     "transactions"
   );
@@ -76,7 +108,7 @@ export default function WalletComponent() {
   const handleTopUp = () => {
     const amount = parseFloat(topUpAmount);
     if (!isNaN(amount) && amount > 0) {
-      setBalance(balance + amount);
+      // setBalance(balance + amount);
       setTransactions([
         {
           id: Date.now(),
@@ -136,7 +168,7 @@ export default function WalletComponent() {
   const handleRedeem = () => {
     if (redeemCode.length === 16) {
       const redeemAmount = 50;
-      setBalance(balance - redeemAmount);
+      // setBalance(balance - redeemAmount);
       setTransactions([
         {
           id: Date.now(),
@@ -163,7 +195,7 @@ export default function WalletComponent() {
               <p className="text-sm opacity-80 mb-1">Current Balance</p>
               <div className="flex items-center gap-2">
                 {showBalance ? (
-                  <p className="text-2xl font-bold">Rs.{balance.toFixed(2)}</p>
+                  <p className="text-2xl font-bold">Rs.{balance?.toFixed(2)}</p>
                 ) : (
                   <p className="text-2xl font-bold">****</p>
                 )}

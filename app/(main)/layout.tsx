@@ -3,6 +3,7 @@ import { TooltipProvider } from "@/components/ui/tooltip/tooltip";
 import { signOut } from "@/auth";
 import { revalidatePath } from "next/cache";
 import Navbar from "../components/navbar/Navbar";
+import { Footer } from "../components/Footer/Footer";
 
 export default async function MainLayoutClient({
   children,
@@ -14,6 +15,7 @@ export default async function MainLayoutClient({
       <div>
         <Navbar />
         <div className="w-full px-8 py-4 flex-1 overflow-auto">{children}</div>
+        <Footer />
       </div>
     </>
   );

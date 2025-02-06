@@ -1,4 +1,4 @@
-
+"use client"
 import React, { useState, useEffect } from "react";
 import {
   Table,
@@ -16,7 +16,8 @@ import { LuListFilter } from "react-icons/lu";
 import { BiShow } from "react-icons/bi";
 import { FaEdit, FaTrash, FaPlus } from "react-icons/fa";
 import { AiOutlineTable, AiOutlineAppstore } from "react-icons/ai"; // Import icons for table and grid
-
+import Image from "next/image";
+import Link from "next/link";
 interface Category {
   id: number; // Ensure id is a number
   categoryName: string;
@@ -150,12 +151,15 @@ const CategoryTable = ({
                 <TableCell>{category.products.length}</TableCell>
                 <TableCell>
                   <div className="flex space-x-2">
+                    <Link href={`/dashboard/category/${category.id}`}>
                     <button
                       className="text-green-500 hover:text-green-700 text-2xl"
                       aria-label="View"
                     >
                       <BiShow />
                     </button>
+                    </Link>
+                 
                     <button
                       onClick={() => onEditClick(category)}
                       className="text-blue-500 hover:text-blue-700 text-2xl"
@@ -185,10 +189,22 @@ const CategoryTable = ({
               key={category.id}
               className="rounded-lg border border-gray-200 overflow-hidden hover:shadow-lg transition-shadow duration-300"
             >
-              <div>
-              <img src={`/upload/${category.categoryImage[0]}`} alt={category.categoryName} className="w-full h-56 object-cover" />
 
-              </div>
+              {/* <div className="w-full">
+                                      <img src={`/upload/${category.categoryImage[0]}`} alt={category.categoryName} className="w-full h-56 object-cover" />
+
+              </div> */}
+       
+       <div className="w-full h-56 relative"> 
+        <Image
+          src={category.categoryImage[0]}
+          alt={category.categoryName}
+          layout="fill"
+          objectFit="contain"
+          className=" rounded-t-lg" 
+        
+        />
+      </div>
               <div className="p-4 mb-2">
                 <h3 className="text-lg font-medium text-gray-900 dark:text-slate-50">
                   {category.categoryName}

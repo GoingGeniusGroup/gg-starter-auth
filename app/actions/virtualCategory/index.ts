@@ -2,7 +2,7 @@
 import { cache } from "@/lib/cache";
 import { db } from "@/lib/db";
 
-export const getCategories = cache(
+export const getVirtualCategories = cache(
   async () => {
     try {
       const categories = await db.virtualCategory.findMany();

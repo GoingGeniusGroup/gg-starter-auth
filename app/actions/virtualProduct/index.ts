@@ -3,7 +3,7 @@
 import { cache } from "@/lib/cache";
 import { db } from "@/lib/db";
 
-export const getProducts = cache(
+export const getVirtualProducts = cache(
   async () => {
     try {
       const products = await db.virtualProduct.findMany();

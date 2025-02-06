@@ -3,7 +3,7 @@ import { PhysicalProduct } from "../interface/physicalProduct.interface";
 // Mock data for products with multiple images
 const physicalProducts: PhysicalProduct[] = [
   {
-    id: 1,
+    id: "1",
     name: "Classic T-Shirt",
     price: 19.99,
     images: [
@@ -16,7 +16,7 @@ const physicalProducts: PhysicalProduct[] = [
       "A comfortable and versatile classic t-shirt, perfect for everyday wear.",
   },
   {
-    id: 2,
+    id: "2",
     name: "Denim Jeans",
     price: 49.99,
     images: [
@@ -27,7 +27,7 @@ const physicalProducts: PhysicalProduct[] = [
       "High-quality denim jeans that offer both style and durability.",
   },
   {
-    id: 3,
+    id: "3",
     name: "Sneakers",
     price: 79.99,
     images: [
@@ -38,7 +38,7 @@ const physicalProducts: PhysicalProduct[] = [
       "Comfortable and stylish sneakers suitable for various activities.",
   },
   {
-    id: 4,
+    id: "4",
     name: "Hoodie",
     price: 39.99,
     images: [
@@ -48,7 +48,7 @@ const physicalProducts: PhysicalProduct[] = [
     description: "A cozy hoodie that's perfect for layering or lounging.",
   },
   {
-    id: 5,
+    id: "5",
     name: "Sunglasses",
     price: 29.99,
     images: [

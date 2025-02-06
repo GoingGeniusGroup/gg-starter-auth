@@ -10,6 +10,11 @@ import { revalidatePath } from "next/cache";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { on } from "events";
+import { FileUploaderRegular } from "@uploadcare/react-uploader";
+import { useTheme } from "next-themes";
+import Image from "next/image";
+
+import "@uploadcare/react-uploader/core.css";
 interface Category {
   id: string;
   categoryName: string;
@@ -38,6 +43,10 @@ interface ProductVariant {
 }
 const ProductForm = () => {
   const router = useRouter();
+  const uploadkey = process.env.NEXT_PUBLIC_UPLOADCARE_PUBLIC_KEY || "";
+  const [allImages, setAllImages] = useState<string[]>([]); 
+const {theme}=useTheme()
+  const [categories, setCategories] = useState<Category[]>([]);
   const {
     control,
     register,
@@ -48,7 +57,6 @@ const ProductForm = () => {
     resolver: zodResolver(productScheme),
   });
 
-  const [categories, setCategories] = useState<Category[]>([]);
 
   const [quantity, setQuantity] = useState<number>(0);
   const [price, setPrice] = useState<number>(0);
@@ -56,6 +64,11 @@ const ProductForm = () => {
   const calculateTotalPrice = (quantity: number, price: number) => {
     setTotalPrice((quantity * price).toFixed(2));
   };
+
+  const handleRemoveImage = (index: number) => {
+    setAllImages((prev) => prev.filter((_, i) => i !== index));
+  };
+
   useEffect(() => {
     async function fetchCategory() {
       try {
@@ -85,11 +98,9 @@ const ProductForm = () => {
     formData.append("status", data.status.toString());
     formData.append("discount", data.discount.toString());
     formData.append("category", data.category);
-    if (data.productImage && data.productImage.length > 0) {
-      data.productImage.forEach((image) => {
-        formData.append("productImage", image);
-      });
-    }
+  
+    allImages.forEach((url) => formData.append("productImage", url));
+
     try {
       const result = await saveProduct(formData);
       if (result.success && result.data) {
@@ -145,16 +156,7 @@ const ProductForm = () => {
                 )}
               </div>
 
-              {/* <div className="mb-4">
-              <label htmlFor="productId" className="block text-sm font-semibold text-gray-700">Product ID:</label>
-              <input
-                type="text"
-                id="productId"
-                name="productId"
-                required
-                className="w-full mt-1 p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-              />
-            </div> */}
+             
 
               <div className="mb-4">
                 <label
@@ -307,9 +309,9 @@ const ProductForm = () => {
                   htmlFor="productImage"
                   className="block text-sm font-semibold text-gray-700 dark:text-gray-300"
                 >
-                  Image
+                Product Image
                 </label>
-                <Controller
+                {/* <Controller
                   name="productImage"
                   control={control}
                   defaultValue={[]}
@@ -325,7 +327,39 @@ const ProductForm = () => {
                       className="w-full mt-1 p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
                     />
                   )}
-                />
+                /> */}
+                 <FileUploaderRegular
+                              multiple
+                              sourceList="local, url, gdrive"
+                              classNameUploader={theme === "dark" ? "uc-dark" : "uc-light"}
+                              pubkey={uploadkey}
+                              imgOnly={true}
+                              onChange={(event) => {
+                                const files = event.successEntries || [];
+                                const urls = files.map((file) => file.cdnUrl);
+                                setAllImages((prev) => [...prev, ...urls]);
+                              }}
+                            />
+ <div className="flex gap-4 flex-wrap mt-2 mb-2">
+              {allImages.map((url, index) => (
+                <div key={index} className="relative">
+                <Image
+                                    src={url}
+                                    alt={`Image ${index + 1}`}
+                                    width={96}
+                                    height={96}
+                                    className="object-cover rounded border"
+                                  />
+                  <button
+                    type="button"
+                    onClick={() => handleRemoveImage(index)}
+                    className="absolute top-0 right-0 bg-red-500 text-white rounded-full p-1 text-xs"
+                  >
+                    ×
+                  </button>
+                </div>
+              ))}
+            </div>
                 {errors.productImage && (
                   <p className="text-sm text-red-500 mt-1">
                     {errors.productImage.message}
