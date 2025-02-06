@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
-import logo from "@/public/card/GGReal Icon.svg";
+import logo from "@/public/svgs/GGLOGO.svg";
 // import shop from "@/public/assets/shop.svg";
 import ProfileHudTop from "../Huds/ProfileHudTop";
 import { ThemeSwitcher } from "../ThemeToggler/ThemeSwitcher";
@@ -15,8 +15,8 @@ const Navbar = async () => {
         <Image
           src={logo}
           alt="GGLogo"
-          width={150}
-          height={150}
+          width={200}
+          height={200}
           className="w-full h-16"
         />
       </Link>
