@@ -32,15 +32,20 @@ const Search = () => {
         <FiSearch className="absolute right-3 top-5 transform -translate-y-1/2 text-gray-500" />
       </div>
       {searchQuery && (
-        <div className="absolute left-0 right-0 mt-1 bg-white border rounded-md shadow-lg z-50">
+        <div className="absolute left-0 right-0 mt-10 bg-white dark:bg-gray-700 border rounded-md shadow-lg z-50">
           {filteredProducts.length > 0 ? (
             filteredProducts.map((product) => (
-              <div key={product.id} className="p-2 hover:bg-gray-100">
+              <div
+                key={product.id}
+                className="p-2 hover:bg-gray-100 dark:hover:bg-gray-500 rounded-md"
+              >
                 {product.name}
               </div>
             ))
           ) : (
-            <p className="p-2 text-gray-500">No results found.</p>
+            <p className="p-2 text-gray-500 dark:text-gray-300">
+              No results found.
+            </p>
           )}
         </div>
       )}

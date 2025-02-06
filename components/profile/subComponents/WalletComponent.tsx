@@ -288,7 +288,7 @@ export default function WalletComponent() {
               <Button
                 type="submit"
                 onClick={handleTopUp}
-                className="w-full"
+                className="w-full border border-gray-700"
                 disabled={isLoading}
               >
                 {isLoading ? "Processing..." : "Pay with Khalti"}
@@ -308,7 +308,7 @@ export default function WalletComponent() {
             />
             <Button
               onClick={handleRedeem}
-              className="w-full "
+              className="w-full border border-gray-700"
               disabled={redeemCode.length !== 16}
             >
               Redeem
@@ -455,7 +455,7 @@ export default function WalletComponent() {
                     <CarouselItem key={card.id}>
                       <div className="p-4 rounded-lg bg-gradient-to-r from-gray-900 to-red-900 text-white">
                         <div className="flex justify-between items-center">
-                          <p className="font-medium mb-4 mb-2 text-lg">
+                          <p className="font-medium mb-4 text-lg">
                             {card.type}
                           </p>
                           <CreditCard className="h-8 w-8" />
