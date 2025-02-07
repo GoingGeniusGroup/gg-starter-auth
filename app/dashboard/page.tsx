@@ -115,7 +115,7 @@ const InventoryManagement: React.FC = () => {
   ];
 
   return (
-    <div className="admin-dashboard min-h-screen">
+    <div className="admin-dashboard ">
       {/* <header className="bg-gray-200 text-black p-6 shadow-md">
         <h2 className="text-3xl font-semibold text-center">Inventory Management</h2>
       </header> */}
