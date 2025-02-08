@@ -89,7 +89,7 @@ model TwoFactorConfirmation {
 }
 
 model Product {
-  id             String          @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  id             String           @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   name           String
   description    String?
   imageUrl       String[]
@@ -98,19 +98,19 @@ model Product {
   stockQuantity  Int
   brand          String?
   rating         Int
-  categoryId     String          @db.Uuid
+  categoryId     String           @db.Uuid
   reviews        String[]
-  isFeatured     Boolean?        @default(false)
-  taxId          String?         @unique @db.Uuid
+  isFeatured     Boolean?         @default(false)
+  taxId          String?          @unique @db.Uuid
   discount       Float?
-  status         Boolean         @default(true)
+  status         Boolean          @default(true)
   carts          Cart?
   inventory      Inventory?
-  category       Category        @relation(fields: [categoryId], references: [id])
-  Tax            Tax?            @relation(fields: [taxId], references: [id])
+  category       Category         @relation(fields: [categoryId], references: [id])
+  Tax            Tax?             @relation(fields: [taxId], references: [id])
+  ProductOnOrder ProductOnOrder[]
   productVariant ProductVariant?
-  order          Order[]         @relation("ProductOrders")
-  Supplier       Supplier[]      @relation("ProductToSupplier")
+  Supplier       Supplier[]       @relation("ProductToSupplier")
 }
 
 model Cart {
@@ -174,9 +174,9 @@ model Order {
   carts                 Cart?                   @relation("OrderCarts")
   PaymentType           PaymentType?            @relation(fields: [paymentId], references: [id])
   user                  User                    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  ProductOnOrder        ProductOnOrder[]
   SalesInvoice          SalesInvoice?
   VirtualProductOnOrder VirtualProductOnOrder[]
-  product               Product[]               @relation("ProductOrders")
 }
 
 model PaymentType {
@@ -327,6 +327,16 @@ model Subcategory {
   id       String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   name     String
   imageUrl String
+}
+
+model ProductOnOrder {
+  orderId   String  @db.Uuid
+  productId String  @db.Uuid
+  quantity  Int
+  Order     Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  Product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@id([orderId, productId])
 }
 
 enum UserRole {

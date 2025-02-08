@@ -11,7 +11,14 @@ export async function getvirtualProdOrder(){
                         user:true
                     }
                 }
-            }
+            },
+            
+            orderBy: {
+                Order: {
+                  orderDate: 'desc', 
+                },
+              },
+
         });
         return{success:true,data:vOrder};
     } catch(error){

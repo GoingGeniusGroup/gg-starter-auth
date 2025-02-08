@@ -6,7 +6,7 @@ export async function getUserOrderDetail(userId:string){
         const orders = await db.order.findMany({
             where: { userId },
             include: {
-              product: true,
+              // product: true,
               VirtualProductOnOrder: {
                 include: {
                   VirtualProduct: true,
@@ -14,6 +14,10 @@ export async function getUserOrderDetail(userId:string){
               },
               
             },
+            orderBy: {
+              orderDate: 'desc', 
+            },
+            
           });
           if(!orders){
             return { success: false, message: 'NO order found for this user' }
@@ -34,7 +38,7 @@ export async function getOrderDetail(orderId:string){
       const orders = await db.order.findMany({
           where: {id: orderId },
           include: {
-            product: true,
+            // product: true,
             VirtualProductOnOrder: {
               include: {
                 VirtualProduct: true,
@@ -42,6 +46,9 @@ export async function getOrderDetail(orderId:string){
             },
             user:true,
             
+          },
+          orderBy: {
+            orderDate:'desc', 
           },
         });
         if(!orders){

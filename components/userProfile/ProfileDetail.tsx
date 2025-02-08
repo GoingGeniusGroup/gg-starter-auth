@@ -210,7 +210,9 @@ const ProfileDetail = ({ userId }: UserProps) => {
                                         const files = event.successEntries;
                                         if (files.length > 0) {
                                           const urls = files.map(file => file.cdnUrl); 
-                                          setUploadedImgUrls(urls); 
+                                          setAllImages((prev) => [...prev, ...urls]);
+
+                                        //   setUploadedImgUrls(urls); 
                                         }
                                       }}
                                     />

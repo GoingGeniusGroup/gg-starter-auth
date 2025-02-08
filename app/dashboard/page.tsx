@@ -40,7 +40,6 @@ const InventoryManagement: React.FC = () => {
     //   icon: <FaClipboardList className="text-4xl text-green-600" />,
     // },
 
-
     {
       name: "Categories",
       num: 10,
@@ -74,7 +73,7 @@ const InventoryManagement: React.FC = () => {
     {
       name: "Stock",
       num: 500,
-      path:"/dashboard/inventory",
+      path: "/dashboard/inventory",
       icon: <FaCubes className="text-4xl text-teal-600" />,
     },
     // {
@@ -107,7 +106,6 @@ const InventoryManagement: React.FC = () => {
       path: "/dashboard/subCategory",
       icon: <MdCategory className="text-4xl text-amber-500" />,
     },
- 
 
     // {
     //   name: "Low Stock",
@@ -117,7 +115,7 @@ const InventoryManagement: React.FC = () => {
   ];
 
   return (
-    <div className="admin-dashboard min-h-screen">
+    <div className="admin-dashboard ">
       {/* <header className="bg-gray-200 text-black p-6 shadow-md">
         <h2 className="text-3xl font-semibold text-center">Inventory Management</h2>
       </header> */}
@@ -125,15 +123,20 @@ const InventoryManagement: React.FC = () => {
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 p-6">
         {fields.map((item, index) => (
           <Link href={item.path} key={index} passHref>
-            <div className="px-6 py-8 shadow-lg rounded-xl dark:bg-gray-300 hover:scale-105  ease-in duration-300 bg-white flex">
-              <div className="w-1/3 flex items-center justify-center">
-                <div className="text-4xl">{item.icon}</div>
-              </div>
-              <div className="w-2/3 flex flex-col justify-center">
-                <h3 className="text-xl font-semibold text-gray-700">
+            <div className="group px-6 py-6 shadow-md rounded-xl dark:bg-gray-800 bg-white transition-transform transform hover:scale-105 duration-300 ease-in-out flex items-center space-x-4 h-full">
+            
+              <div className="w-3/4 flex flex-col justify-center">
+                <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-200 transition-colors duration-300 group-hover:text-blue-500">
                   {item.name}
                 </h3>
-                {/* <div className="text-4xl font-bold text-gray-800">{item.num}</div> */}
+                <div className="text-lg text-gray-700 dark:text-gray-300">
+                  {item.num}
+                </div>
+              </div>
+              <div className="flex items-center justify-center w-1/4">
+                <div className="text-5xl transition-colors duration-300 group-hover:text-blue-500">
+                  {item.icon}
+                </div>
               </div>
             </div>
           </Link>

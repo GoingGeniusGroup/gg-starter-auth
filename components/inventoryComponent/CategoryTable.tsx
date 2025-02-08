@@ -132,6 +132,7 @@ const CategoryTable = ({
           <TableHeader>
             <TableRow>
               <TableHead>S.N</TableHead>
+              <TableHead>Image</TableHead>
               <TableHead>Category Name</TableHead>
               <TableHead>Category Type</TableHead>
               <TableHead>Category Description</TableHead>
@@ -143,6 +144,16 @@ const CategoryTable = ({
             {categories.map((category, index) => (
               <TableRow key={index}>
                 <TableCell>{index + 1}</TableCell>
+                  <TableCell>
+                                <div className="relative h-12 w-12">
+                                  <Image
+                                    src={category.categoryImage[0]}
+                                    alt={category.categoryName}
+                                    className="object-cover rounded-sm"
+                                    fill
+                                  />
+                                </div>
+                              </TableCell>
                 <TableCell className="text-blue-500">
                   {category.categoryName}
                 </TableCell>

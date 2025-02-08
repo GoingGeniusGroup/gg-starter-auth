@@ -119,6 +119,8 @@ const ProductTable = () => {
           <TableHeader>
             <TableRow>
               <TableHead>S.N</TableHead>
+              <TableCell>Image</TableCell>
+
               <TableHead>Name</TableHead>
               <TableHead>Quantity</TableHead>
               <TableHead>Cost Price</TableHead>
@@ -133,6 +135,16 @@ const ProductTable = () => {
             {products.map((product, index) => (
               <TableRow key={index}>
                 <TableCell>{index + 1}</TableCell>
+                 <TableCell>
+                                <div className="relative h-12 w-12">
+                                  <Image
+                                    src={product.imageUrl[0]}
+                                    alt={product.name}
+                                    className="object-cover rounded-sm"
+                                    fill
+                                  />
+                                </div>
+                              </TableCell>
                 <TableCell className="text-blue-500">{product.name}</TableCell>
                 <TableCell>{product.stockQuantity}</TableCell>
                 <TableCell>{product.costPrice}</TableCell>
