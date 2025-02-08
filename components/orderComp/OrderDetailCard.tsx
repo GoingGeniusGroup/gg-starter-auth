@@ -160,7 +160,7 @@ const OrderDetailCard = ({user}:OrderProps) => {
                 </tr>
               </thead>
               <tbody className="bg-white dark:bg-black divide-y divide-gray-200">
-                   { order && order.product.map((product:any, index:number) => (
+                   {/* { order && order.product.map((product:any, index:number) => (
                   <tr key={index}>
                     <td className="px-4 py-3 text-sm">{product.name}</td>
                     <td className="px-4 py-3 text-sm">{order.orderQuantity}</td>
@@ -172,7 +172,7 @@ const OrderDetailCard = ({user}:OrderProps) => {
                       ${(order.orderQuantity * product.sellPrice).toFixed(2)}
                     </td>
                   </tr>
-                ))}
+                ))} */}
                {order.VirtualProductOnOrder?.map((virtualProductOnOrder: any, index: number) => {
   const product = virtualProductOnOrder.VirtualProduct;
   return (
