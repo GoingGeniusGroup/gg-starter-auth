@@ -33,6 +33,7 @@ const InventoryManagement: React.FC = () => {
     vpTotal: 0,
     vpOrderTotal: 0,
     orderTotal: 0,
+    stockTotal:0,
   });
 
   useEffect(() => {
@@ -77,9 +78,10 @@ const InventoryManagement: React.FC = () => {
     },
     {
       name: "Stock",
-      num: 500,
+      num: totals.stockTotal,
       path: "/dashboard/inventory",
       icon: <FaCubes className="text-4xl text-teal-600" />,
+      totalKey:"stockTotal",
     },
     {
       name: "Virtual Product",
