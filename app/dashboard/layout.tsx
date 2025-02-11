@@ -5,7 +5,7 @@ import Topbar from "@/_components/dashboard/Topbar";
 import { ReactNode, useState } from "react";
  
 
-const DashboardLayout = ({ children,orderStat,prodStat1 }: { children: ReactNode,orderStat:ReactNode ,prodStat1:ReactNode}) => {
+const DashboardLayout = ({ children,orderStat,prodStat1 ,categoryStat}: { children: ReactNode,orderStat:ReactNode ,prodStat1:ReactNode,categoryStat:ReactNode}) => {
   const [isCollapsed, setIsCollapsed] = useState(false); // Sidebar state
   const pathname = usePathname();
 
@@ -30,6 +30,7 @@ const DashboardLayout = ({ children,orderStat,prodStat1 }: { children: ReactNode
         <div className="grid grid-cols-2 gap-4 mt-4">
           <div>{orderStat}</div>
           <div>{prodStat1}</div>
+          <div>{categoryStat}</div>
         
         </div>
       )}
