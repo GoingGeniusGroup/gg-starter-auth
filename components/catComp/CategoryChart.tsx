@@ -39,8 +39,11 @@ const chartConfig = {
 } satisfies ChartConfig
 
 export function CategoryChart({ data }: CategoryChartProps) {
-  const totalProducts = React.useMemo(() => {
+  const totalStock = React.useMemo(() => {
     return data.reduce((acc, curr) => acc + curr.num, 0)
+  }, [data])
+  const totalProducts = React.useMemo(() => {
+    return data.reduce((acc, curr) => acc + curr.value, 0)
   }, [data])
 
   return (
@@ -49,7 +52,8 @@ export function CategoryChart({ data }: CategoryChartProps) {
         <CardTitle>Product Category Breakdown</CardTitle>
         <CardDescription>Product distribution by category</CardDescription>
       </CardHeader>
-      <CardContent className="flex-1 pb-0">
+      <div className="grid grid-cols-2">
+      <CardContent className=" pb-0">
         <ChartContainer
           config={chartConfig}
           className="mx-auto aspect-square max-h-[250px]"
@@ -77,7 +81,7 @@ export function CategoryChart({ data }: CategoryChartProps) {
             
             <Pie
               data={data}
-              dataKey="num"
+              dataKey="value"
               nameKey="name"
               innerRadius={60}
               strokeWidth={5}
@@ -115,6 +119,60 @@ export function CategoryChart({ data }: CategoryChartProps) {
           </PieChart>
         </ChartContainer>
       </CardContent>
+      <CardContent className=" pb-0">
+        <ChartContainer
+          config={chartConfig}
+          className="mx-auto aspect-square max-h-[250px]"
+        >
+          <PieChart>
+            <ChartTooltip
+              cursor={false}
+              content={<ChartTooltipContent hideLabel />}
+            />
+    
+            
+            <Pie
+              data={data}
+              dataKey="num"
+              nameKey="name"
+              innerRadius={60}
+              strokeWidth={5}
+            >
+              <Label
+                content={({ viewBox }) => {
+                  if (viewBox && "cx" in viewBox && "cy" in viewBox) {
+                    return (
+                      <text
+                        x={viewBox.cx}
+                        y={viewBox.cy}
+                        textAnchor="middle"
+                        dominantBaseline="middle"
+                      >
+                        <tspan
+                          x={viewBox.cx}
+                          y={viewBox.cy}
+                          className="fill-foreground text-3xl font-bold"
+                        >
+                          {totalStock.toLocaleString()}
+                        </tspan>
+                        <tspan
+                          x={viewBox.cx}
+                          y={(viewBox.cy || 0) + 24}
+                          className="fill-muted-foreground"
+                        >
+                          Stock Quantity
+                        </tspan>
+                      </text>
+                    )
+                  }
+                }}
+              />
+            </Pie>
+          </PieChart>
+        </ChartContainer>
+      </CardContent>
+      </div>
+     
       <CardFooter className="flex-col gap-2 text-sm">
         {/* <div className="flex items-center gap-2 font-medium leading-none">
     
