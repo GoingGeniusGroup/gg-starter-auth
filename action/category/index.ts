@@ -192,3 +192,29 @@ export async function getCategory(id: string) {
     return { success: false, message: 'An unexpected error occurred' }
   }
 }
+
+
+export async function getProdCategoryData() {
+  try {
+    const categoryData = await db.category.findMany({
+      include: {
+        products: true, 
+      },
+    });
+
+    const formattedData = categoryData.map((category) => ({
+      name: category.categoryName,
+      value:category.products.length,
+      num: category.products.reduce((sum, product) => sum + (product.stockQuantity || 0), 0), // Sum of stockQuantity
+
+    }));
+
+    const totalProducts = categoryData.reduce((sum, category) => sum + category.products.length, 0);
+
+    return { data: formattedData, totalProducts };
+  } catch (error) {
+    console.error("Error fetching product category data:", error);
+    return { success: false, message: 'An unexpected error occurred' }
+
+  } 
+}

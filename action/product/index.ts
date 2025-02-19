@@ -191,6 +191,7 @@ export async function getProductDetail(productId:string){
       include:{
         category:true,
         inventory:true,
+        ProductOnOrder:true,
         Tax:true
       }
     })

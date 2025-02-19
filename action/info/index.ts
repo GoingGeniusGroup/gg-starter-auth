@@ -13,6 +13,7 @@ export const getAllTotals = async () => {
         virtualProductCount,
         virtualProductOnOrderCount,
         orderCount,
+        stockTotal
       ] = await Promise.all([
         db.product.count(),
         db.category.count(),
@@ -22,6 +23,11 @@ export const getAllTotals = async () => {
         db.virtualProduct.count(),
         db.virtualProductOnOrder.count(),
         db.order.count(),
+        db.product.aggregate({
+          _sum: {
+            stockQuantity: true,
+          },
+        }),
       ]);
   
       return {
@@ -33,6 +39,7 @@ export const getAllTotals = async () => {
         vpTotal:virtualProductCount,
         vpOrderTotal:virtualProductOnOrderCount,
         orderTotal:orderCount,
+        stockTotal: stockTotal?._sum.stockQuantity || 0,
       };
     }
     catch(error){
