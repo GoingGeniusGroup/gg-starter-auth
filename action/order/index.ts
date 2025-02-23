@@ -50,3 +50,57 @@ export async function orderInfo(){
         return{success:false,message:"An unexpected error occured"}
     }
 }
+
+export async function OrderInfoBoard(){
+  try{
+    const orders = await db.order.findMany({
+      include: {
+        user: true,
+        VirtualProductOnOrder: {
+          include: {
+            VirtualProduct: true,
+          },
+        },
+        ProductOnOrder: true,
+      },
+    });
+    
+
+    // Map orders into the format needed for the board
+    const formattedOrders = orders.map((order) => ({
+      id: order.id,
+      orderNumber: `#ORD${order.id}`, 
+      status:order.orderStatus,
+      customer: order.user.userName || '', 
+      products:
+        order.VirtualProductOnOrder.length > 0
+          ? order.VirtualProductOnOrder.map((item) => item.VirtualProduct.name)
+          : ['No Products'],
+      total:order.orderAmount,
+        // order.orderAmount ||
+        // (order.ProductOnOrder.reduce(
+        //   (acc, curr) => acc + curr.price * curr.quantity,
+        //   0
+        // ) || 0),
+      date:
+        new Date(order.orderDate).toISOString().split('T')[0] ||
+        new Date().toISOString().split('T')[0],
+    }));
+// group by status
+  const groupedOrders = {
+    pending:
+      formattedOrders.filter((o) => o.status === 'PENDING') || [],
+    shipped:
+      formattedOrders.filter((o) => o.status === 'SHIPPED') || [],
+    delivered:
+      formattedOrders.filter((o) => o.status === 'DELIVERED') || [],
+    cancelled:
+      formattedOrders.filter((o) => o.status === 'CANCELLED') || [],
+  };
+return{success:true,data:groupedOrders}
+  }
+  catch(error){
+    console.error("Error fetching the order datas")
+    return{success:false,message:"An unexpected error occured"}
+  }
+}
