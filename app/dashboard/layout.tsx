@@ -28,10 +28,9 @@ const DashboardLayout = ({ children,orderStat,prodStat1 ,categoryStat,orderPlot}
           {children}
           {pathname === "/dashboard" && (<>
             <div>{categoryStat}</div>
-      
-
             <div className="grid grid-cols-2 gap-4 mt-4">
           <div>{orderStat}</div>
+          <div>{orderPlot}</div>
           <div>{prodStat1}</div>
         </div>
           </>
