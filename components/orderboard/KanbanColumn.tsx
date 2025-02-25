@@ -13,11 +13,11 @@ export function KanbanColumn({
   icon,
   orders
 }:pageProps) {
-  return <div className="bg-white rounded-lg shadow p-4">
+  return <div className="bg-white  dark:bg-[#162846] rounded-lg shadow p-4">
       <div className="flex items-center gap-2 mb-4">
         {icon}
         <h2 className="font-semibold">{title}</h2>
-        <span className="ml-auto bg-gray-100 px-2 py-1 rounded text-sm">
+        <span className="ml-auto bg-gray-100  dark:bg-gray-700 px-2 py-1 rounded text-sm">
           {orders.length}
         </span>
       </div>
