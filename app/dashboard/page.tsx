@@ -19,9 +19,11 @@ import {
   FaUnity,
   FaUserCircle,
   FaNetworkWired,
+  FaColumns,
 } from "react-icons/fa";
 
 import { MdCategory, MdOutlineStorefront, MdInventory } from "react-icons/md";
+import { BsFillKanbanFill } from "react-icons/bs";
 
 const InventoryManagement: React.FC = () => {
   const [totals, setTotals] = useState({
@@ -33,7 +35,7 @@ const InventoryManagement: React.FC = () => {
     vpTotal: 0,
     vpOrderTotal: 0,
     orderTotal: 0,
-    stockTotal:0,
+    stockTotal: 0,
   });
 
   useEffect(() => {
@@ -77,11 +79,19 @@ const InventoryManagement: React.FC = () => {
       totalKey: "suppliersTotal",
     },
     {
+      name: "Order Board",
+      num: totals.orderTotal,
+      path: "/dashboard/virtualOrder/orderBoard",
+      icon: <BsFillKanbanFill className="text-4xl text-lime-500" />,
+
+      totalKey: "orderTotal",
+    },
+    {
       name: "Stock",
       num: totals.stockTotal,
       path: "/dashboard/inventory",
       icon: <FaCubes className="text-4xl text-teal-600" />,
-      totalKey:"stockTotal",
+      totalKey: "stockTotal",
     },
     {
       name: "Virtual Product",
@@ -104,12 +114,13 @@ const InventoryManagement: React.FC = () => {
       icon: <FaClipboardList className="text-4xl text-green-600" />,
       totalKey: "vpOrderTotal",
     },
-    {
-      name: "Sub Categories",
-      num: 10,
-      path: "/dashboard/subCategory",
-      icon: <MdCategory className="text-4xl text-amber-500" />,
-    },
+    // {
+    //   name: "Sub Categories",
+    //   num: 10,
+    //   path: "/dashboard/subCategory",
+    //   icon: <MdCategory className="text-4xl text-amber-500" />,
+    // },
+  
   ];
 
   return (
