@@ -37,8 +37,8 @@ const VirtOrderTable = () => {
   return (
     <div>
       <div className="p-2 ">
-        <div className="flex justify-between items-center h-[55px] px-4 my-2 mb-3 rounded">
-          <div className="flex items-center py-4 w-1/4 gap-2">
+        <div className="flex justify-end items-center h-[55px] px-4 my-2 mb-3 rounded">
+          {/* <div className="flex items-center py-4 w-1/4 gap-2">
             <Input type="text" placeholder="search" />
             <button
               type="button"
@@ -46,7 +46,7 @@ const VirtOrderTable = () => {
             >
               <LuListFilter className="w-5 h-5" />
             </button>
-          </div>
+          </div> */}
           <Link href="/dashboard/virtualOrder/orderBoard">
               <button className="flex items-center gap-2 justify-end bg-blue-500 text-white px-4 py-2 rounded-md shadow hover:bg-blue-600 active:bg-blue-700">
                 Manage Orders

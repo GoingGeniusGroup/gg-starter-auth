@@ -40,6 +40,8 @@ interface Inventory{
   
 const InventProdTable = () => {
  const[inventorys,setInventorys]=useState<any[]>([])
+   const[searchQuery,setSearchQuery]=useState("")
+ 
  useEffect(()=>{
       async function fetchInventory(){
         try{
@@ -57,11 +59,18 @@ const InventProdTable = () => {
       }
       fetchInventory()
     },[])
+    const filteredInventory = inventorys.filter(item =>
+      item.product.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      item.address.toLowerCase().includes(searchQuery.toLowerCase())
+    );
   return (
     <div className="p-2 ">
         <div className="flex justify-between items-center h-[55px] dark:bg-black/40 px-4 bg-white my-2 mb-3 rounded">
-        <div className="flex items-center  py-4 w-1/4 gap-2">
-            <Input type="text" placeholder="search"  />
+        <div className="flex items-center  py-4 w-1/3 gap-2">
+            <Input type="text" placeholder="search by product name ,address" 
+                                value={searchQuery}
+                                onChange={(e)=>setSearchQuery(e.target.value)}
+            />
         <button type="button" className="flex items-center justify-center  p-2 rounded hover:bg-gray-300">
           <LuListFilter className="w-5 h-5" />
         </button>
@@ -92,7 +101,7 @@ const InventProdTable = () => {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {inventorys.map((inventory,index) => (
+          {filteredInventory.map((inventory,index) => (
             <TableRow key={index}>
               <TableCell>{index+1}</TableCell>
               <TableCell className="text-blue-500">{inventory.product && inventory.product.name}</TableCell>

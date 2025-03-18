@@ -38,6 +38,7 @@ const CategoryTable = ({
 }: CategoryTableProps) => {
   const [categories, setCategories] = useState<any[]>([]);
   const [viewMode, setViewMode] = useState("table"); // State to track view mode
+  const[searchQuery,setSearchQuery]=useState("")
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -86,11 +87,17 @@ const CategoryTable = ({
     return text.length > maxLength ? text.substring(0, maxLength) + "..." : text;
   };
 
+  const filteredCategory=categories.filter(category=>
+    category.categoryName.toLowerCase().includes(searchQuery.toLocaleLowerCase())
+  )
   return (
     <div className="p-2">
       <div className="flex justify-between items-center dark:bg-black/40 h-[55px] px-4 bg-white my-2 mb-3 rounded">
         <div className="flex items-center py-4 w-1/4 gap-2">
-          <Input type="text" placeholder="Search" />
+          <Input type="text" placeholder="Search category"
+          value={searchQuery}
+          onChange={(e)=>setSearchQuery(e.target.value)}
+          />
           <button
             type="button"
             className="flex items-center justify-center p-2 rounded hover:bg-gray-300"
@@ -141,7 +148,7 @@ const CategoryTable = ({
             </TableRow>
           </TableHeader>
           <TableBody>
-            {categories.map((category, index) => (
+            {filteredCategory.map((category, index) => (
               <TableRow key={index}>
                 <TableCell>{index + 1}</TableCell>
                   <TableCell>
@@ -195,7 +202,7 @@ const CategoryTable = ({
 
       {viewMode === "grid" && (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {categories.map((category) => (
+          {filteredCategory.map((category) => (
             <div
               key={category.id}
               className="rounded-lg border border-gray-200 overflow-hidden hover:shadow-lg transition-shadow duration-300"
@@ -220,7 +227,7 @@ const CategoryTable = ({
                 <h3 className="text-lg font-medium text-gray-900 dark:text-slate-50">
                   {category.categoryName}
                 </h3>
-                <p className="text-sm text-gray-500 dark:text-slate-200 mb-2">
+                <p className="text-sm text-gray-500 dark:text-slate-200 mb-2 line-clamp-1">
                   {truncateText(category.categoryDescription, 50)}
                 </p>
                 <div className="flex justify-between items-center mt-4">

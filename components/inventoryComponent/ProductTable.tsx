@@ -44,6 +44,7 @@ const truncateText = (text: string, maxLength: number): string => {
 const ProductTable = () => {
   const [products, setProducts] = useState<any[]>([]);
   const [viewMode, setViewMode] = useState("table"); // State to track view mode
+  const[searchQuery,setSearchQuery]=useState("")
 
   useEffect(() => {
     async function fetchProducts() {
@@ -80,12 +81,20 @@ const ProductTable = () => {
       }
     }
   };
+  const filteredProducts = products.filter(product =>
+    product.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    product.category.categoryName.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
 
   return (
     <div className="p-2">
       <div className="flex justify-between items-center dark:bg-black/40 h-[55px] px-4 bg-white my-2 mb-3 rounded">
-        <div className="flex items-center py-4 w-1/4 gap-2">
-          <Input type="text" placeholder="search" />
+        <div className="flex items-center py-4 w-1/3 gap-2">
+          <Input type="text" placeholder="search by name or category" 
+          value={searchQuery}
+          onChange={(e)=>setSearchQuery(e.target.value)}
+          />
           <button type="button" className="flex items-center justify-center p-2 rounded hover:bg-gray-300">
             <LuListFilter className="w-5 h-5" />
           </button>
@@ -132,7 +141,7 @@ const ProductTable = () => {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {products.map((product, index) => (
+            {filteredProducts.map((product, index) => (
               <TableRow key={index}>
                 <TableCell>{index + 1}</TableCell>
                  <TableCell>
@@ -190,7 +199,7 @@ const ProductTable = () => {
 
       {viewMode === "grid" && (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {products.map((product) => (
+          {filteredProducts.map((product) => (
             <div
               key={product.id}
               className=" rounded-lg border border-gray-200 overflow-hidden hover:shadow-lg transition-shadow duration-300"
@@ -221,7 +230,7 @@ const ProductTable = () => {
                     ${product.salePrice?.toFixed(2)}
                   </span>
                 </div>
-                <p className="text-sm text-gray-500   dark:text-slate-200 mb-2">{truncateText(product.description ?? "", 50)}</p>
+                <p className="text-sm text-gray-500   dark:text-slate-200 mb-2 line-clamp-1">{truncateText(product.description ?? "", 50)}</p>
                 <div className="flex justify-between items-center mt-4">
                   <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium  bg-gray-200 text-gray-800  ">
                     {product.category && product.category.categoryName}

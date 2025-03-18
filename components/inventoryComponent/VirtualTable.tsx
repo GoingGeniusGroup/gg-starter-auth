@@ -33,6 +33,7 @@ interface Vproduct {
 
 const VirtualTable = () => {
   const [virtualProduct, setVirtualProduct] = useState<any[]>([]);
+  const[searchQuery,setSearchQuery]=useState("")
 
   useEffect(() => {
     async function fetchProducts() {
@@ -72,12 +73,18 @@ const VirtualTable = () => {
       }
     }
   };
-
+  const filteredvirtualProd = virtualProduct.filter(product =>
+    product.name.toLowerCase().includes(searchQuery.toLowerCase()) 
+  
+  );
   return (
     <div className="">
       <div className="flex justify-between items-center h-[55px] px-4   my-2 mb-3 rounded">
-        <div className="flex items-center  py-4 w-1/4 gap-2">
-          <Input type="text" placeholder="search" />
+        <div className="flex items-center  py-4 w-1/3 gap-2">
+          <Input type="text" placeholder="Search Product "
+                    value={searchQuery}
+                    onChange={(e)=>setSearchQuery(e.target.value)}
+           />
           {/* <input type="text" placeholder="search" className="px-3 py-2 w-80 bg-slate-50 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 " /> */}
           <button
             type="button"
@@ -109,7 +116,7 @@ const VirtualTable = () => {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {virtualProduct.map((virtual, index) => (
+          {filteredvirtualProd.map((virtual, index) => (
             <TableRow key={index}>
               <TableCell>{index + 1}</TableCell>
               <TableCell className="text-blue-500">{virtual.name}</TableCell>
