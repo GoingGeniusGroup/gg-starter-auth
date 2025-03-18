@@ -227,7 +227,7 @@ const CategoryTable = ({
                 <h3 className="text-lg font-medium text-gray-900 dark:text-slate-50">
                   {category.categoryName}
                 </h3>
-                <p className="text-sm text-gray-500 dark:text-slate-200 mb-2">
+                <p className="text-sm text-gray-500 dark:text-slate-200 mb-2 line-clamp-1">
                   {truncateText(category.categoryDescription, 50)}
                 </p>
                 <div className="flex justify-between items-center mt-4">

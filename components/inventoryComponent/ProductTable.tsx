@@ -230,7 +230,7 @@ const ProductTable = () => {
                     ${product.salePrice?.toFixed(2)}
                   </span>
                 </div>
-                <p className="text-sm text-gray-500   dark:text-slate-200 mb-2">{truncateText(product.description ?? "", 50)}</p>
+                <p className="text-sm text-gray-500   dark:text-slate-200 mb-2 line-clamp-1">{truncateText(product.description ?? "", 50)}</p>
                 <div className="flex justify-between items-center mt-4">
                   <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium  bg-gray-200 text-gray-800  ">
                     {product.category && product.category.categoryName}
