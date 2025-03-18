@@ -26,6 +26,7 @@ interface VCategory {
 
 const VirtualCategoryTable = () => {
   const [categories, setCategories] = useState<VCategory[]>([]);
+  const[searchQuery,setSearchQuery]=useState("")
 
   useEffect(() => {
     async function fetchInventory() {
@@ -63,12 +64,20 @@ const VirtualCategoryTable = () => {
     }
   };
 
+  const filteredCategory = categories.filter(category =>
+    category.name.toLowerCase().includes(searchQuery.toLowerCase()) 
+  
+  );
+
   return (
     <div>
       <div className="p-2">
         <div className="flex justify-between items-center h-[55px] px-4 my-2 mb-3 rounded">
-          <div className="flex items-center py-4 w-1/4 gap-2">
-            <Input type="text" placeholder="Search" />
+          <div className="flex items-center py-4 w-1/3 gap-2">
+            <Input type="text" placeholder="Search by name"
+                                value={searchQuery}
+                                onChange={(e)=>setSearchQuery(e.target.value)}
+            />
             <button
               type="button"
               className="flex items-center justify-center p-2 rounded hover:bg-gray-300 dark:hover:bg-gray-600"
@@ -94,7 +103,7 @@ const VirtualCategoryTable = () => {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {categories.map((category, index) => (
+            {filteredCategory.map((category, index) => (
               <TableRow key={category.id}>
                 <TableCell>{index + 1}</TableCell>
                 <TableCell className="text-blue-500">{category.name}</TableCell>
