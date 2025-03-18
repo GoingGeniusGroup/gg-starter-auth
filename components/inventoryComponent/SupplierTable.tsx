@@ -46,6 +46,7 @@ const SupplierTable = ({
 }: SupplierTableProps) => {
   const [suppliers, setSuppliers] = useState<any[]>([]);
   const [viewMode, setViewMode] = useState("table"); // State to track view mode
+  const[searchQuery,setSearchQuery]=useState("")
 
   useEffect(() => {
     const fetchSuppliers = async () => {
@@ -90,12 +91,18 @@ const SupplierTable = ({
       }
     }
   };
-
+  const filteredSuppliers = suppliers.filter(supplier =>
+    supplier.supplierName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    supplier.address.toLowerCase().includes(searchQuery.toLowerCase())
+  );
   return (
     <div className="p-2">
       <div className="flex justify-between items-center h-[55px] px-4 my-2 mb-3 rounded">
-        <div className="flex items-center py-4 w-1/4 gap-2">
-          <Input type="text" placeholder="Search" />
+        <div className="flex items-center py-4 w-1/3 gap-2">
+          <Input type="text" placeholder="Search by name/address"
+                    value={searchQuery}
+                    onChange={(e)=>setSearchQuery(e.target.value)}
+           />
           <button
             type="button"
             className="flex items-center justify-center p-2 rounded hover:bg-gray-300 dark:hover:bg-gray-600"
@@ -145,7 +152,7 @@ const SupplierTable = ({
             </TableRow>
           </TableHeader>
           <TableBody>
-            {suppliers.map((supplier, index) => (
+            {filteredSuppliers.map((supplier, index) => (
               <TableRow key={index}>
                 <TableCell>{index + 1}</TableCell>
                 <TableCell className="text-blue-500">
@@ -186,7 +193,7 @@ const SupplierTable = ({
 
       {viewMode === "grid" && (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {suppliers.map((supplier) => (
+          {filteredSuppliers.map((supplier) => (
             <div
               key={supplier.id}
               className="rounded-lg border border-gray-200 overflow-hidden hover:shadow-lg transition-shadow duration-300"
