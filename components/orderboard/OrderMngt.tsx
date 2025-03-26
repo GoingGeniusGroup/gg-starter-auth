@@ -5,7 +5,7 @@ import { KanbanColumn } from "./KanbanColumn";
 import { Package, Truck, CheckCircle, XCircle } from "lucide-react";
 import { DropResult } from "@hello-pangea/dnd";
 import { OrderInfoBoard } from "@/action/order";
-
+import { updateOrderStatus } from "@/action/order";
 // Define the type for an order
 // interface Order {
 //   id: string;
@@ -62,13 +62,16 @@ export function OrderMngt() {
       fetchData()
   },[])
 
-const onDragEnd = (result: DropResult) => {
+const onDragEnd = async(result: DropResult) => {
     const {
       source,
       destination
     } = result;
     if (!destination) return;
+
+
     if (source.droppableId === destination.droppableId) {
+      //handel reordering within same column,
       const items = Array.from(orders[source.droppableId]);
       const [reorderedItem] = items.splice(source.index, 1);
       items.splice(destination.index, 0, reorderedItem);
@@ -76,16 +79,26 @@ const onDragEnd = (result: DropResult) => {
         ...orders,
         [source.droppableId]: items
       });
+
+
     } else {
+      //betn diff col
       const sourceItems = Array.from(orders[source.droppableId]);
       const destItems = Array.from(orders[destination.droppableId]);
-      const [removedItem] = sourceItems.splice(source.index, 1);
-      destItems.splice(destination.index, 0, removedItem);
+      const [movedItem]:any = sourceItems.splice(source.index, 1);
+      movedItem.status = destination.droppableId;
+
+      destItems.splice(destination.index, 0, movedItem);
       setOrders({
         ...orders,
         [source.droppableId]: sourceItems,
         [destination.droppableId]: destItems
       });
+        // Update the order status
+        const response = await updateOrderStatus(movedItem.id, destination.droppableId);
+        if (!response.success) {
+          console.error("Failed to update order status in DB:", response.message);
+        }
     }
   };
 
