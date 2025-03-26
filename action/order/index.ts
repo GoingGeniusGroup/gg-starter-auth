@@ -159,3 +159,17 @@ export async function orderInformation() {
     return { success: false, message: "An unexpected error occurred" };
   }
 }
+
+export async function updateOrderStatus(orderId: string, newStatus: any) {
+  try {
+    await db.order.update({
+      where: { id: orderId },
+      data: { orderStatus: newStatus.toUpperCase() }
+    });
+
+    return { success: true };
+  } catch (error) {
+    console.error("Error updating order status:", error);
+    return { success: false, message: "Database update failed" };
+  }
+}
