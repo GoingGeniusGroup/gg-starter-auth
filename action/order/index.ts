@@ -7,27 +7,26 @@ export async function orderInfo(){
         sixMonthsAgo.setMonth(sixMonthsAgo.getMonth() - 6);
         const orders=await db.order.groupBy(
             {
-                by: ['deliveryDate'],
+                by: ['orderDate'],
                 _sum: {
                     orderAmount: true,
                     orderQuantity: true,
                   },
                   where: {
-                    deliveryDate: {
-                      not: null,
+                    orderDate: {
                       gte: sixMonthsAgo, //  fetch last 6 months
                     },
                   },
                   orderBy: {
-                    deliveryDate: 'asc',
+                    orderDate: 'asc',
                   },
             }
         )
 
         const monthlyData = orders.reduce((acc, order) => {
-            if (!order.deliveryDate) return acc;
-      
-            const date = new Date(order.deliveryDate);
+            if (!order.orderDate) return acc;
+       
+            const date = new Date(order.orderDate);
             const key = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`;
       
             if (!acc[key]) {
