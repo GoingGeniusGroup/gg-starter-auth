@@ -160,11 +160,20 @@ export async function orderInformation() {
   }
 }
 
-export async function updateOrderStatus(orderId: string, newStatus: any) {
+export async function updateOrderStatus(orderId: string, newStatus: string) {
   try {
+
+    const updateData:any={
+      orderStatus:newStatus.toUpperCase()
+    }
+
+    if(newStatus.toUpperCase()==="DELIVERED"){
+      updateData.deliveryDate=new Date()
+    }
     await db.order.update({
       where: { id: orderId },
-      data: { orderStatus: newStatus.toUpperCase() }
+      data: updateData
+
     });
 
     return { success: true };
