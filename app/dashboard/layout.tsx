@@ -3,9 +3,22 @@ import { usePathname } from "next/navigation";
 import Sidebar from "@/_components/dashboard/Sidebar";
 import Topbar from "@/_components/dashboard/Topbar";
 import { ReactNode, useState } from "react";
- 
 
-const DashboardLayout = ({ children,orderStat,prodStat1 ,categoryStat,orderPlot}: { children: ReactNode,orderStat:ReactNode ,prodStat1:ReactNode,categoryStat:ReactNode,orderPlot:ReactNode}) => {
+const DashboardLayout = ({
+  children,
+  orderStat,
+  prodStat1,
+  categoryStat,
+  orderPlot,
+  topSale,
+}: {
+  children: ReactNode;
+  orderStat: ReactNode;
+  prodStat1: ReactNode;
+  categoryStat: ReactNode;
+  orderPlot: ReactNode;
+  topSale: ReactNode;
+}) => {
   const [isCollapsed, setIsCollapsed] = useState(false); // Sidebar state
   const pathname = usePathname();
 
@@ -24,18 +37,23 @@ const DashboardLayout = ({ children,orderStat,prodStat1 ,categoryStat,orderPlot}
           style={{
             marginLeft: isCollapsed ? "7rem" : "16rem",
           }}
-        > 
+        >
           {children}
-          {pathname === "/dashboard" && (<>
-            <div>{categoryStat}</div>
-            <div className="grid grid-cols-2 gap-4 mt-4">
-          <div>{orderStat}</div>
-          <div>{orderPlot}</div>
-          <div>{prodStat1}</div>
-        </div>
-          </>
-       
-      )}
+          {pathname === "/dashboard" && (
+            <>
+              <div>{categoryStat}</div>
+
+
+              <div className="grid grid-cols-2 gap-4 mt-4 p-4">
+              <div>{topSale}</div>
+              <div>{orderPlot}</div>
+              <div>{orderStat}</div>
+                <div>{prodStat1}</div>
+
+
+              </div>
+            </>
+          )}
         </main>
       </div>
     </div>
