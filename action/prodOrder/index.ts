@@ -44,9 +44,10 @@ export async function getTopProducts(){
             productType:"Virtual"
           }));
 
-          const topSellingProducts = [...physicalProductSales, ...virtualProductSales].sort(
-            (a, b) => b.totalSold - a.totalSold
-          );
+          const topSellingProducts = [...physicalProductSales, ...virtualProductSales]
+          .sort( (a, b) => b.totalSold - a.totalSold)
+          .slice(0, 5);
+
           return{success:true,data:topSellingProducts}
     }
     catch(error){
