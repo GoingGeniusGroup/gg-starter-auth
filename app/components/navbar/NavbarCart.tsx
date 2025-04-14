@@ -1,21 +1,14 @@
 "use client";
 
-import { createContext, useContext, type ReactNode } from "react";
+import { useState } from "react";
+import { ShoppingCart } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
+import CartSheet from "./CartSheet";
+import type { CartItem } from "./types";
 import { useLocalStorage } from "@/hooks/use-local-storage";
-import type { CartItem } from "@/types/cart";
 
-interface CartContextType {
-  cart: CartItem[];
-  addToCart: (product: Omit<CartItem, "quantity">) => void;
-  removeFromCart: (productId: string) => void;
-  clearCart: () => void;
-  totalItems: number;
-  totalPrice: number;
-}
-
-const CartContext = createContext<CartContextType | undefined>(undefined);
-
-export function CartProvider({ children }: { children: ReactNode }) {
+export default function NavbarCart() {
+  const [isCartOpen, setIsCartOpen] = useState(false);
   const [cart, setCart] = useLocalStorage<CartItem[]>("shopping-cart", []);
 
   const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
@@ -24,10 +17,10 @@ export function CartProvider({ children }: { children: ReactNode }) {
     0
   );
 
-  const addToCart = (product: Omit<CartItem, "quantity">) => {
+  const addToCart = (productId: string) => {
     setCart((prevCart) => {
       const existingItemIndex = prevCart.findIndex(
-        (item) => item.id === product.id
+        (item) => item.id === productId
       );
 
       if (existingItemIndex > -1) {
@@ -36,9 +29,9 @@ export function CartProvider({ children }: { children: ReactNode }) {
             ? { ...item, quantity: item.quantity + 1 }
             : item
         );
-      } else {
-        return [...prevCart, { ...product, quantity: 1 }];
       }
+
+      return prevCart;
     });
   };
 
@@ -66,30 +59,32 @@ export function CartProvider({ children }: { children: ReactNode }) {
     });
   };
 
-  const clearCart = () => {
-    setCart([]);
-  };
-
   return (
-    <CartContext.Provider
-      value={{
-        cart,
-        addToCart,
-        removeFromCart,
-        clearCart,
-        totalItems,
-        totalPrice,
-      }}
-    >
-      {children}
-    </CartContext.Provider>
-  );
-}
+    <div className="relative">
+      <button
+        className="flex items-center focus:outline-none"
+        onClick={() => setIsCartOpen(true)}
+        aria-label="Open shopping cart"
+      >
+        <ShoppingCart className="h-6 w-6" />
+        {totalItems > 0 && (
+          <Badge
+            variant="destructive"
+            className="absolute -top-2 -right-2 h-5 w-5 flex items-center justify-center p-0 text-xs"
+          >
+            {totalItems}
+          </Badge>
+        )}
+      </button>
 
-export function useCart() {
-  const context = useContext(CartContext);
-  if (context === undefined) {
-    throw new Error("useCart must be used within a CartProvider");
-  }
-  return context;
+      <CartSheet
+        isOpen={isCartOpen}
+        onClose={() => setIsCartOpen(false)}
+        cartItems={cart}
+        onAddToCart={addToCart}
+        onRemoveFromCart={removeFromCart}
+        totalPrice={totalPrice}
+      />
+    </div>
+  );
 }
