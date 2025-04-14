@@ -117,13 +117,17 @@ export const getAllUsersByUsername = async (usernames: string) => {
 
 export const getUserById = async (id: string) => {
   try {
-    const user = await db.user.findUnique({ where: { id } });
-    return user;
+    const user = await db.user.findUnique({
+      where: {
+        id: id,
+      },
+    })
+    return user
   } catch (error) {
-    console.error("Error in getUserById:", error);
-    return null;
+    console.error("Failed to fetch user:", error)
+    return null
   }
-};
+}
 
 export const createUser = async (userData: Prisma.UserCreateInput) => {
   try {
