@@ -3,10 +3,13 @@
 import { useState, useEffect } from "react";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { getAllproducts } from "@/action/product";
-import { getVirtualCategories, getVirtualProducts } from "@/action/virtualProducts";
+import {
+  getVirtualCategories,
+  getVirtualProducts,
+} from "@/action/virtualProducts";
 import { getCategories } from "@/actions/category";
 import ProductGrid from "./ProductGrid";
-import VirtualProductGrid from "./VirtualProductGrid";
+import VirtualProductGrid from "./VIrtualProductGrid";
 import { useCart } from "@/contexts/CartContext";
 import type { Product, VirtualProduct } from "@/types/product";
 

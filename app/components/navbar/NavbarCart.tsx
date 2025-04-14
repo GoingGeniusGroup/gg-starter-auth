@@ -32,9 +32,18 @@ export default function NavbarCart() {
         isOpen={isCartOpen}
         onClose={() => setIsCartOpen(false)}
         cartItems={cart}
-        onAddToCart={(id) =>
-          addToCart({ id, name: "", price: 0, images: [], productType: "" })
-        }
+        onAddToCart={(id) => {
+          const item = cart.find((item) => item.id === id);
+          if (item) {
+            addToCart({
+              id: item.id,
+              name: item.name,
+              price: item.price,
+              images: item.images,
+              productType: item.productType,
+            });
+          }
+        }}
         onRemoveFromCart={removeFromCart}
         totalPrice={totalPrice}
       />

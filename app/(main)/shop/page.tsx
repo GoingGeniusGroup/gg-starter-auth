@@ -1,3 +1,4 @@
+import ShopComponent from "@/app/components/shop1/ShopComponent";
 import VirtualShop from "@/components/shop/VirtualShop";
 import { Metadata } from "next";
 
@@ -7,8 +8,8 @@ export const metadata: Metadata = {
 
 export default function Shop() {
   return (
-    <div className="flex-1 overflow-hidden size-full">
-      <VirtualShop />
+    <div className="container mx-auto py-6">
+      <ShopComponent />
     </div>
   );
 }
