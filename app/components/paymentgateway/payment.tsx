@@ -10,10 +10,9 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { toast } from "sonner";
-import { esewaTopup } from "@/actions/esewa/index";
+
 import { useSession } from "next-auth/react";
-import { khaltiTopup } from "@/app/actions/khalti";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { Input } from "../ui/input";
 import axios from "axios";
 
@@ -27,78 +26,6 @@ export default function PaymentGateway() {
   if (!session) {
     return <div>Please login to proceed with the payment.</div>;
   }
-
-  //method to handle esewa payment
-  // const handleEsewaPayment = async () => {
-  //   setIsLoading(true);
-  //   setError(null);
-
-  //   try {
-  //     const response = await esewaTopup({
-  //       userId: session.user.id,
-  //       amount: 100,
-  //     });
-
-  //     if (response.success && response.data?.esewaConfig) {
-  //       toast.success("eSewa payment initiated successfully");
-
-  //       // Create and submit the form
-  //       const form = document.createElement("form");
-  //       form.method = "POST";
-  //       form.action = "https://rc-epay.esewa.com.np/api/epay/main/v2/form";
-
-  //       Object.entries(response.data.esewaConfig).forEach(([key, value]) => {
-  //         const input = document.createElement("input");
-  //         input.type = "hidden";
-  //         input.name = key;
-  //         input.value = value as string;
-  //         form.appendChild(input);
-  //       });
-
-  //       document.body.appendChild(form);
-  //       form.submit();
-  //     } else {
-  //       setError(
-  //         response.error ||
-  //           "Failed to initiate eSewa payment. Please try again."
-  //       );
-  //     }
-  //   } catch (error) {
-  //     setError("An error occurred. Please try again.");
-  //   } finally {
-  //     setIsLoading(false);
-  //   }
-  // };
-
-  //method to handle khalti payment
-  // const handleKhaltiPayment = async () => {
-  //   setIsLoading(true);
-  //   setError(null);
-
-  //   const userId = session.user.id;
-
-  //   try {
-  //     const response = await khaltiTopup({
-  //       amount: 1000,
-  //       productName: "wallet",
-  //       transactionId: `${Date.now()}`,
-  //       userId,
-  //     });
-
-  //     if (response.success && response.paymentUrl) {
-  //       toast.success("Khalti payment initiated successfully");
-  //       router.push(response.paymentUrl);
-  //     } else {
-  //       setError(
-  //         response.error || "Failed to initiate payment. Please try again."
-  //       );
-  //     }
-  //   } catch (error) {
-  //     setError("An error occurred. Please try again.");
-  //   } finally {
-  //     setIsLoading(false);
-  //   }
-  // };
 
   const handleKhaltiPayment = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
