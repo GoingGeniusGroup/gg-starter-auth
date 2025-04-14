@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { ShoppingCart, Star, X } from "lucide-react";
-import type { Product, VirtualProduct } from "@/components/types";
+import type { Product, VirtualProduct } from "@/types/product";
 
 interface ProductQuickViewProps {
   product: Product | VirtualProduct | null;
