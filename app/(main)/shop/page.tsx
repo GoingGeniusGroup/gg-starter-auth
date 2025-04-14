@@ -5,7 +5,7 @@ export const metadata: Metadata = {
   title: "Shop",
 };
 
-export default function Shop2() {
+export default function Shop() {
   return (
     <div className="flex-1 overflow-hidden size-full">
       <VirtualShop />

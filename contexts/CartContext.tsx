@@ -1,7 +1,12 @@
 "use client";
 
-import { createContext, useContext, type ReactNode } from "react";
-import { useLocalStorage } from "@/hooks/use-local-storage";
+import {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  type ReactNode,
+} from "react";
 import type { CartItem } from "@/types/cart";
 
 interface CartContextType {
@@ -16,7 +21,30 @@ interface CartContextType {
 const CartContext = createContext<CartContextType | undefined>(undefined);
 
 export function CartProvider({ children }: { children: ReactNode }) {
-  const [cart, setCart] = useLocalStorage<CartItem[]>("shopping-cart", []);
+  const [cart, setCart] = useState<CartItem[]>([]);
+  const [isInitialized, setIsInitialized] = useState(false);
+
+  // Initialize cart from localStorage
+  useEffect(() => {
+    if (typeof window !== "undefined" && !isInitialized) {
+      try {
+        const storedCart = localStorage.getItem("shopping-cart");
+        if (storedCart) {
+          setCart(JSON.parse(storedCart));
+        }
+        setIsInitialized(true);
+      } catch (error) {
+        console.error("Failed to load cart from localStorage:", error);
+      }
+    }
+  }, [isInitialized]);
+
+  // Update localStorage when cart changes
+  useEffect(() => {
+    if (isInitialized && typeof window !== "undefined") {
+      localStorage.setItem("shopping-cart", JSON.stringify(cart));
+    }
+  }, [cart, isInitialized]);
 
   const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
   const totalPrice = cart.reduce(
