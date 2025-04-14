@@ -22,13 +22,6 @@ const Navbar = async () => {
       </Link>
 
       <Link href={"/shop"} className="flex items-center">
-        {/* <Image
-          src={shop}
-          alt="GGLogo"
-          width={50}
-          height={50}
-          className="w-full h-12"
-        /> */}
         <h2 className="font-bold text-xl ">SHOP</h2>
       </Link>
       <div className="mt-4 flex justify-center md:justify-end w-[300px] ">

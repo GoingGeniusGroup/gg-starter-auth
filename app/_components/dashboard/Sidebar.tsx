@@ -71,7 +71,7 @@ const Sidebar: React.FC<{
         className={`${
           isCollapsed
             ? "  "
-            : "flex items-center px-4 py-4 border-b border-gray-200 dark:bg-black/40 dark:border-white/20 dark:text-white"
+            : "flex z-50 items-center px-4 py-4 border-b border-gray-200 dark:bg-black/40 dark:border-white/20 dark:text-white"
         }  ${
           isCollapsed ? "justify-center" : ""
         } transition-all sticky top-0 bg-white dark:bg-black/40 dark:border-white/20 z-50`}
