@@ -8,7 +8,7 @@ import { getCategories } from "@/actions/category";
 import ProductGrid from "./ProductGrid";
 import VirtualProductGrid from "./VirtualProductGrid";
 import { useCart } from "@/contexts/CartContext";
-import type { Product, VirtualProduct } from "@/components/types";
+import type { Product, VirtualProduct } from "@/types/product";
 
 export default function ShopComponent() {
   const [activeTab, setActiveTab] = useState("physical");
